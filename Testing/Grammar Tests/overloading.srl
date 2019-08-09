@@ -1,0 +1,23 @@
+
+int foo(int p) {
+	return p + 5;
+}
+
+int foo(bool b) {
+	if (b) {
+		return 3;
+	}
+	else {
+		return 5;
+	}
+}
+
+int foo(int p1, int p2) {
+	return p1 * p2;
+}
+
+void main() {
+	int k = foo(10);
+	int g = foo(4, 3);
+	int j = foo(true);
+}

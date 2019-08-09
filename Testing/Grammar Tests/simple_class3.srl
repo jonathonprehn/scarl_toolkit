@@ -1,0 +1,16 @@
+
+class A {
+	int field;
+	int funcOfClass() {
+		field = field + 2;	
+	}
+}
+
+class B extends A {
+	int moreData;
+}
+
+void main() {
+	A generalCase = allocate B();
+	a.funcOfclass();
+}

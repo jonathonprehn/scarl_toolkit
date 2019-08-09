@@ -1,0 +1,20 @@
+
+C:\Users\Jonathon\ProgrammingProjects\SCARL\SCARL_POST\scarlcompile\src>flex scarl.l 
+
+C:\Users\Jonathon\ProgrammingProjects\SCARL\SCARL_POST\scarlcompile\src>yacc -d scarl_tokens.y 
+
+C:\Users\Jonathon\ProgrammingProjects\SCARL\SCARL_POST\scarlcompile\src>gcc -o ./../obj/linked_list.o -c linked_list.c 
+
+C:\Users\Jonathon\ProgrammingProjects\SCARL\SCARL_POST\scarlcompile\src>gcc -o ./../obj/lex.yy.o -I. -L./../lib -lfl -c lex.yy.c 
+
+C:\Users\Jonathon\ProgrammingProjects\SCARL\SCARL_POST\scarlcompile\src>gcc -o ./../obj/y.tab.o -I. -L./../lib -lfl -c y.tab.c 
+
+C:\Users\Jonathon\ProgrammingProjects\SCARL\SCARL_POST\scarlcompile\src>gcc -o ./../obj/scarlastnode.o -c scarlastnode.c 
+
+C:\Users\Jonathon\ProgrammingProjects\SCARL\SCARL_POST\scarlcompile\src>gcc -o ./../obj/scarlcodegenerator.o -c scarlcodegenerator.c 
+
+C:\Users\Jonathon\ProgrammingProjects\SCARL\SCARL_POST\scarlcompile\src>gcc -o ./../obj/scarlsymboltable.o -c scarlsymboltable.c 
+
+C:\Users\Jonathon\ProgrammingProjects\SCARL\SCARL_POST\scarlcompile\src>gcc -o ./../obj/scarltypes.o -c scarltypes.c 
+
+C:\Users\Jonathon\ProgrammingProjects\SCARL\SCARL_POST\scarlcompile\src>gcc -o ./../bin/scarlcompile.exe ./../obj/linked_list.o ./../obj/lex.yy.o ./../obj/scarlastnode.o ./../obj/scarlsymboltable.o ./../obj/scarlcodegenerator.o ./../obj/scarltypes.o 

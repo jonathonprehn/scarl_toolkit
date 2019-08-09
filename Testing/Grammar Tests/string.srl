@@ -1,0 +1,5 @@
+
+void main() {
+	char[9] str = "My string";
+	char[3] cat = { 'c', 'a', 't' };
+}

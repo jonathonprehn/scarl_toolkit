@@ -1,0 +1,11 @@
+LightActuator shine;
+
+int myval = 5;
+
+void foo(int passing) {
+	myval = 2;
+}
+
+void main() {
+	foo(5);
+}

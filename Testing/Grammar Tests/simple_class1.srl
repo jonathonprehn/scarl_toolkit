@@ -1,0 +1,8 @@
+
+class A {
+	int field;
+}
+
+void main() {
+	A a;
+}

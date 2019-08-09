@@ -1,0 +1,15 @@
+
+int mem1 = 0;
+int mem2 = 10;
+int mem3 = 30;
+
+void main() {
+	int x = mem1 + mem2 + mem3;
+	int stat = 0;
+	if (x > 0) {
+		stat = 1;
+	}
+	else {
+		stat = 0;
+	}
+}

@@ -1,0 +1,10 @@
+
+void up(int val) {
+	if (val > 0) {
+		up(val - 1);
+	}
+}
+
+void main() {
+	up(10);
+}

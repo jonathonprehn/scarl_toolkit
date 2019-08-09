@@ -1,0 +1,9 @@
+
+bool alwaysTrue() { 
+	return true;
+}
+
+void main() {
+	bool confirm = alwaysTrue();
+}
+

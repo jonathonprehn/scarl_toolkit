@@ -1,0 +1,12 @@
+
+class A {
+	int field;
+	int funcOfClass() {
+		field = field + 2;	
+	}
+}
+
+void main() {
+	A a = allocate A();
+	a.funcOfclass();
+}
