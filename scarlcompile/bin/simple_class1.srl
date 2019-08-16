@@ -5,4 +5,5 @@ class A {
 
 void main() {
 	A a;
+	constant int x = 5;
 }

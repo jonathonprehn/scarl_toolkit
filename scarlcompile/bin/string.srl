@@ -1,5 +1,6 @@
 
 void main() {
 	char[9] str = "My string";
+	int[2] thing = { 3, 2, 1 };
 	char[3] cat = { 'c', 'a', 't' };
 }

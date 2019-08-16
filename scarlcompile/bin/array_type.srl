@@ -3,4 +3,5 @@ void main() {
 	int x = 3; // this does not break it
 	int nonArrayType; // this breaks it too
 	int[5] arr;  //broken
+	int[2] thing = { 3, 2, 1 };
 }

@@ -42,6 +42,7 @@ struct scarl_ast_node *create_typed_ast_node(int node_type, int type_value);
 struct scarl_ast_node *create_int_value_ast_node(int node_type, int int_value);
 struct scarl_ast_node *create_str_value_ast_node(int node_type, char *str_value);
 void add_child_node(struct scarl_ast_node *parent, struct scarl_ast_node *adding);
+void push_child_node_front(struct scarl_ast_node *parent, struct scarl_ast_node *adding);
 int has_children(struct scarl_ast_node *node);
 int get_children_count(struct scarl_ast_node *node);
 void print_tree(struct scarl_ast_node *node);

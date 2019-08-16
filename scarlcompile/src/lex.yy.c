@@ -423,6 +423,7 @@ along with SCARL.  If not, see <https://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include <string.h>
 
+#include "scarlastnode.h"
 #include "stringstack.h"
 #include "linked_list.h"
 #include "y.tab.h"
@@ -430,6 +431,7 @@ along with SCARL.  If not, see <https://www.gnu.org/licenses/>.
 unsigned line_number = 0;
 char *last_token_text = NULL;
 FILE *code_file = NULL;
+struct scarl_ast_node *program_ast;
 
 void setLastTokenText(char *txt) {
 	if (last_token_text != NULL) {
@@ -439,7 +441,7 @@ void setLastTokenText(char *txt) {
 	last_token_text = strdup(txt);
 }
 
-#line 443 "lex.yy.c"
+#line 445 "lex.yy.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -590,10 +592,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 49 "scarl.l"
+#line 51 "scarl.l"
 
 
-#line 597 "lex.yy.c"
+#line 599 "lex.yy.c"
 
 	if ( yy_init )
 		{
@@ -678,22 +680,22 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 51 "scarl.l"
+#line 53 "scarl.l"
 { /*Ignore everything for the rest of this line */ }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 52 "scarl.l"
+#line 54 "scarl.l"
 { /* Do nothing for whitespace */ }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 53 "scarl.l"
+#line 55 "scarl.l"
 { /*Count lines for debug*/ line_number++; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 54 "scarl.l"
+#line 56 "scarl.l"
 {  
 	setLastTokenText(yytext);
 	string_stack_push(yytext);  // retrieve at parser
@@ -702,7 +704,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 59 "scarl.l"
+#line 61 "scarl.l"
 {
 	//can set up a binary search later
 	setLastTokenText(yytext);
@@ -823,47 +825,89 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 176 "scarl.l"
+#line 178 "scarl.l"
 {
 	setLastTokenText(yytext);
+	int parsed_value = atoi(yytext);
+	int_stack_push(parsed_value);
 	return DECIMAL;
 }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 180 "scarl.l"
+#line 184 "scarl.l"
 {
 	setLastTokenText(yytext);
+	int parsed_value = 0;
+	int place_value = 1;
+	int place_index = strlen(yytext) - 1;
+	while(place_index > 0) { //exclude the first "0" character
+		parsed_value += ((yytext[place_index] - '0') * place_value);
+		place_value *= 8;
+		place_index--;
+	}
+	int_stack_push(parsed_value);
 	return OCTAL;
 }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 184 "scarl.l"
+#line 197 "scarl.l"
 {
 	setLastTokenText(yytext);
+	int parsed_value = 0;
+	int place_value = 1;
+	int place_index = strlen(yytext) - 1;
+	while(place_index > 1) { //exclude the first "0x" character
+		char hex_char = yytext[place_index];
+		int hex_char_value = 0;
+		if (hex_char >= '0' && hex_char <= '9') {
+			hex_char_value = hex_char - '0';
+		}
+		else if (hex_char >= 'a' && hex_char <= 'f') {
+			hex_char_value = (hex_char - 'a') + 10;
+		}
+		else if (hex_char >= 'A' && hex_char <= 'F') {
+			hex_char_value = (hex_char - 'A') + 10;
+		}
+		parsed_value += (hex_char_value * place_value);
+		place_value *= 16;
+		place_index--;
+	}
+	int_stack_push(parsed_value);
 	return HEX;
 }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 188 "scarl.l"
+#line 221 "scarl.l"
 {
 	setLastTokenText(yytext);
+	int parsed_value = 0;
+	int place_value = 1;
+	int place_index = strlen(yytext) - 1;
+	while(place_index > 1) { //exclude the "b" character
+		parsed_value += ((yytext[place_index] - '0') * place_value);
+		place_value *= 2;
+		place_index--;
+	}
+	int_stack_push(parsed_value);
 	return BINARY;
 }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 192 "scarl.l"
+#line 234 "scarl.l"
 {/* Weird "just 0" case */
 	setLastTokenText(yytext);
+	int parsed_value = 0;
+	int_stack_push(parsed_value);
 	return DECIMAL;
 }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 196 "scarl.l"
+#line 240 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return PLUS;
@@ -871,7 +915,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 200 "scarl.l"
+#line 244 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return MINUS;
@@ -879,7 +923,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 204 "scarl.l"
+#line 248 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return STAR;
@@ -887,7 +931,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 208 "scarl.l"
+#line 252 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return SLASH;
@@ -895,7 +939,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 212 "scarl.l"
+#line 256 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return BANG;
@@ -903,7 +947,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 216 "scarl.l"
+#line 260 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return LPAREN;
@@ -911,7 +955,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 220 "scarl.l"
+#line 264 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return RPAREN;
@@ -919,7 +963,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 224 "scarl.l"
+#line 268 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return GTR;
@@ -927,7 +971,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 228 "scarl.l"
+#line 272 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return LESS;
@@ -935,7 +979,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 232 "scarl.l"
+#line 276 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return GTR_EQ;
@@ -943,7 +987,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 236 "scarl.l"
+#line 280 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return LESS_EQ;
@@ -951,7 +995,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 240 "scarl.l"
+#line 284 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return DBL_EQ;
@@ -959,7 +1003,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 244 "scarl.l"
+#line 288 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return EQ;
@@ -967,7 +1011,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 248 "scarl.l"
+#line 292 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return NOT_EQ;
@@ -975,7 +1019,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 252 "scarl.l"
+#line 296 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return OR;
@@ -983,7 +1027,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 256 "scarl.l"
+#line 300 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return AND;
@@ -991,7 +1035,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 260 "scarl.l"
+#line 304 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return COMMA;
@@ -999,7 +1043,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 264 "scarl.l"
+#line 308 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return SEMICOLON;
@@ -1007,7 +1051,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 268 "scarl.l"
+#line 312 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return LBRACE;
@@ -1015,7 +1059,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 272 "scarl.l"
+#line 316 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return RBRACE;
@@ -1023,7 +1067,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 276 "scarl.l"
+#line 320 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return LBRACKET;
@@ -1031,7 +1075,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 280 "scarl.l"
+#line 324 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return RBRACKET;
@@ -1039,7 +1083,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 284 "scarl.l"
+#line 328 "scarl.l"
 {
     setLastTokenText(yytext);
     return DOT;
@@ -1047,7 +1091,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 288 "scarl.l"
+#line 332 "scarl.l"
 {
 	setLastTokenText(yytext);
 	string_stack_push(yytext); // to be retrieved by the parser
@@ -1056,15 +1100,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 294 "scarl.l"
+#line 338 "scarl.l"
 { setLastTokenText(yytext); fprintf(stderr, "unrecognized characters: \'%s\'\n", yytext); }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 296 "scarl.l"
+#line 340 "scarl.l"
 ECHO;
 	YY_BREAK
-#line 1068 "lex.yy.c"
+#line 1112 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1950,7 +1994,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 296 "scarl.l"
+#line 340 "scarl.l"
 
 
 int yyparse();
@@ -2013,6 +2057,7 @@ int main(int argc, char *argv[]) {
 	
 	printf("Compiling file...\n");
 	
+	program_ast = NULL; // initialize to ensure it is NULL if parsing fails
 	line_number = 1;
 	extern FILE *yyin;
 	if (!yyparse()) {
@@ -2023,5 +2068,9 @@ int main(int argc, char *argv[]) {
 		fprintf(stderr, "\nFailed to parse. Check your file.\n");
 		return 1; //error
 	}
+	printf("Hey, the source file was parsed successfully! Here is the AST:\n");
+	print_tree(program_ast);
+	
+	
     return 0;
 }

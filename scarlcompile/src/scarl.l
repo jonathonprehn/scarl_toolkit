@@ -21,6 +21,7 @@ along with SCARL.  If not, see <https://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include <string.h>
 
+#include "scarlastnode.h"
 #include "stringstack.h"
 #include "linked_list.h"
 #include "y.tab.h"
@@ -28,6 +29,7 @@ along with SCARL.  If not, see <https://www.gnu.org/licenses/>.
 unsigned line_number = 0;
 char *last_token_text = NULL;
 FILE *code_file = NULL;
+struct scarl_ast_node *program_ast;
 
 void setLastTokenText(char *txt) {
 	if (last_token_text != NULL) {
@@ -181,18 +183,58 @@ hex_digit [0-9a-fA-F]
 }
 ("0"){octal_digit}+			{
 	setLastTokenText(yytext);
+	int parsed_value = 0;
+	int place_value = 1;
+	int place_index = strlen(yytext) - 1;
+	while(place_index > 0) { //exclude the first "0" character
+		parsed_value += ((yytext[place_index] - '0') * place_value);
+		place_value *= 8;
+		place_index--;
+	}
+	int_stack_push(parsed_value);
 	return OCTAL;
 }
 ("0")("x"|"X"){hex_digit}+	{
 	setLastTokenText(yytext);
+	int parsed_value = 0;
+	int place_value = 1;
+	int place_index = strlen(yytext) - 1;
+	while(place_index > 1) { //exclude the first "0x" character
+		char hex_char = yytext[place_index];
+		int hex_char_value = 0;
+		if (hex_char >= '0' && hex_char <= '9') {
+			hex_char_value = hex_char - '0';
+		}
+		else if (hex_char >= 'a' && hex_char <= 'f') {
+			hex_char_value = (hex_char - 'a') + 10;
+		}
+		else if (hex_char >= 'A' && hex_char <= 'F') {
+			hex_char_value = (hex_char - 'A') + 10;
+		}
+		parsed_value += (hex_char_value * place_value);
+		place_value *= 16;
+		place_index--;
+	}
+	int_stack_push(parsed_value);
 	return HEX;
 }
 ("0b"){binary_digit}+		{
 	setLastTokenText(yytext);
+	int parsed_value = 0;
+	int place_value = 1;
+	int place_index = strlen(yytext) - 1;
+	while(place_index > 1) { //exclude the "b" character
+		parsed_value += ((yytext[place_index] - '0') * place_value);
+		place_value *= 2;
+		place_index--;
+	}
+	int_stack_push(parsed_value);
 	return BINARY;
 }
 "0" {/* Weird "just 0" case */
 	setLastTokenText(yytext);
+	int parsed_value = 0;
+	int_stack_push(parsed_value);
 	return DECIMAL;
 }
 "+"		{
@@ -357,6 +399,7 @@ int main(int argc, char *argv[]) {
 	
 	printf("Compiling file...\n");
 	
+	program_ast = NULL; // initialize to ensure it is NULL if parsing fails
 	line_number = 1;
 	extern FILE *yyin;
 	if (!yyparse()) {
@@ -367,5 +410,9 @@ int main(int argc, char *argv[]) {
 		fprintf(stderr, "\nFailed to parse. Check your file.\n");
 		return 1; //error
 	}
+	printf("Hey, the source file was parsed successfully! Here is the AST:\n");
+	print_tree(program_ast);
+	
+	
     return 0;
 }

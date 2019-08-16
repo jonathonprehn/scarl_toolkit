@@ -1,0 +1,8 @@
+
+void main() {
+	int dec = 53;
+	int bin = 0b0011101;
+	int oct = 034;
+	int hex = 0x11;
+	
+}
