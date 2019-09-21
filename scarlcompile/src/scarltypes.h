@@ -41,7 +41,7 @@ along with SCARL.  If not, see <https://www.gnu.org/licenses/>.
 #define NON_TERMINAL_BLOCK_STATEMENT				0x304
 #define NON_TERMINAL_STATEMENT_LIST_BLOCK_LEVEL		0x305
 #define NON_TERMINAL_STATEMENT_BLOCK_LEVEL			0x306
-#define NON_TERMINAL_DEVICE_DECLARATOR_STATEMENT	0x307
+///////////#define NON_TERMINAL_DEVICE_DECLARATOR_STATEMENT	0x307
 #define NON_TERMINAL_PRIMITIVE_DECLARATOR			0x308
 #define NON_TERMINAL_VARIABLE_DEFINITION_STATEMENT	0x309
 #define NON_TERMINAL_FUNCTION_DEFINITION_STATEMENT	0x30A
@@ -86,6 +86,7 @@ along with SCARL.  If not, see <https://www.gnu.org/licenses/>.
 #define NON_TERMINAL_METHOD_INVOCATION				0x330
 #define NON_TERMINAL_CLASS_ATTRIBUTE_LIST			0x331
 #define NON_TERMINAL_CLASS_DECLARATOR				0x332
+#define NON_TERMINAL_VARIABLE_DECLARATION_STATEMENT	0x333
 
 #define TYPES_EQUAL									0x400
 #define TYPES_CONVERTABLE							0x401
@@ -98,37 +99,63 @@ along with SCARL.  If not, see <https://www.gnu.org/licenses/>.
 #define CLASS_TYPE									0x407
 #define DEVICE_TYPE									0x408
 
+#include "scarlsymboltable.h"
+#include "scarlastnode.h"
 
 // We have primitive types, pointer types, array types,
 // function types and class types
 // all type definitions besides primitive types rely
 // on other Type_Descriptor objects to be constructed.
 
+struct scarl_ast_node;
+
+struct scarl_type_descriptor;
+
 struct scarl_type_descriptor {
+	// a flag that indicates which type structure this 
+	// matches up with (it must be the first field in all 
+	// type structures)
 	int type_class;
+	
+	// allow for type descriptors to be act as 
+	// a linked list. All type descriptors must  
+	// have this as the second field
+	struct scarl_type_descriptor *next;
 };
 
 struct scarl_primitive_type {
 	int type_class; // Must be PRIMITIVE_TYPE
+	struct scarl_type_descriptor *next;
     int primitive_type;
+};
+
+struct scarl_device_type {
+	int type_class; // Must be PRIMITIVE_TYPE
+	struct scarl_type_descriptor *next;
+    int device_type;
 };
 
 struct scarl_pointer_type {
 	int type_class; // Must be POINTER_TYPE
-    struct scarl_type_descriptor *pointingTo;
+	struct scarl_type_descriptor *next;
+    struct scarl_type_descriptor *pointing_to;
 };
 
 struct scarl_array_type {
 	int type_class; // Must be ARRAY_TYPE
-    struct scarl_type_descriptor *containingType;
+	struct scarl_type_descriptor *next;
+    struct scarl_type_descriptor *containing_type;
     int length;
 };
 
 struct scarl_function_type {
     int type_class; // Must be FUNCTION_TYPE
-	struct type_descriptor *returnType;
+	struct scarl_type_descriptor *next;
+	char *func_name;
+	struct scarl_type_descriptor *return_type;
 	//need to support a list type
-    //formalParameters;
+    struct scarl_type_descriptor *formal_parameters;
+	struct scarl_symbol_table *function_st;
 };
 
 /*
@@ -149,15 +176,18 @@ struct scarl_function_type {
 	};
 */
 
+// "user type" would be another good name for this
 struct scarl_class_type;
 
+// what is a good way to organize these?
 struct scarl_class_type {
-	int type_class;
-	struct scarl_class_type *parent_class;
-	//descendents
-	//fields
-	//methods
+	int type_class; // Must be CLASS_TYPE
+	struct scarl_type_descriptor *next;
+	char *class_name_identifier;
+	char *parent_class_identifier;
+	struct scarl_symbol_table *class_st;
 };
+
 
 // global functions related to class relations
 
@@ -170,5 +200,45 @@ int is_direct_descendant_of(struct scarl_class_type *lhs, struct scarl_class_typ
 /* Is the right hand side an ancestor of the left hand side? */
 int is_ancestor_of(struct scarl_class_type *lhs, struct scarl_class_type *rhs);
 
+
+// For dynamic type conversions
+
+/* Returns TYPES_EQUAL, TYPES_NOT_EQUAL or TYPES_CONVERTABLE */
+/* It is directional in that for two given types A and B, you might be able to convert from A to B but  */
+/* not be able to convert from B back to A (think about class hierarchies in polymorphism)              */
+int directional_type_equality(struct scarl_type_descriptor *from_type, struct scarl_type_descriptor *to_type);
+
+/* Returns one of: PRIMITIVE_TYPE, POINTER_TYPE, ARRAY_TYPE, FUNCTION_TYPE, CLASS_TYPE or DEVICE_TYPE */
+/* This function attempts to figure out which type the expression will eventually be converted to,    */
+/* taking the "most straightforward" approach to guessing, given its context (symbol table)    */
+int assume_type_class_of_expression_st(struct scarl_symbol_table *current_scope_st, struct scarl_ast_node *expr_node);
+
+/* Determines if the expression can be converted to a requested type given its context (symbol table)  */
+int can_coerce_expression_to_type_class(struct scarl_symbol_table *current_scope_st, struct scarl_ast_node *expr_node, struct scarl_type_descriptor *type);
+
+/* Determines if the expression is constant. That is, is its value deterministic at compile time? TRUE/FALSE */
+int is_constant_expression(struct scarl_symbol_table *current_scope_st, struct scarl_ast_node *expr_node);
+// gets the compile time value of the constant expression (this assumes it has already been checked to be constant)
+int eval_constant_expression(struct scarl_symbol_table *current_scope_st, struct scarl_ast_node *expr_node);
+
+// initialization
+// make sure to verify the input data 
+struct scarl_primitive_type *create_primitive_type(int primitive_type);
+struct scarl_device_type *create_device_type(int device_type);
+struct scarl_pointer_type *create_pointer_type(struct scarl_type_descriptor *pointing_to);
+struct scarl_array_type *create_array_type(struct scarl_type_descriptor *containing_type, int length);
+struct scarl_function_type *create_function_type(char *func_name, struct scarl_type_descriptor *return_type, struct scarl_type_descriptor *formal_parameters, struct scarl_symbol_table *function_st);
+struct scarl_class_type *create_class_type(char *class_name_identifier, char *parent_class_identifier, struct scarl_symbol_table *class_st);
+// type descriptors for identifiers - does not create symbol tables 
+struct scarl_type_descriptor *create_type_descriptor_for_entry_identifier(struct scarl_symbol_table *current_scope, struct scarl_ast_node *node);
+// type descriptors for the symbol table entry - creates symbol tables from nodes
+// -- has different expectations for nodes than the entry_identifier one 
+struct scarl_type_descriptor *create_type_descriptor_for_symbol_table(struct scarl_symbol_table *current_scope, struct scarl_ast_node *node);
+// exact match, TRUE/FALSE equals
+int compare_type_descriptors(struct scarl_type_descriptor *lhs, struct scarl_type_descriptor *rhs);
+
+// list functions 
+void append_type_descriptor(struct scarl_type_descriptor *lst, struct scarl_type_descriptor *adding);
+int get_type_descriptor_list_count(struct scarl_type_descriptor *lst);
 
 #endif // SCARLTYPES_H_INCLUDED

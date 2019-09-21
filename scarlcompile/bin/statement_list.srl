@@ -1,0 +1,26 @@
+int def = 0;
+int decl;
+constant int constDef = 1;
+class ClassDef {
+	int attr;
+	void classFunc() {
+		attr = 3;
+	}
+}
+void main() {
+	int g = 0;
+	int k;
+	decl = def;
+	{
+		int blk = 4;
+	}
+	fakeFunc();
+	cd.classFunc();
+	if (true) {
+		doIt();
+	}
+	while(true) {
+		keepDoingIt();
+	}
+	delete it;
+}

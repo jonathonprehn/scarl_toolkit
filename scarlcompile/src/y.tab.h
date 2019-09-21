@@ -52,3 +52,6 @@
 #define DOT 308
 #define STRING_LITERAL 309
 #define CHAR_LITERAL 310
+#define SERIAL_SENSOR 311
+#define SERIAL_ACTUATOR 312
+#define BYTE 313

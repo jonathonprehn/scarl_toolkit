@@ -60,6 +60,7 @@ void add_child_node(struct scarl_ast_node *parent, struct scarl_ast_node *adding
 	assert(parent != NULL && adding != NULL);
 	if (parent->first_child == NULL) {
 		parent->first_child = adding;
+		adding->parent = parent;
 	}
 	else {
 		struct scarl_ast_node *n = parent->first_child;
@@ -106,7 +107,7 @@ const char *get_ast_node_type_string(int node_type) {
 	else if (node_type == NON_TERMINAL_BLOCK_STATEMENT) {return "NON_TERMINAL_BLOCK_STATEMENT"; }
 	else if (node_type == NON_TERMINAL_STATEMENT_LIST_BLOCK_LEVEL) {return "NON_TERMINAL_STATEMENT_LIST_BLOCK_LEVEL"; }
 	else if (node_type == NON_TERMINAL_STATEMENT_BLOCK_LEVEL) {return "NON_TERMINAL_STATEMENT_BLOCK_LEVEL"; }
-	else if (node_type == NON_TERMINAL_DEVICE_DECLARATOR_STATEMENT) {return "NON_TERMINAL_DEVICE_DECLARATOR_STATEMENT"; }
+	//////else if (node_type == NON_TERMINAL_DEVICE_DECLARATOR_STATEMENT) {return "NON_TERMINAL_DEVICE_DECLARATOR_STATEMENT"; }
 	else if (node_type == NON_TERMINAL_PRIMITIVE_DECLARATOR) {return "NON_TERMINAL_PRIMITIVE_DECLARATOR"; }
 	else if (node_type == NON_TERMINAL_VARIABLE_DEFINITION_STATEMENT) {return "NON_TERMINAL_VARIABLE_DEFINITION_STATEMENT"; }
 	else if (node_type == NON_TERMINAL_FUNCTION_DEFINITION_STATEMENT) {return "NON_TERMINAL_FUNCTION_DEFINITION_STATEMENT"; }
@@ -159,6 +160,7 @@ const char *get_ast_node_type_string(int node_type) {
 	else if (node_type == NON_TERMINAL_METHOD_INVOCATION) {return "NON_TERMINAL_METHOD_INVOCATION"; }
 	else if (node_type == NON_TERMINAL_CLASS_ATTRIBUTE_LIST) {return "NON_TERMINAL_CLASS_ATTRIBUTE_LIST"; }
 	else if (node_type == NON_TERMINAL_CLASS_DECLARATOR) {return "NON_TERMINAL_CLASS_DECLARATOR"; }
+	else if (node_type == NON_TERMINAL_VARIABLE_DECLARATION_STATEMENT) {return "NON_TERMINAL_VARIABLE_DECLARATION_STATEMENT"; }
 	else { return "<INVALID NODE TYPE>"; }
 }
 

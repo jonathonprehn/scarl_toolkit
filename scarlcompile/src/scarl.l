@@ -22,6 +22,7 @@ along with SCARL.  If not, see <https://www.gnu.org/licenses/>.
 #include <string.h>
 
 #include "scarlastnode.h"
+#include "scarlsymboltable.h"
 #include "stringstack.h"
 #include "linked_list.h"
 #include "y.tab.h"
@@ -30,6 +31,7 @@ unsigned line_number = 0;
 char *last_token_text = NULL;
 FILE *code_file = NULL;
 struct scarl_ast_node *program_ast;
+struct scarl_symbol_table *root_st;
 
 void setLastTokenText(char *txt) {
 	if (last_token_text != NULL) {
@@ -162,6 +164,18 @@ hex_digit [0-9a-fA-F]
 	else if (strcmp(yytext, "constant") == 0)
 	{
         return CONSTANT;
+	}
+	else if (strcmp(yytext, "SerialSensor") == 0)
+	{
+		return SERIAL_SENSOR;
+	}
+	else if (strcmp(yytext, "SerialActuator") == 0)
+	{
+		return SERIAL_ACTUATOR;
+	}
+	else if (strcmp(yytext, "byte") == 0)
+	{
+		return BYTE;
 	}
 	else if (strcmp(yytext, "platform") == 0)
 	{
@@ -399,19 +413,26 @@ int main(int argc, char *argv[]) {
 	
 	printf("Compiling file...\n");
 	
-	program_ast = NULL; // initialize to ensure it is NULL if parsing fails
-	line_number = 1;
+	program_ast = NULL; // the program abstract syntax tree - initialize to ensure it is NULL if parsing fails
+	root_st = NULL; // the root symbol table
+	line_number = 1; // count line number for error
 	extern FILE *yyin;
 	if (!yyparse()) {
 		//hey it parsed according to the grammar correctly
 		//say nothing like a real compiler
 	}
 	else {
-		fprintf(stderr, "\nFailed to parse. Check your file.\n");
+		//TODO: Better error handling (create error codes with better explainations)
+		fprintf(stderr, "\nFailed to parse. Check your file.\n"); 
 		return 1; //error
 	}
+	// create the symbol table for this compiled program 
+	root_st = create_st_from_ast(NULL, program_ast);
+	
 	printf("Hey, the source file was parsed successfully! Here is the AST:\n");
 	print_tree(program_ast);
+	
+	// first pass to gather
 	
 	
     return 0;

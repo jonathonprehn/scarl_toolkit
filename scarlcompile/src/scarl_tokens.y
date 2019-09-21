@@ -24,6 +24,7 @@ along with SCARL.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "scarltypes.h"
 #include "scarlastnode.h"
+#include "scarlsymboltable.h"
 #include "stringstack.h"
 
 int yylex(void);
@@ -55,7 +56,8 @@ unsigned debugging_grammar = 1;
 %token TEMPERATURE_SENSOR TRUE FALSE CONSTANT
 %token RETURN ALLOCATE DELETE DEREF SUPER CLASS
 %token EXTENDS LBRACKET RBRACKET DOT STRING_LITERAL
-%token CHAR_LITERAL
+%token CHAR_LITERAL SERIAL_SENSOR SERIAL_ACTUATOR
+%token BYTE
 
 
 %%
@@ -85,11 +87,6 @@ statement_list : statement statement_list {
 	$$ = statement_list_node;
 }
 
-statement : device_declarator_statement {
-	if (debugging_grammar) printf("Match statement\n");
-	$$ = $1;
-}
-
 statement : variable_definition_statement {
 	if (debugging_grammar) printf("Match statement\n");
 	$$ = $1;
@@ -107,6 +104,12 @@ statement : class_definition_statement {
 
 statement : constant_definition_statement {
 	if (debugging_grammar) printf("Match statement\n");
+	$$ = $1;
+}
+
+statement : variable_declaration_statement {
+	if (debugging_grammar) printf("Match statement\n");
+	// this is its own node if it is a statement and not a class field 
 	$$ = $1;
 }
 
@@ -188,17 +191,6 @@ statement_block_level : constant_definition_statement {
 	$$ = $1;
 }
 
-device_declarator_statement : device_type IDENTIFIER SEMICOLON {
-	char *device_identifier = string_stack_pop();
-	if (debugging_grammar) printf("Match device_declarator_statement (%s)\n", device_identifier);
-	struct scarl_ast_node *device_declarator_node = create_typed_ast_node(NON_TERMINAL_DEVICE_DECLARATOR_STATEMENT, NON_TERMINAL_DEVICE_DECLARATOR_STATEMENT);
-	struct scarl_ast_node *device_type_node = $1;
-	struct scarl_ast_node *device_identifier_node = create_str_value_ast_node(NON_TERMINAL_IDENTIFIER_VALUE, device_identifier);
-	add_child_node(device_declarator_node, device_type_node);
-	add_child_node(device_declarator_node, device_identifier_node);
-	$$ = device_declarator_node;
-}
-
 type_declarator : any_type IDENTIFIER {
     // for any variable declared with a type
 	char *declarator_identifier = string_stack_pop();
@@ -227,6 +219,12 @@ any_type : primitive_type {
 }
 
 any_type : user_type {
+	if (debugging_grammar) printf("Match any_type\n");
+	$$ = $1;
+}
+
+// new addition - pass device types as parameters (references to the device)
+any_type : device_type {
 	if (debugging_grammar) printf("Match any_type\n");
 	$$ = $1;
 }
@@ -274,7 +272,9 @@ variable_declaration_statement : type_declarator SEMICOLON {
 	// refer to this variable without assigning it, otherwise 
 	// the compiler will give an error
 	if (debugging_grammar) printf("Match variable_declaration_statement\n");
-	$$ = $1;
+	struct scarl_ast_node *variable_declaration_node = create_typed_ast_node(NON_TERMINAL_VARIABLE_DECLARATION_STATEMENT, NON_TERMINAL_VARIABLE_DECLARATION_STATEMENT);
+	add_child_node(variable_declaration_node, $1);
+	$$ = variable_declaration_node;
 }
 
 delete_statement : DELETE IDENTIFIER SEMICOLON {
@@ -1109,6 +1109,11 @@ primitive_type : VOID  {
     $$ = create_typed_ast_node(NON_TERMINAL_PRIMITIVE_TYPE, VOID);
 }
 
+primitive_type : BYTE  {
+	if (debugging_grammar) printf("Match primitive_type\n");
+    $$ = create_typed_ast_node(NON_TERMINAL_PRIMITIVE_TYPE, BYTE);
+}
+
 device_type : LIGHT_ACTUATOR {
 	if (debugging_grammar) printf("Match device_type\n");
     $$ = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, LIGHT_ACTUATOR);
@@ -1138,6 +1143,17 @@ device_type : TEMPERATURE_SENSOR {
 	if (debugging_grammar) printf("Match device_type\n");
 	$$ = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, TEMPERATURE_SENSOR);
 }
+
+device_type : SERIAL_SENSOR {
+	if (debugging_grammar) printf("Match device_type\n");
+	$$ = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, SERIAL_SENSOR);
+}
+
+device_type : SERIAL_ACTUATOR {
+	if (debugging_grammar) printf("Match device_type\n");
+	$$ = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, SERIAL_ACTUATOR);
+}
+
 
 %%
 

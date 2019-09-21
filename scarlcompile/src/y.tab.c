@@ -16,6 +16,7 @@ static char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
 
 #include "scarltypes.h"
 #include "scarlastnode.h"
+#include "scarlsymboltable.h"
 #include "stringstack.h"
 
 int yylex(void);
@@ -35,7 +36,7 @@ extern FILE *code_file;
 
 unsigned debugging_grammar = 1;
 
-#line 39 "y.tab.c"
+#line 40 "y.tab.c"
 #define IDENTIFIER 257
 #define PLUS 258
 #define MINUS 259
@@ -90,26 +91,29 @@ unsigned debugging_grammar = 1;
 #define DOT 308
 #define STRING_LITERAL 309
 #define CHAR_LITERAL 310
+#define SERIAL_SENSOR 311
+#define SERIAL_ACTUATOR 312
+#define BYTE 313
 #define YYERRCODE 256
 short yylhs[] = {                                        -1,
     0,    1,    1,    2,    2,    2,    2,    2,    8,    9,
     9,   10,   10,   10,   10,   10,   10,   10,   10,   10,
-   10,   10,    3,   20,   21,   21,   21,   21,   22,   23,
-   25,    4,   17,   18,    7,    6,   28,   28,   30,   31,
-   29,   32,   32,   33,   33,    5,   11,   15,   15,   35,
-   12,   37,   16,   38,   38,   13,   13,   14,   34,   34,
-   34,   36,   36,   36,   27,   27,   40,   41,   41,   39,
-   39,   42,   42,   43,   43,   43,   44,   44,   44,   44,
-   44,   45,   45,   26,   26,   26,   46,   46,   46,   47,
-   47,   47,   48,   48,   48,   48,   48,   48,   48,   48,
-   48,   52,   53,   54,   54,   55,   49,   49,   49,   49,
-   50,   51,   51,   24,   24,   24,   24,   19,   19,   19,
-   19,   19,   19,
+   10,   10,   18,   19,   19,   19,   19,   19,   20,   21,
+   23,    3,    7,   17,    6,    5,   27,   27,   29,   30,
+   28,   31,   31,   32,   32,    4,   11,   15,   15,   34,
+   12,   36,   16,   37,   37,   13,   13,   14,   33,   33,
+   33,   35,   35,   35,   26,   26,   39,   40,   40,   38,
+   38,   41,   41,   42,   42,   42,   43,   43,   43,   43,
+   43,   44,   44,   25,   25,   25,   45,   45,   45,   46,
+   46,   46,   47,   47,   47,   47,   47,   47,   47,   47,
+   47,   51,   52,   53,   53,   54,   48,   48,   48,   48,
+   49,   50,   50,   22,   22,   22,   22,   22,   24,   24,
+   24,   24,   24,   24,   24,   24,
 };
 short yylen[] = {                                         2,
     1,    1,    2,    1,    1,    1,    1,    1,    3,    1,
     2,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-    1,    1,    3,    2,    1,    1,    1,    1,    4,    2,
+    1,    1,    2,    1,    1,    1,    1,    1,    4,    2,
     1,    4,    2,    3,    5,    2,    1,    2,    2,    2,
     3,    1,    2,    1,    1,    6,    4,    3,    2,    4,
     2,    4,    2,    3,    3,    5,    7,    5,    1,    3,
@@ -119,187 +123,203 @@ short yylen[] = {                                         2,
     2,    3,    1,    1,    1,    1,    1,    1,    1,    1,
     1,    4,    2,    1,    1,    3,    1,    1,    1,    1,
     1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-    1,    1,    1,
+    1,    1,    1,    1,    1,    1,
 };
 short yydefred[] = {                                      0,
-   31,  114,  115,  116,  117,  118,  119,  120,  121,  122,
-  123,    0,    0,    0,    1,    0,    4,    5,    6,    7,
-    8,    0,    0,    0,   25,   26,   27,   28,    0,    0,
-    0,    0,   39,    3,    0,    0,    0,   30,    0,    0,
-   36,    0,   38,    0,   24,   23,    0,    0,    0,    0,
-    0,  107,  108,  109,  110,  112,  113,    0,    0,  104,
-  111,    0,    0,   97,   99,    0,    0,   66,    0,    0,
-    0,   77,    0,   87,   90,   94,   95,   96,   98,  100,
-  101,  105,    0,    0,   44,   45,    0,    0,    0,   40,
-    0,    0,    0,    0,   91,    0,    0,    0,    0,    0,
-    0,   67,  103,    0,    0,   32,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,   29,
-   33,   41,   43,   35,    0,    0,    0,   55,   92,    0,
-  106,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-   78,   79,   80,   81,   88,   89,    0,    0,   50,  102,
-   63,    0,    0,   52,   60,    0,   46,   68,   69,    0,
-    0,    0,    0,    0,   12,   22,   13,    0,    0,   14,
-   15,   16,   17,   18,   19,   20,   21,    0,    0,    0,
+   31,  114,  115,  116,  117,  119,  120,  121,  122,  123,
+  124,    0,    0,  125,  126,  118,    0,    1,    0,    4,
+    5,    6,    7,    8,    0,    0,   24,   25,   26,   27,
+   28,    0,    0,    0,    0,   39,    3,    0,   33,    0,
+   30,    0,    0,   36,    0,   38,    0,   23,    0,    0,
+    0,    0,    0,  107,  108,  109,  110,  112,  113,    0,
+    0,  104,  111,    0,    0,   97,   99,    0,    0,   66,
+    0,    0,    0,   77,    0,   87,   90,   94,   95,   96,
+   98,  100,  101,  105,    0,    0,   44,   45,    0,    0,
+    0,   40,    0,    0,    0,    0,   91,    0,    0,    0,
+    0,    0,    0,   67,  103,    0,    0,   32,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,   29,   41,   43,   35,    0,    0,    0,   55,   92,
+    0,  106,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,   78,   79,   80,   81,   88,   89,    0,    0,   50,
+  102,   63,    0,    0,   52,   60,    0,   46,   68,   69,
+    0,    0,    0,    0,    0,   12,   22,   20,   13,    0,
+    0,   14,   15,   16,   17,   18,   19,   21,    0,    0,
     0,    0,    0,   49,    0,    0,    9,   11,   51,   53,
     0,    0,    0,   48,   34,   47,    0,    0,    0,   58,
     0,   57,
 };
-short yydgoto[] = {                                      14,
-   15,   16,   17,   18,   19,   20,   21,  167,  168,  169,
-  170,  171,  172,  173,  174,  175,   86,  177,   22,   23,
-   32,   25,   26,   27,   28,   62,   98,   29,   41,   30,
-   43,   88,   89,  119,   64,   99,   65,   66,   67,   68,
-  102,   69,   70,   71,   72,   73,   74,   75,   76,   77,
-   78,   79,   80,   81,   82,
+short yydgoto[] = {                                      17,
+   18,   19,   20,   21,   22,   23,   24,  169,  170,  171,
+  172,  173,  174,  175,  176,  177,  178,   25,   35,   27,
+   28,   29,   30,   31,   64,  100,   32,   44,   33,   46,
+   90,   91,  121,   66,  101,   67,   68,   69,   70,  104,
+   71,   72,   73,   74,   75,   76,   77,   78,   79,   80,
+   81,   82,   83,   84,
 };
-short yysindex[] = {                                     20,
+short yysindex[] = {                                   -136,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,   25, -252,    0,    0,   20,    0,    0,    0,    0,
-    0, -238, -228, -250,    0,    0,    0,    0, -218, -224,
- -186, -245,    0,    0, -176, -194, -161,    0, -118,   25,
-    0, -123,    0, -194,    0,    0, -258, -118, -118, -118,
- -194,    0,    0,    0,    0,    0,    0,   25, -121,    0,
-    0, -236, -140,    0,    0, -108, -132,    0, -136, -178,
-  -90,    0, -147,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,   25, -227,    0,    0, -117, -120,   25,    0,
- -116, -194, -118,  -85,    0, -236, -139, -106, -109,  -91,
-  -79,    0,    0, -118, -118,    0, -194, -135, -135, -135,
- -135, -135, -135, -135, -135, -118, -118,  -89,  -76,    0,
-    0,    0,    0,    0,  -75, -219, -113,    0,    0, -194,
-    0, -194, -194, -147, -147,  -67, -136, -178,  -90,  -90,
-    0,    0,    0,    0,    0,    0,   25,  -74,    0,    0,
-    0,  -58,  -52,    0,    0,   65,    0,    0,    0, -241,
-  -43,  -32, -251,  -39,    0,    0,    0,  -48,   65,    0,
-    0,    0,    0,    0,    0,    0,    0, -193,  -47,  -42,
- -194, -194, -194,    0,  -41,  -40,    0,    0,    0,    0,
-  -24,  -28,  -21,    0,    0,    0,  -74,  -74,  -23,    0,
-  -74,    0,
+    0,  -94, -233,    0,    0,    0,    0,    0, -136,    0,
+    0,    0,    0,    0, -259, -247,    0,    0,    0,    0,
+    0, -278, -235, -187, -246,    0,    0,  -32,    0, -178,
+    0,   29,  -94,    0, -158,    0,  -32,    0, -186,   29,
+   29,   29,  -32,    0,    0,    0,    0,    0,    0, -199,
+ -148,    0,    0, -125, -165,    0,    0, -151, -142,    0,
+ -159, -251, -106,    0, -110,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,  -94, -229,    0,    0, -140, -143,
+  -94,    0, -132,  -32,   29, -104,    0, -125, -120, -107,
+ -111,  -88,  -86,    0,    0,   29,   29,    0,  -32,  -15,
+  -15,  -15,  -15,  -15,  -15,  -15,  -15,   29,   29, -101,
+  -78,    0,    0,    0,    0,  -75, -222, -115,    0,    0,
+  -32,    0,  -32,  -32, -110, -110,  -67, -159, -251, -106,
+ -106,    0,    0,    0,    0,    0,    0,  -94,  -81,    0,
+    0,    0,  -64,  -63,    0,    0, -188,    0,    0,    0,
+ -167,  -61,  -54,  -76,  -48,    0,    0,    0,    0,  -70,
+ -188,    0,    0,    0,    0,    0,    0,    0,  -58,  -57,
+  -32,  -32,  -32,    0,  -52,  -49,    0,    0,    0,    0,
+  -45,  -53,  -37,    0,    0,    0,  -81,  -81,  -36,    0,
+  -81,    0,
 };
 short yyrindex[] = {                                      0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,  260,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,  -22,
-    0,    0,    0,    0,    0,    0, -137,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,  -73,    0,    0,    0,
-  -14,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,   82,    0,    0,    0,    0,  126,    0, -148, -225,
-   17,    0,  -50,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,   -8,    0,    0,    0,    0,    0,   -6,    0,
-    0,   -5,    0,    0,    0,   99,    0, -244,    0,    0,
-    0,    0,    0,    0,    0,    0,   -5,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    9,    0,    0,
-    0,    0,    0,    0,    0,    0,   30,    0,    0, -207,
-    0,   -5,   -5,  -27,   -4,    0,  135, -168,  111,  123,
-    0,    0,    0,    0,    0,    0,   -8,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0, -242,
-    0,    0,    0,    0,    0,    0,    0,    0,   15,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,  241,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,  -33,    0,    0,    0,    0,    0,    0, -194,
+    0,    0,    0,    0,    0,    0,    0,    0,   74,    0,
+    0,    0,  -26,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,  160,    0,    0,    0,    0, -133,    0,
+  -19,  -90,   22,    0,   97,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,  -21,    0,    0,    0,    0,    0,
+  -23,    0,    0,  -20,    0,    0,    0,  182,    0, -230,
+    0,    0,    0,    0,    0,    0,    0,    0,  -20,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,   -6,
+    0,    0,    0,    0,    0,    0,    0,  -25,    0,    0,
+ -185,    0,  -20,  -20,  120,  143,    0,   42,  -40,  194,
+  206,    0,    0,    0,    0,    0,    0,  -21,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,   42,    0,
+ -219,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+  -18,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0, -250,    0,
     0,    0,
 };
 short yygindex[] = {                                      0,
-  247,    0,    0, -126,  -20,    0,  -86, -122,  132,    0,
-    0,    0,    0,    0,    0,    0,  -72,    0,    0,  -12,
-    2,    0,    0,  246,  250,  -36,  -35,    0,    0,    0,
-    0,  227,    0,  170,  -70,   -7,  -51,  225,    0,    0,
-    0,  212,  222,   45,  101,   54,  -44,    0,    0,    0,
-    0,    0,    0,    0,    0,
+  256,    0, -145,  -35,    0,  -74,  -41, -144,  105,    0,
+    0,    0,    0,    0,    0,    0,    0,  -11,    3,    0,
+    0,  219,  220,    0,  -24,  -38,    0,    0,    0,    0,
+  192,    0,  136,  -59,  -42,  -39,  193,    0,    0,    0,
+  175,  179,   48,  189,   78,  -46,    0,    0,    0,    0,
+    0,    0,    0,    0,
 };
-#define YYTABLESIZE 420
-short yytable[] = {                                      31,
-   63,   24,   84,   95,   33,   47,   37,   48,   91,   92,
-   49,   45,   96,   97,   31,   38,   50,   24,   35,   85,
-   38,  104,  105,   31,   62,  157,   92,   87,  184,  165,
-  104,  105,   51,  181,   52,   53,   54,   55,  104,  105,
-   62,   24,  165,   72,   56,   57,   36,   93,   58,   94,
-   59,   72,   72,   72,   72,   39,  126,   60,   61,   72,
-   39,   64,   47,   31,   48,   40,   94,   49,   85,  166,
-  118,  145,  146,   50,  199,  200,   87,   64,  202,  120,
-   42,   36,  166,  176,  125,  179,  121,  150,   44,   51,
-   24,   52,   53,   54,   55,  110,  176,  111,  179,  136,
-   73,   56,   57,   46,  180,   58,   83,   59,   73,   73,
-   73,   73,  116,  117,   60,   61,   73,  180,  104,  105,
-   70,   47,  151,   48,  152,  153,   49,  185,   70,  129,
-   70,   70,   50,   90,  118,  103,   70,   24,   47,  106,
-   48,  109,   24,  178,  108,  191,  192,  193,   51,   50,
-   52,   53,   54,   55,  139,  140,  178,  134,  135,  107,
-   56,   57,  121,  124,  122,   51,   59,   52,   53,   54,
-   55,  127,  130,   60,   61,  131,  132,   56,   57,  112,
-  113,  114,  115,   59,   93,   93,   93,   93,  133,  147,
-   60,   61,  148,  149,   94,   93,   93,   93,   93,   93,
-   93,  154,   93,   93,   93,   93,   93,   84,   84,  156,
-  158,   93,  141,  142,  143,  144,  159,  186,   84,   84,
-   84,   84,   84,   84,  182,   84,   84,   84,   84,   84,
-   85,   85,  189,   93,   84,  183,  187,  190,  194,  195,
-  197,   85,   85,   85,   85,   85,   85,  198,   85,   85,
-   85,   85,   85,   86,   86,  196,   84,   85,  201,    2,
-   61,   37,   34,   64,   86,   86,   86,   86,   86,   86,
-   64,   86,   86,   86,   86,   86,    1,   59,   42,   85,
-   86,    1,    2,    3,    4,   74,    5,    2,    3,    4,
-   74,    5,   74,   74,   74,   74,   74,   54,   56,   10,
-  188,   74,   86,  100,   56,   56,   56,  101,   56,    6,
-    7,    8,    9,   10,   11,  123,  155,   12,  128,  137,
-    0,  160,   56,   13,   56,   56,   56,    2,    3,    4,
-  138,    5,    0,    0,    0,    0,    0,    0,    0,   56,
-   56,    0,   56,    0,    0,  161,    0,  162,  156,    0,
-   82,   82,   82,   82,   82,   82,    0,   82,   82,   82,
-   82,   82,   12,  163,    0,  164,   82,   83,   83,   83,
-   83,   83,   83,    0,   83,   83,   83,   83,   83,   75,
-    0,    0,    0,   83,   75,    0,   75,   75,   75,   75,
-   75,   76,    0,    0,   65,   75,   76,    0,   76,   76,
-   76,   76,   76,   71,   65,   65,    0,   76,    0,    0,
-   65,   71,    0,   71,   71,    0,    0,    0,    0,   71,
+#define YYTABLESIZE 491
+short yytable[] = {                                      65,
+   34,   88,   26,   97,  158,   43,   56,   87,   93,   40,
+   48,  166,   56,   56,   56,   38,   56,   86,   41,   41,
+   39,   26,  112,   36,  113,  166,   98,   99,  106,  107,
+   56,   89,   56,   56,   56,  106,  107,   31,   62,   56,
+   56,   56,   56,   56,   56,   26,   31,   56,   56,   88,
+   56,  126,  199,  200,   62,   87,  202,    1,   42,   42,
+   56,   56,   56,    2,    3,    4,  137,    5,  161,   45,
+  127,  146,  147,  120,    2,    3,    4,  122,    5,   89,
+   23,   94,  167,   64,  151,   23,   31,   47,  152,   85,
+  153,  154,  162,   26,  163,  157,  167,  179,   92,   64,
+   94,    6,    7,    8,    9,   10,   11,  181,  105,   12,
+  164,  179,  165,   16,  108,  168,  109,  180,  111,   95,
+    1,   96,   14,   15,   16,  185,    2,    3,    4,  168,
+    5,  180,  106,  107,  110,   65,  120,  106,  107,   39,
+   96,  123,  191,  192,  193,   65,   65,  125,  130,  118,
+  119,   65,  128,    6,    7,    8,    9,   10,   11,  140,
+  141,   12,    1,  114,  115,  116,  117,   13,    2,    3,
+    4,  131,    5,  132,   14,   15,   16,  148,   72,  133,
+   49,  134,   50,  135,  136,   51,   72,   72,   72,   72,
+  149,   52,   96,  150,   72,    6,    7,    8,    9,   10,
+   11,  155,  157,  184,  159,  160,  182,   53,  186,   54,
+   55,   56,   57,  183,  187,  197,   14,   15,   16,   58,
+   59,  189,  190,   60,   49,   61,   50,  194,   73,   51,
+  195,  198,   62,   63,  196,   52,   73,   73,   73,   73,
+    2,   49,   54,   50,   73,  201,   51,   61,   64,   70,
+   37,   53,   52,   54,   55,   56,   57,   70,   64,   70,
+   70,   42,   59,   58,   59,   70,   10,   60,   53,   61,
+   54,   55,   56,   57,   37,  188,   62,   63,  102,  103,
+   58,   59,  124,  156,  138,   49,   61,   50,  129,  139,
+   74,    0,    0,   62,   63,   74,   52,   74,   74,   74,
+   74,   74,  142,  143,  144,  145,   74,    0,    0,    0,
+   71,    0,   53,    0,   54,   55,   56,   57,   71,    0,
+   71,   71,    0,    0,   58,   59,   71,    0,    0,    0,
+   61,   93,   93,   93,   93,    0,    0,   62,   63,    0,
+    0,    0,   93,   93,   93,   93,   93,   93,    0,   93,
+   93,   93,   93,   93,   84,   84,    0,    0,   93,    0,
+    0,    0,    0,    0,    0,   84,   84,   84,   84,   84,
+   84,    0,   84,   84,   84,   84,   84,   85,   85,    0,
+   93,   84,    0,    0,    0,    0,    0,    0,   85,   85,
+   85,   85,   85,   85,    0,   85,   85,   85,   85,   85,
+   86,   86,    0,   84,   85,    0,    0,    0,    0,    0,
+    0,   86,   86,   86,   86,   86,   86,    0,   86,   86,
+   86,   86,   86,    0,    0,    0,   85,   86,   82,   82,
+   82,   82,   82,   82,    0,   82,   82,   82,   82,   82,
+    0,    0,    0,    0,   82,    0,    0,    0,    0,   86,
+   83,   83,   83,   83,   83,   83,    0,   83,   83,   83,
+   83,   83,   75,    0,    0,    0,   83,   75,    0,   75,
+   75,   75,   75,   75,   76,    0,    0,    0,   75,   76,
+    0,   76,   76,   76,   76,   76,    0,    0,    0,    0,
+   76,
 };
-short yycheck[] = {                                      12,
-   36,    0,   39,   48,  257,  257,  257,  259,   44,  268,
-  262,  257,   49,   50,  257,  266,  268,   16,  257,   40,
-  266,  258,  259,  266,  269,  148,  268,   40,  280,  156,
-  258,  259,  284,  275,  286,  287,  288,  289,  258,  259,
-  285,   40,  169,  269,  296,  297,  275,  306,  300,  308,
-  302,  277,  278,  279,  280,  306,   93,  309,  310,  285,
-  306,  269,  257,  306,  259,  284,  308,  262,   89,  156,
-   83,  116,  117,  268,  197,  198,   89,  285,  201,  307,
-  305,  275,  169,  156,   92,  156,  280,  307,  275,  284,
-   89,  286,  287,  288,  289,  274,  169,  276,  169,  107,
-  269,  296,  297,  280,  156,  300,  268,  302,  277,  278,
-  279,  280,  260,  261,  309,  310,  285,  169,  258,  259,
-  269,  257,  130,  259,  132,  133,  262,  163,  277,  269,
-  279,  280,  268,  257,  147,  257,  285,  275,  257,  280,
-  259,  278,  280,  156,  277,  181,  182,  183,  284,  268,
-  286,  287,  288,  289,  110,  111,  169,  104,  105,  268,
-  296,  297,  280,  280,  285,  284,  302,  286,  287,  288,
-  289,  257,  279,  309,  310,  285,  268,  296,  297,  270,
-  271,  272,  273,  302,  258,  259,  260,  261,  268,  279,
-  309,  310,  269,  269,  308,  269,  270,  271,  272,  273,
-  274,  269,  276,  277,  278,  279,  280,  258,  259,  284,
-  269,  285,  112,  113,  114,  115,  269,  257,  269,  270,
-  271,  272,  273,  274,  268,  276,  277,  278,  279,  280,
-  258,  259,  280,  307,  285,  268,  285,  280,  280,  280,
-  269,  269,  270,  271,  272,  273,  274,  269,  276,  277,
-  278,  279,  280,  258,  259,  280,  307,  285,  282,    0,
-  269,  284,   16,  269,  269,  270,  271,  272,  273,  274,
-  285,  276,  277,  278,  279,  280,  257,  269,  285,  307,
-  285,  257,  263,  264,  265,  269,  267,  263,  264,  265,
-  274,  267,  276,  277,  278,  279,  280,  268,  257,  285,
-  169,  285,  307,   58,  263,  264,  265,   58,  267,  290,
-  291,  292,  293,  294,  295,   89,  147,  298,   94,  108,
-   -1,  257,  281,  304,  283,  284,  285,  263,  264,  265,
-  109,  267,   -1,   -1,   -1,   -1,   -1,   -1,   -1,  298,
-  299,   -1,  301,   -1,   -1,  281,   -1,  283,  284,   -1,
+short yycheck[] = {                                      38,
+   12,   43,    0,   50,  149,  284,  257,   43,   47,  257,
+  257,  157,  263,  264,  265,  275,  267,   42,  266,  266,
+  280,   19,  274,  257,  276,  171,   51,   52,  258,  259,
+  281,   43,  283,  284,  285,  258,  259,  257,  269,  290,
+  291,  292,  293,  294,  295,   43,  266,  298,  299,   91,
+  301,   94,  197,  198,  285,   91,  201,  257,  306,  306,
+  311,  312,  313,  263,  264,  265,  109,  267,  257,  305,
+   95,  118,  119,   85,  263,  264,  265,  307,  267,   91,
+  275,  268,  157,  269,  307,  280,  306,  275,  131,  268,
+  133,  134,  281,   91,  283,  284,  171,  157,  257,  285,
+  268,  290,  291,  292,  293,  294,  295,  275,  257,  298,
+  299,  171,  301,  313,  280,  157,  268,  157,  278,  306,
+  257,  308,  311,  312,  313,  164,  263,  264,  265,  171,
+  267,  171,  258,  259,  277,  269,  148,  258,  259,  280,
+  308,  285,  181,  182,  183,  279,  280,  280,  269,  260,
+  261,  285,  257,  290,  291,  292,  293,  294,  295,  112,
+  113,  298,  257,  270,  271,  272,  273,  304,  263,  264,
+  265,  279,  267,  285,  311,  312,  313,  279,  269,  268,
+  257,  268,  259,  106,  107,  262,  277,  278,  279,  280,
+  269,  268,  308,  269,  285,  290,  291,  292,  293,  294,
+  295,  269,  284,  280,  269,  269,  268,  284,  257,  286,
+  287,  288,  289,  268,  285,  269,  311,  312,  313,  296,
+  297,  280,  280,  300,  257,  302,  259,  280,  269,  262,
+  280,  269,  309,  310,  280,  268,  277,  278,  279,  280,
+    0,  257,  268,  259,  285,  282,  262,  269,  269,  269,
+  284,  284,  268,  286,  287,  288,  289,  277,  285,  279,
+  280,  285,  269,  296,  297,  285,  285,  300,  284,  302,
+  286,  287,  288,  289,   19,  171,  309,  310,   60,   60,
+  296,  297,   91,  148,  110,  257,  302,  259,   96,  111,
+  269,   -1,   -1,  309,  310,  274,  268,  276,  277,  278,
+  279,  280,  114,  115,  116,  117,  285,   -1,   -1,   -1,
+  269,   -1,  284,   -1,  286,  287,  288,  289,  277,   -1,
+  279,  280,   -1,   -1,  296,  297,  285,   -1,   -1,   -1,
+  302,  258,  259,  260,  261,   -1,   -1,  309,  310,   -1,
+   -1,   -1,  269,  270,  271,  272,  273,  274,   -1,  276,
+  277,  278,  279,  280,  258,  259,   -1,   -1,  285,   -1,
+   -1,   -1,   -1,   -1,   -1,  269,  270,  271,  272,  273,
+  274,   -1,  276,  277,  278,  279,  280,  258,  259,   -1,
+  307,  285,   -1,   -1,   -1,   -1,   -1,   -1,  269,  270,
+  271,  272,  273,  274,   -1,  276,  277,  278,  279,  280,
+  258,  259,   -1,  307,  285,   -1,   -1,   -1,   -1,   -1,
+   -1,  269,  270,  271,  272,  273,  274,   -1,  276,  277,
+  278,  279,  280,   -1,   -1,   -1,  307,  285,  269,  270,
+  271,  272,  273,  274,   -1,  276,  277,  278,  279,  280,
+   -1,   -1,   -1,   -1,  285,   -1,   -1,   -1,   -1,  307,
   269,  270,  271,  272,  273,  274,   -1,  276,  277,  278,
-  279,  280,  298,  299,   -1,  301,  285,  269,  270,  271,
-  272,  273,  274,   -1,  276,  277,  278,  279,  280,  269,
-   -1,   -1,   -1,  285,  274,   -1,  276,  277,  278,  279,
-  280,  269,   -1,   -1,  269,  285,  274,   -1,  276,  277,
-  278,  279,  280,  269,  279,  280,   -1,  285,   -1,   -1,
-  285,  277,   -1,  279,  280,   -1,   -1,   -1,   -1,  285,
+  279,  280,  269,   -1,   -1,   -1,  285,  274,   -1,  276,
+  277,  278,  279,  280,  269,   -1,   -1,   -1,  285,  274,
+   -1,  276,  277,  278,  279,  280,   -1,   -1,   -1,   -1,
+  285,
 };
-#define YYFINAL 14
+#define YYFINAL 17
 #ifndef YYDEBUG
 #define YYDEBUG 0
 #endif
-#define YYMAXTOKEN 310
+#define YYMAXTOKEN 313
 #if YYDEBUG
 char *yyname[] = {
 "end-of-file",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -315,18 +335,18 @@ char *yyname[] = {
 "BINARY","LIGHT_ACTUATOR","SERVO_ACTUATOR","SOUND_SENSOR","LIGHT_SENSOR",
 "DISTANCE_SENSOR","TEMPERATURE_SENSOR","TRUE","FALSE","CONSTANT","RETURN",
 "ALLOCATE","DELETE","DEREF","SUPER","CLASS","EXTENDS","LBRACKET","RBRACKET",
-"DOT","STRING_LITERAL","CHAR_LITERAL",
+"DOT","STRING_LITERAL","CHAR_LITERAL","SERIAL_SENSOR","SERIAL_ACTUATOR","BYTE",
 };
 char *yyrule[] = {
 "$accept : program",
 "program : statement_list",
 "statement_list : statement",
 "statement_list : statement statement_list",
-"statement : device_declarator_statement",
 "statement : variable_definition_statement",
 "statement : function_definition_statement",
 "statement : class_definition_statement",
 "statement : constant_definition_statement",
+"statement : variable_declaration_statement",
 "block_statement : LBRACE statement_list_block_level RBRACE",
 "statement_list_block_level : statement_block_level",
 "statement_list_block_level : statement_block_level statement_list_block_level",
@@ -341,12 +361,12 @@ char *yyrule[] = {
 "statement_block_level : variable_declaration_statement",
 "statement_block_level : delete_statement",
 "statement_block_level : constant_definition_statement",
-"device_declarator_statement : device_type IDENTIFIER SEMICOLON",
 "type_declarator : any_type IDENTIFIER",
 "any_type : array_type",
 "any_type : pointer_type",
 "any_type : primitive_type",
 "any_type : user_type",
+"any_type : device_type",
 "array_type : any_type LBRACKET arithmetic_expression RBRACKET",
 "pointer_type : any_type POINTER",
 "user_type : IDENTIFIER",
@@ -436,12 +456,15 @@ char *yyrule[] = {
 "primitive_type : INT",
 "primitive_type : CHAR",
 "primitive_type : VOID",
+"primitive_type : BYTE",
 "device_type : LIGHT_ACTUATOR",
 "device_type : SERVO_ACTUATOR",
 "device_type : SOUND_SENSOR",
 "device_type : LIGHT_SENSOR",
 "device_type : DISTANCE_SENSOR",
 "device_type : TEMPERATURE_SENSOR",
+"device_type : SERIAL_SENSOR",
+"device_type : SERIAL_ACTUATOR",
 };
 #endif
 #ifndef YYSTYPE
@@ -469,12 +492,12 @@ YYSTYPE yylval;
 short yyss[YYSTACKSIZE];
 YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
-#line 1143 "scarl_tokens.y"
+#line 1159 "scarl_tokens.y"
 
 void yyerror(char *s) {
 	fprintf(stderr, "%s at line %i near \'%s\'\n", s, line_number, last_token_text);
 }
-#line 478 "y.tab.c"
+#line 501 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYREJECT goto yyabort
 #define YYACCEPT goto yyaccept
@@ -616,7 +639,7 @@ yyreduce:
     switch (yyn)
     {
 case 1:
-#line 63 "scarl_tokens.y"
+#line 65 "scarl_tokens.y"
 {
 	printf("Match program\n");
 	/*pass the completed AST back to the main program for further processing*/
@@ -625,7 +648,7 @@ case 1:
 }
 break;
 case 2:
-#line 70 "scarl_tokens.y"
+#line 72 "scarl_tokens.y"
 {
     /* finish off the statement list*/
 	struct scarl_ast_node *statement_node = yyvsp[0];
@@ -636,7 +659,7 @@ case 2:
 }
 break;
 case 3:
-#line 79 "scarl_tokens.y"
+#line 81 "scarl_tokens.y"
 {
     /* add the statement to the statement list*/
 	if (debugging_grammar) printf("Match statement_list\n");
@@ -647,49 +670,50 @@ case 3:
 }
 break;
 case 4:
-#line 88 "scarl_tokens.y"
+#line 90 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match statement\n");
 	yyval = yyvsp[0];
 }
 break;
 case 5:
-#line 93 "scarl_tokens.y"
+#line 95 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match statement\n");
 	yyval = yyvsp[0];
 }
 break;
 case 6:
-#line 98 "scarl_tokens.y"
+#line 100 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match statement\n");
 	yyval = yyvsp[0];
 }
 break;
 case 7:
-#line 103 "scarl_tokens.y"
+#line 105 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match statement\n");
 	yyval = yyvsp[0];
 }
 break;
 case 8:
-#line 108 "scarl_tokens.y"
+#line 110 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match statement\n");
+	/* this is its own node if it is a statement and not a class field */
 	yyval = yyvsp[0];
 }
 break;
 case 9:
-#line 113 "scarl_tokens.y"
+#line 116 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match block_statement\n");
 	yyval = yyvsp[-1];
 }
 break;
 case 10:
-#line 118 "scarl_tokens.y"
+#line 121 "scarl_tokens.y"
 {
     /* finish the block level statement list*/
 	if (debugging_grammar) printf("Match statement_list_block_level\n");
@@ -700,7 +724,7 @@ case 10:
 }
 break;
 case 11:
-#line 127 "scarl_tokens.y"
+#line 130 "scarl_tokens.y"
 {
     /* add a block level statement to the statement list*/
 	if (debugging_grammar) printf("Match statement_list_block_level\n");
@@ -711,97 +735,84 @@ case 11:
 }
 break;
 case 12:
-#line 136 "scarl_tokens.y"
+#line 139 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match statement_block_level\n");
 	yyval = yyvsp[0];
 }
 break;
 case 13:
-#line 141 "scarl_tokens.y"
+#line 144 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match statement_block_level\n");
 	yyval = yyvsp[0];
 }
 break;
 case 14:
-#line 146 "scarl_tokens.y"
+#line 149 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match statement_block_level\n");
 	yyval = yyvsp[0];
 }
 break;
 case 15:
-#line 151 "scarl_tokens.y"
+#line 154 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match statement_block_level\n");
 	yyval = yyvsp[0];
 }
 break;
 case 16:
-#line 156 "scarl_tokens.y"
+#line 159 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match statement_block_level\n");
 	yyval = yyvsp[0];
 }
 break;
 case 17:
-#line 161 "scarl_tokens.y"
+#line 164 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match statement_block_level\n");
 	yyval = yyvsp[0];
 }
 break;
 case 18:
-#line 166 "scarl_tokens.y"
+#line 169 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match statement_block_level\n");
 	yyval = yyvsp[0];
 }
 break;
 case 19:
-#line 171 "scarl_tokens.y"
+#line 174 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match statement_block_level\n");
 	yyval = yyvsp[0];
 }
 break;
 case 20:
-#line 176 "scarl_tokens.y"
+#line 179 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match statement_block_level\n");
 	yyval = yyvsp[0];
 }
 break;
 case 21:
-#line 181 "scarl_tokens.y"
+#line 184 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match statement_block_level\n");
 	yyval = yyvsp[0];
 }
 break;
 case 22:
-#line 186 "scarl_tokens.y"
+#line 189 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match statement_block_level\n");
 	yyval = yyvsp[0];
 }
 break;
 case 23:
-#line 191 "scarl_tokens.y"
-{
-	char *device_identifier = string_stack_pop();
-	if (debugging_grammar) printf("Match device_declarator_statement (%s)\n", device_identifier);
-	struct scarl_ast_node *device_declarator_node = create_typed_ast_node(NON_TERMINAL_DEVICE_DECLARATOR_STATEMENT, NON_TERMINAL_DEVICE_DECLARATOR_STATEMENT);
-	struct scarl_ast_node *device_type_node = yyvsp[-2];
-	struct scarl_ast_node *device_identifier_node = create_str_value_ast_node(NON_TERMINAL_IDENTIFIER_VALUE, device_identifier);
-	add_child_node(device_declarator_node, device_type_node);
-	add_child_node(device_declarator_node, device_identifier_node);
-	yyval = device_declarator_node;
-}
-break;
-case 24:
-#line 202 "scarl_tokens.y"
+#line 194 "scarl_tokens.y"
 {
     /* for any variable declared with a type*/
 	char *declarator_identifier = string_stack_pop();
@@ -814,36 +825,43 @@ case 24:
 	yyval = type_declarator_node;
 }
 break;
+case 24:
+#line 206 "scarl_tokens.y"
+{
+	if (debugging_grammar) printf("Match any_type\n");
+	yyval = yyvsp[0];
+}
+break;
 case 25:
-#line 214 "scarl_tokens.y"
+#line 211 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match any_type\n");
 	yyval = yyvsp[0];
 }
 break;
 case 26:
-#line 219 "scarl_tokens.y"
+#line 216 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match any_type\n");
 	yyval = yyvsp[0];
 }
 break;
 case 27:
-#line 224 "scarl_tokens.y"
+#line 221 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match any_type\n");
 	yyval = yyvsp[0];
 }
 break;
 case 28:
-#line 229 "scarl_tokens.y"
+#line 227 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match any_type\n");
 	yyval = yyvsp[0];
 }
 break;
 case 29:
-#line 234 "scarl_tokens.y"
+#line 232 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match array_type\n");
 	struct scarl_ast_node *array_type_node = create_typed_ast_node(NON_TERMINAL_ARRAY_TYPE, NON_TERMINAL_ARRAY_TYPE);
@@ -855,7 +873,7 @@ case 29:
 }
 break;
 case 30:
-#line 244 "scarl_tokens.y"
+#line 242 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match pointer_type\n");
 	struct scarl_ast_node *pointer_node = create_typed_ast_node(NON_TERMINAL_POINTER_TYPE, NON_TERMINAL_POINTER_TYPE);
@@ -865,7 +883,7 @@ case 30:
 }
 break;
 case 31:
-#line 252 "scarl_tokens.y"
+#line 250 "scarl_tokens.y"
 {
 	char *user_type_identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match user_type (%s)\n", user_type_identifier);
@@ -873,7 +891,7 @@ case 31:
 }
 break;
 case 32:
-#line 258 "scarl_tokens.y"
+#line 256 "scarl_tokens.y"
 {
     /* we must ensure that the evaluated type*/
     /* on the right hand side of the = sign is*/
@@ -889,13 +907,15 @@ case 32:
 }
 break;
 case 33:
-#line 272 "scarl_tokens.y"
+#line 270 "scarl_tokens.y"
 {
 	/* declares a variable without giving it a value - cannot*/
 	/* refer to this variable without assigning it, otherwise */
 	/* the compiler will give an error*/
 	if (debugging_grammar) printf("Match variable_declaration_statement\n");
-	yyval = yyvsp[-1];
+	struct scarl_ast_node *variable_declaration_node = create_typed_ast_node(NON_TERMINAL_VARIABLE_DECLARATION_STATEMENT, NON_TERMINAL_VARIABLE_DECLARATION_STATEMENT);
+	add_child_node(variable_declaration_node, yyvsp[-1]);
+	yyval = variable_declaration_node;
 }
 break;
 case 34:
@@ -1887,46 +1907,67 @@ break;
 case 118:
 #line 1112 "scarl_tokens.y"
 {
-	if (debugging_grammar) printf("Match device_type\n");
-    yyval = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, LIGHT_ACTUATOR);
+	if (debugging_grammar) printf("Match primitive_type\n");
+    yyval = create_typed_ast_node(NON_TERMINAL_PRIMITIVE_TYPE, BYTE);
 }
 break;
 case 119:
 #line 1117 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match device_type\n");
-    yyval = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, SERVO_ACTUATOR);
+    yyval = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, LIGHT_ACTUATOR);
 }
 break;
 case 120:
 #line 1122 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match device_type\n");
-    yyval = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, SOUND_SENSOR);
+    yyval = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, SERVO_ACTUATOR);
 }
 break;
 case 121:
 #line 1127 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match device_type\n");
-    yyval = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, LIGHT_SENSOR);
+    yyval = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, SOUND_SENSOR);
 }
 break;
 case 122:
 #line 1132 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match device_type\n");
-    yyval = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, DISTANCE_SENSOR);
+    yyval = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, LIGHT_SENSOR);
 }
 break;
 case 123:
 #line 1137 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match device_type\n");
+    yyval = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, DISTANCE_SENSOR);
+}
+break;
+case 124:
+#line 1142 "scarl_tokens.y"
+{
+	if (debugging_grammar) printf("Match device_type\n");
 	yyval = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, TEMPERATURE_SENSOR);
 }
 break;
-#line 1930 "y.tab.c"
+case 125:
+#line 1147 "scarl_tokens.y"
+{
+	if (debugging_grammar) printf("Match device_type\n");
+	yyval = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, SERIAL_SENSOR);
+}
+break;
+case 126:
+#line 1152 "scarl_tokens.y"
+{
+	if (debugging_grammar) printf("Match device_type\n");
+	yyval = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, SERIAL_ACTUATOR);
+}
+break;
+#line 1971 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

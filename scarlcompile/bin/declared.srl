@@ -1,0 +1,29 @@
+
+// all the kinds of statements
+// that yield a symbol table
+// entry
+
+SerialSensor cereal;
+
+constant int x = 1;
+int y = 2;
+
+class MyClass {
+	int field;
+	void foo() {
+		x = x + 1;
+	}
+}
+
+// the 5 types that can be function parameters
+// (cannot use functions as parameters; polymorphism is for that)
+int complicatedFunction(int i, LightActuator li, MyClass cls, int pointer p, int[5] arr) {
+	li.on(100);
+	wait(100);
+	li.off();
+	return !b + i*c;
+}
+
+void main() {
+	int decl; 
+}
