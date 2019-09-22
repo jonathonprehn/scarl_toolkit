@@ -10,6 +10,11 @@ class B extends A {
 	int moreData;
 }
 
+int stuff() {
+	B bee = allocate B();
+	//bee.moreData = 20; // not working
+}
+
 void main() {
 	A generalCase = allocate B();
 	a.funcOfclass();

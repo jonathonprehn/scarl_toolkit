@@ -17,6 +17,7 @@ along with SCARL.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "stringstack.h"
 
@@ -36,6 +37,17 @@ char *string_stack_pop() {
 	return val;
 }
 
+void print_string_stack() {
+	for (int i = scarl_string_stack_top - 1; i >= 0; i--) {
+		if (i == scarl_string_stack_top - 1) {
+			printf("| %s <-- top\n", the_string_stack[i]);
+		}
+		else {
+			printf("| %s\n", the_string_stack[i]);
+		}
+	}
+	printf("----\n");
+}
 
 int the_int_stack[SCARL_INT_STACK_SIZE];
 int scarl_int_stack_top = 0;

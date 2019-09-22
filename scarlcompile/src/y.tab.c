@@ -100,220 +100,218 @@ short yylhs[] = {                                        -1,
     9,   10,   10,   10,   10,   10,   10,   10,   10,   10,
    10,   10,   18,   19,   19,   19,   19,   19,   20,   21,
    23,    3,    7,   17,    6,    5,   27,   27,   29,   30,
-   28,   31,   31,   32,   32,    4,   11,   15,   15,   34,
-   12,   36,   16,   37,   37,   13,   13,   14,   33,   33,
-   33,   35,   35,   35,   26,   26,   39,   40,   40,   38,
-   38,   41,   41,   42,   42,   42,   43,   43,   43,   43,
-   43,   44,   44,   25,   25,   25,   45,   45,   45,   46,
-   46,   46,   47,   47,   47,   47,   47,   47,   47,   47,
-   47,   51,   52,   53,   53,   54,   48,   48,   48,   48,
-   49,   50,   50,   22,   22,   22,   22,   22,   24,   24,
-   24,   24,   24,   24,   24,   24,
+   28,   31,   31,   32,   32,    4,   11,   11,   15,   15,
+   35,   12,   37,   16,   34,   34,   13,   13,   14,   33,
+   33,   33,   36,   36,   36,   26,   26,   39,   40,   40,
+   38,   38,   41,   41,   42,   42,   42,   43,   43,   43,
+   43,   43,   44,   44,   25,   25,   25,   45,   45,   45,
+   46,   46,   46,   47,   47,   47,   47,   47,   47,   47,
+   47,   47,   51,   52,   53,   53,   54,   48,   48,   48,
+   48,   49,   50,   50,   22,   22,   22,   22,   22,   24,
+   24,   24,   24,   24,   24,   24,   24,
 };
 short yylen[] = {                                         2,
     1,    1,    2,    1,    1,    1,    1,    1,    3,    1,
     2,    1,    1,    1,    1,    1,    1,    1,    1,    1,
     1,    1,    2,    1,    1,    1,    1,    1,    4,    2,
     1,    4,    2,    3,    5,    2,    1,    2,    2,    2,
-    3,    1,    2,    1,    1,    6,    4,    3,    2,    4,
-    2,    4,    2,    3,    3,    5,    7,    5,    1,    3,
-    0,    1,    3,    0,    1,    1,    2,    4,    4,    1,
-    3,    1,    3,    1,    3,    3,    1,    3,    3,    3,
-    3,    1,    2,    1,    3,    3,    1,    3,    3,    1,
-    2,    3,    1,    1,    1,    1,    1,    1,    1,    1,
-    1,    4,    2,    1,    1,    3,    1,    1,    1,    1,
+    3,    1,    2,    1,    1,    6,    4,    4,    3,    2,
+    4,    2,    4,    2,    3,    3,    5,    7,    5,    1,
+    3,    0,    1,    3,    0,    1,    1,    2,    4,    4,
+    1,    3,    1,    3,    1,    3,    3,    1,    3,    3,
+    3,    3,    1,    2,    1,    3,    3,    1,    3,    3,
+    1,    2,    3,    1,    1,    1,    1,    1,    1,    1,
+    1,    1,    4,    2,    1,    1,    3,    1,    1,    1,
     1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-    1,    1,    1,    1,    1,    1,
+    1,    1,    1,    1,    1,    1,    1,
 };
 short yydefred[] = {                                      0,
-   31,  114,  115,  116,  117,  119,  120,  121,  122,  123,
-  124,    0,    0,  125,  126,  118,    0,    1,    0,    4,
+   31,  115,  116,  117,  118,  120,  121,  122,  123,  124,
+  125,    0,    0,  126,  127,  119,    0,    1,    0,    4,
     5,    6,    7,    8,    0,    0,   24,   25,   26,   27,
    28,    0,    0,    0,    0,   39,    3,    0,   33,    0,
    30,    0,    0,   36,    0,   38,    0,   23,    0,    0,
-    0,    0,    0,  107,  108,  109,  110,  112,  113,    0,
-    0,  104,  111,    0,    0,   97,   99,    0,    0,   66,
-    0,    0,    0,   77,    0,   87,   90,   94,   95,   96,
-   98,  100,  101,  105,    0,    0,   44,   45,    0,    0,
-    0,   40,    0,    0,    0,    0,   91,    0,    0,    0,
-    0,    0,    0,   67,  103,    0,    0,   32,    0,    0,
+    0,    0,    0,  108,  109,  110,  111,  113,  114,    0,
+    0,  105,  112,    0,    0,    0,   98,  100,    0,   67,
+    0,    0,    0,   78,    0,   88,   91,   95,   96,   97,
+   99,  101,  102,  106,    0,    0,   44,   45,    0,    0,
+    0,   40,    0,    0,    0,    0,   92,    0,    0,    0,
+    0,    0,    0,   68,  104,    0,    0,   32,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,   29,   41,   43,   35,    0,    0,    0,   55,   92,
-    0,  106,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,   78,   79,   80,   81,   88,   89,    0,    0,   50,
-  102,   63,    0,    0,   52,   60,    0,   46,   68,   69,
+    0,   29,   41,   43,   35,    0,    0,    0,   56,   93,
+    0,  107,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,   79,   80,   81,   82,   89,   90,    0,    0,   51,
+  103,   64,    0,    0,   53,   61,    0,   46,   69,   70,
     0,    0,    0,    0,    0,   12,   22,   20,   13,    0,
     0,   14,   15,   16,   17,   18,   19,   21,    0,    0,
-    0,    0,    0,   49,    0,    0,    9,   11,   51,   53,
-    0,    0,    0,   48,   34,   47,    0,    0,    0,   58,
-    0,   57,
+    0,    0,    0,    0,   50,    0,    0,    9,   11,    0,
+   52,   54,    0,    0,    0,   49,   34,    0,   47,    0,
+    0,   48,    0,   59,    0,   58,
 };
 short yydgoto[] = {                                      17,
    18,   19,   20,   21,   22,   23,   24,  169,  170,  171,
   172,  173,  174,  175,  176,  177,  178,   25,   35,   27,
    28,   29,   30,   31,   64,  100,   32,   44,   33,   46,
-   90,   91,  121,   66,  101,   67,   68,   69,   70,  104,
+   90,   91,  121,   66,   67,  101,   68,   69,   70,  104,
    71,   72,   73,   74,   75,   76,   77,   78,   79,   80,
    81,   82,   83,   84,
 };
-short yysindex[] = {                                   -136,
+short yysindex[] = {                                   -251,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,  -94, -233,    0,    0,    0,    0,    0, -136,    0,
-    0,    0,    0,    0, -259, -247,    0,    0,    0,    0,
-    0, -278, -235, -187, -246,    0,    0,  -32,    0, -178,
-    0,   29,  -94,    0, -158,    0,  -32,    0, -186,   29,
-   29,   29,  -32,    0,    0,    0,    0,    0,    0, -199,
- -148,    0,    0, -125, -165,    0,    0, -151, -142,    0,
- -159, -251, -106,    0, -110,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,  -94, -229,    0,    0, -140, -143,
-  -94,    0, -132,  -32,   29, -104,    0, -125, -120, -107,
- -111,  -88,  -86,    0,    0,   29,   29,    0,  -32,  -15,
-  -15,  -15,  -15,  -15,  -15,  -15,  -15,   29,   29, -101,
-  -78,    0,    0,    0,    0,  -75, -222, -115,    0,    0,
-  -32,    0,  -32,  -32, -110, -110,  -67, -159, -251, -106,
- -106,    0,    0,    0,    0,    0,    0,  -94,  -81,    0,
-    0,    0,  -64,  -63,    0,    0, -188,    0,    0,    0,
- -167,  -61,  -54,  -76,  -48,    0,    0,    0,    0,  -70,
- -188,    0,    0,    0,    0,    0,    0,    0,  -58,  -57,
-  -32,  -32,  -32,    0,  -52,  -49,    0,    0,    0,    0,
-  -45,  -53,  -37,    0,    0,    0,  -81,  -81,  -36,    0,
-  -81,    0,
+    0, -110, -237,    0,    0,    0,    0,    0, -251,    0,
+    0,    0,    0,    0, -270, -221,    0,    0,    0,    0,
+    0, -254, -241, -191, -200,    0,    0,  -51,    0, -160,
+    0,   10, -110,    0, -146,    0,  -51,    0, -220,   10,
+   10,   10,  -51,    0,    0,    0,    0,    0,    0, -246,
+ -143,    0,    0, -109, -149, -117,    0,    0, -113,    0,
+ -118, -245,  -75,    0,  -98,    0,    0,    0,    0,    0,
+    0,    0,    0,    0, -110, -224,    0,    0, -105,  -95,
+ -110,    0,  -76,  -51,   10,  -52,    0, -109, -231,  -66,
+  -71,  -46,  -45,    0,    0,   10,   10,    0,  -51,   -7,
+   -7,   -7,   -7,   -7,   -7,   -7,   -7,   10,   10,  -55,
+  -39,    0,    0,    0,    0,  -30, -204,  -82,    0,    0,
+  -51,    0,  -51,  -51,  -98,  -98,  -26, -118, -245,  -75,
+  -75,    0,    0,    0,    0,    0,    0, -110,  -57,    0,
+    0,    0,  -25,  -22,    0,    0, -125,    0,    0,    0,
+ -216,  -37,  -20,  -68,   -4,    0,    0,    0,    0,  -31,
+ -125,    0,    0,    0,    0,    0,    0,    0, -217,  -24,
+  -23,  -51,  -51,  -51,    0,  -17,  -14,    0,    0,  -51,
+    0,    0,  -12,   -9,    5,    0,    0,    7,    0,  -57,
+  -57,    0,   -6,    0,  -57,    0,
 };
 short yyrindex[] = {                                      0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,  241,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,  288,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,  -33,    0,    0,    0,    0,    0,    0, -194,
-    0,    0,    0,    0,    0,    0,    0,    0,   74,    0,
-    0,    0,  -26,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,  160,    0,    0,    0,    0, -133,    0,
-  -19,  -90,   22,    0,   97,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,  -21,    0,    0,    0,    0,    0,
-  -23,    0,    0,  -20,    0,    0,    0,  182,    0, -230,
-    0,    0,    0,    0,    0,    0,    0,    0,  -20,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,   -6,
-    0,    0,    0,    0,    0,    0,    0,  -25,    0,    0,
- -185,    0,  -20,  -20,  120,  143,    0,   42,  -40,  194,
-  206,    0,    0,    0,    0,    0,    0,  -21,    0,    0,
+    0,    0,    8,    0,    0,    0,    0,    0,    0, -132,
+    0,    0,    0,    0,    0,    0,    0,    0,   55,    0,
+    0,    0,   15,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,  141,    0,    0,    0,    0, -108,    0,
+ -157, -144,  175,    0,   78,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,   24,    0,    0,    0,    0,    0,
+   16,    0,    0,   35,    0,    0,    0,  163,    0, -236,
+    0,    0,    0,    0,    0,    0,    0,    0,   35,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,   36,
+    0,    0,    0,    0,    0,    0,    0, -173,    0,    0,
+ -176,    0,   35,   35,  101,  124,    0,  -70,    6,  187,
+  199,    0,    0,    0,    0,    0,    0,   24,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
- -219,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-  -18,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+ -185,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+   23,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0, -250,    0,
-    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0, -194,    0,    0,    0,
 };
 short yygindex[] = {                                      0,
-  256,    0, -145,  -35,    0,  -74,  -41, -144,  105,    0,
+  290,    0, -134,  -35,    0,  -47,  -41, -123,  139,    0,
     0,    0,    0,    0,    0,    0,    0,  -11,    3,    0,
-    0,  219,  220,    0,  -24,  -38,    0,    0,    0,    0,
-  192,    0,  136,  -59,  -42,  -39,  193,    0,    0,    0,
-  175,  179,   48,  189,   78,  -46,    0,    0,    0,    0,
+    0,  251,  257,    0,  -27,  -38,    0,    0,    0,    0,
+  227,    0,  173,  -92,  -44,  131,  -42,    0,    0,    0,
+  212,  219,   66,  156,   86,  -43,    0,    0,    0,    0,
     0,    0,    0,    0,
 };
-#define YYTABLESIZE 491
+#define YYTABLESIZE 484
 short yytable[] = {                                      65,
-   34,   88,   26,   97,  158,   43,   56,   87,   93,   40,
-   48,  166,   56,   56,   56,   38,   56,   86,   41,   41,
-   39,   26,  112,   36,  113,  166,   98,   99,  106,  107,
-   56,   89,   56,   56,   56,  106,  107,   31,   62,   56,
-   56,   56,   56,   56,   56,   26,   31,   56,   56,   88,
-   56,  126,  199,  200,   62,   87,  202,    1,   42,   42,
-   56,   56,   56,    2,    3,    4,  137,    5,  161,   45,
-  127,  146,  147,  120,    2,    3,    4,  122,    5,   89,
-   23,   94,  167,   64,  151,   23,   31,   47,  152,   85,
-  153,  154,  162,   26,  163,  157,  167,  179,   92,   64,
-   94,    6,    7,    8,    9,   10,   11,  181,  105,   12,
-  164,  179,  165,   16,  108,  168,  109,  180,  111,   95,
-    1,   96,   14,   15,   16,  185,    2,    3,    4,  168,
-    5,  180,  106,  107,  110,   65,  120,  106,  107,   39,
-   96,  123,  191,  192,  193,   65,   65,  125,  130,  118,
-  119,   65,  128,    6,    7,    8,    9,   10,   11,  140,
-  141,   12,    1,  114,  115,  116,  117,   13,    2,    3,
-    4,  131,    5,  132,   14,   15,   16,  148,   72,  133,
-   49,  134,   50,  135,  136,   51,   72,   72,   72,   72,
-  149,   52,   96,  150,   72,    6,    7,    8,    9,   10,
-   11,  155,  157,  184,  159,  160,  182,   53,  186,   54,
-   55,   56,   57,  183,  187,  197,   14,   15,   16,   58,
-   59,  189,  190,   60,   49,   61,   50,  194,   73,   51,
-  195,  198,   62,   63,  196,   52,   73,   73,   73,   73,
-    2,   49,   54,   50,   73,  201,   51,   61,   64,   70,
-   37,   53,   52,   54,   55,   56,   57,   70,   64,   70,
-   70,   42,   59,   58,   59,   70,   10,   60,   53,   61,
-   54,   55,   56,   57,   37,  188,   62,   63,  102,  103,
-   58,   59,  124,  156,  138,   49,   61,   50,  129,  139,
-   74,    0,    0,   62,   63,   74,   52,   74,   74,   74,
-   74,   74,  142,  143,  144,  145,   74,    0,    0,    0,
-   71,    0,   53,    0,   54,   55,   56,   57,   71,    0,
-   71,   71,    0,    0,   58,   59,   71,    0,    0,    0,
-   61,   93,   93,   93,   93,    0,    0,   62,   63,    0,
-    0,    0,   93,   93,   93,   93,   93,   93,    0,   93,
-   93,   93,   93,   93,   84,   84,    0,    0,   93,    0,
-    0,    0,    0,    0,    0,   84,   84,   84,   84,   84,
-   84,    0,   84,   84,   84,   84,   84,   85,   85,    0,
-   93,   84,    0,    0,    0,    0,    0,    0,   85,   85,
-   85,   85,   85,   85,    0,   85,   85,   85,   85,   85,
-   86,   86,    0,   84,   85,    0,    0,    0,    0,    0,
-    0,   86,   86,   86,   86,   86,   86,    0,   86,   86,
-   86,   86,   86,    0,    0,    0,   85,   86,   82,   82,
-   82,   82,   82,   82,    0,   82,   82,   82,   82,   82,
-    0,    0,    0,    0,   82,    0,    0,    0,    0,   86,
-   83,   83,   83,   83,   83,   83,    0,   83,   83,   83,
-   83,   83,   75,    0,    0,    0,   83,   75,    0,   75,
-   75,   75,   75,   75,   76,    0,    0,    0,   75,   76,
-    0,   76,   76,   76,   76,   76,    0,    0,    0,    0,
-   76,
+   34,   88,   26,  129,   38,    1,   97,   87,   93,   39,
+    1,    2,    3,    4,   86,    5,    2,    3,    4,   36,
+    5,   26,  166,   98,   99,  158,  106,  107,  112,   43,
+  113,   89,   63,  106,  107,   40,  166,  130,    6,    7,
+    8,    9,   10,   11,   41,   26,   12,   94,   63,   88,
+  109,   94,   13,  106,  107,   87,   48,  190,  182,   14,
+   15,   16,   57,   45,  179,   41,   16,  127,   57,   57,
+   57,   31,   57,  120,  146,  147,  203,  204,  179,   89,
+   31,  206,  122,   47,   42,   95,   57,   96,   57,   57,
+   57,   96,   65,   26,   55,   57,   57,   57,   57,   57,
+   57,   55,  151,   57,   57,   42,   57,   85,   65,  167,
+   92,   71,  180,  105,  181,  168,   57,   57,   57,   71,
+   31,   71,   71,  167,   73,  186,  180,   71,  181,  168,
+  108,  161,   73,   73,   73,   73,  120,    2,    3,    4,
+   73,    5,   23,  193,  194,  195,    1,   23,  106,  107,
+  109,  198,    2,    3,    4,  162,    5,  163,  157,  111,
+   66,  118,  119,  110,    6,    7,    8,    9,   10,   11,
+   66,   66,   12,  164,   39,  165,   66,  140,  141,    6,
+    7,    8,    9,   10,   11,   14,   15,   16,   49,  123,
+   50,  135,  136,   51,  114,  115,  116,  117,   72,   52,
+   14,   15,   16,  125,  128,   49,   72,   50,   72,   72,
+   51,  185,  131,  132,   72,   53,   52,   54,   55,   56,
+   57,  133,  134,  148,  126,   96,  157,   58,   59,  149,
+  183,   60,   53,   61,   54,   55,   56,   57,  150,  137,
+   62,   63,  155,  159,   58,   59,  160,  184,   60,   49,
+   61,   50,  187,  188,   51,  191,  192,   62,   63,  200,
+   52,  152,  196,  153,  154,  197,   49,  199,   50,  142,
+  143,  144,  145,  201,   74,  205,   53,   52,   54,   55,
+   56,   57,   74,   74,   74,   74,  202,    2,   58,   59,
+   74,   37,   62,   53,   61,   54,   55,   56,   57,   65,
+   42,   62,   63,   65,   60,   58,   59,   10,   37,  189,
+  102,   61,   94,   94,   94,   94,  103,  124,   62,   63,
+  156,  138,    0,   94,   94,   94,   94,   94,   94,  139,
+   94,   94,   94,   94,   94,   85,   85,    0,    0,   94,
+    0,    0,    0,    0,    0,    0,   85,   85,   85,   85,
+   85,   85,    0,   85,   85,   85,   85,   85,   86,   86,
+    0,   94,   85,    0,    0,    0,    0,    0,    0,   86,
+   86,   86,   86,   86,   86,    0,   86,   86,   86,   86,
+   86,   87,   87,    0,   85,   86,    0,    0,    0,    0,
+    0,    0,   87,   87,   87,   87,   87,   87,    0,   87,
+   87,   87,   87,   87,    0,    0,    0,   86,   87,   83,
+   83,   83,   83,   83,   83,    0,   83,   83,   83,   83,
+   83,    0,    0,    0,    0,   83,    0,    0,    0,    0,
+   87,   84,   84,   84,   84,   84,   84,    0,   84,   84,
+   84,   84,   84,   75,    0,    0,    0,   84,   75,    0,
+   75,   75,   75,   75,   75,   76,    0,    0,    0,   75,
+   76,    0,   76,   76,   76,   76,   76,   77,    0,    0,
+    0,   76,   77,    0,   77,   77,   77,   77,   77,    0,
+    0,    0,    0,   77,
 };
 short yycheck[] = {                                      38,
-   12,   43,    0,   50,  149,  284,  257,   43,   47,  257,
-  257,  157,  263,  264,  265,  275,  267,   42,  266,  266,
-  280,   19,  274,  257,  276,  171,   51,   52,  258,  259,
-  281,   43,  283,  284,  285,  258,  259,  257,  269,  290,
-  291,  292,  293,  294,  295,   43,  266,  298,  299,   91,
-  301,   94,  197,  198,  285,   91,  201,  257,  306,  306,
-  311,  312,  313,  263,  264,  265,  109,  267,  257,  305,
-   95,  118,  119,   85,  263,  264,  265,  307,  267,   91,
-  275,  268,  157,  269,  307,  280,  306,  275,  131,  268,
-  133,  134,  281,   91,  283,  284,  171,  157,  257,  285,
-  268,  290,  291,  292,  293,  294,  295,  275,  257,  298,
-  299,  171,  301,  313,  280,  157,  268,  157,  278,  306,
-  257,  308,  311,  312,  313,  164,  263,  264,  265,  171,
-  267,  171,  258,  259,  277,  269,  148,  258,  259,  280,
-  308,  285,  181,  182,  183,  279,  280,  280,  269,  260,
-  261,  285,  257,  290,  291,  292,  293,  294,  295,  112,
-  113,  298,  257,  270,  271,  272,  273,  304,  263,  264,
-  265,  279,  267,  285,  311,  312,  313,  279,  269,  268,
-  257,  268,  259,  106,  107,  262,  277,  278,  279,  280,
-  269,  268,  308,  269,  285,  290,  291,  292,  293,  294,
-  295,  269,  284,  280,  269,  269,  268,  284,  257,  286,
-  287,  288,  289,  268,  285,  269,  311,  312,  313,  296,
-  297,  280,  280,  300,  257,  302,  259,  280,  269,  262,
-  280,  269,  309,  310,  280,  268,  277,  278,  279,  280,
-    0,  257,  268,  259,  285,  282,  262,  269,  269,  269,
-  284,  284,  268,  286,  287,  288,  289,  277,  285,  279,
-  280,  285,  269,  296,  297,  285,  285,  300,  284,  302,
-  286,  287,  288,  289,   19,  171,  309,  310,   60,   60,
-  296,  297,   91,  148,  110,  257,  302,  259,   96,  111,
-  269,   -1,   -1,  309,  310,  274,  268,  276,  277,  278,
-  279,  280,  114,  115,  116,  117,  285,   -1,   -1,   -1,
-  269,   -1,  284,   -1,  286,  287,  288,  289,  277,   -1,
-  279,  280,   -1,   -1,  296,  297,  285,   -1,   -1,   -1,
-  302,  258,  259,  260,  261,   -1,   -1,  309,  310,   -1,
+   12,   43,    0,   96,  275,  257,   50,   43,   47,  280,
+  257,  263,  264,  265,   42,  267,  263,  264,  265,  257,
+  267,   19,  157,   51,   52,  149,  258,  259,  274,  284,
+  276,   43,  269,  258,  259,  257,  171,  269,  290,  291,
+  292,  293,  294,  295,  266,   43,  298,  268,  285,   91,
+  268,  268,  304,  258,  259,   91,  257,  275,  275,  311,
+  312,  313,  257,  305,  157,  266,  313,   95,  263,  264,
+  265,  257,  267,   85,  118,  119,  200,  201,  171,   91,
+  266,  205,  307,  275,  306,  306,  281,  308,  283,  284,
+  285,  308,  269,   91,  268,  290,  291,  292,  293,  294,
+  295,  275,  307,  298,  299,  306,  301,  268,  285,  157,
+  257,  269,  157,  257,  157,  157,  311,  312,  313,  277,
+  306,  279,  280,  171,  269,  164,  171,  285,  171,  171,
+  280,  257,  277,  278,  279,  280,  148,  263,  264,  265,
+  285,  267,  275,  182,  183,  184,  257,  280,  258,  259,
+  268,  190,  263,  264,  265,  281,  267,  283,  284,  278,
+  269,  260,  261,  277,  290,  291,  292,  293,  294,  295,
+  279,  280,  298,  299,  280,  301,  285,  112,  113,  290,
+  291,  292,  293,  294,  295,  311,  312,  313,  257,  285,
+  259,  106,  107,  262,  270,  271,  272,  273,  269,  268,
+  311,  312,  313,  280,  257,  257,  277,  259,  279,  280,
+  262,  280,  279,  285,  285,  284,  268,  286,  287,  288,
+  289,  268,  268,  279,   94,  308,  284,  296,  297,  269,
+  268,  300,  284,  302,  286,  287,  288,  289,  269,  109,
+  309,  310,  269,  269,  296,  297,  269,  268,  300,  257,
+  302,  259,  257,  285,  262,  280,  280,  309,  310,  269,
+  268,  131,  280,  133,  134,  280,  257,  280,  259,  114,
+  115,  116,  117,  269,  269,  282,  284,  268,  286,  287,
+  288,  289,  277,  278,  279,  280,  280,    0,  296,  297,
+  285,  284,  269,  284,  302,  286,  287,  288,  289,  285,
+  285,  309,  310,  269,  269,  296,  297,  285,   19,  171,
+   60,  302,  258,  259,  260,  261,   60,   91,  309,  310,
+  148,  110,   -1,  269,  270,  271,  272,  273,  274,  111,
+  276,  277,  278,  279,  280,  258,  259,   -1,   -1,  285,
+   -1,   -1,   -1,   -1,   -1,   -1,  269,  270,  271,  272,
+  273,  274,   -1,  276,  277,  278,  279,  280,  258,  259,
+   -1,  307,  285,   -1,   -1,   -1,   -1,   -1,   -1,  269,
+  270,  271,  272,  273,  274,   -1,  276,  277,  278,  279,
+  280,  258,  259,   -1,  307,  285,   -1,   -1,   -1,   -1,
    -1,   -1,  269,  270,  271,  272,  273,  274,   -1,  276,
-  277,  278,  279,  280,  258,  259,   -1,   -1,  285,   -1,
-   -1,   -1,   -1,   -1,   -1,  269,  270,  271,  272,  273,
-  274,   -1,  276,  277,  278,  279,  280,  258,  259,   -1,
-  307,  285,   -1,   -1,   -1,   -1,   -1,   -1,  269,  270,
-  271,  272,  273,  274,   -1,  276,  277,  278,  279,  280,
-  258,  259,   -1,  307,  285,   -1,   -1,   -1,   -1,   -1,
-   -1,  269,  270,  271,  272,  273,  274,   -1,  276,  277,
-  278,  279,  280,   -1,   -1,   -1,  307,  285,  269,  270,
-  271,  272,  273,  274,   -1,  276,  277,  278,  279,  280,
-   -1,   -1,   -1,   -1,  285,   -1,   -1,   -1,   -1,  307,
-  269,  270,  271,  272,  273,  274,   -1,  276,  277,  278,
-  279,  280,  269,   -1,   -1,   -1,  285,  274,   -1,  276,
-  277,  278,  279,  280,  269,   -1,   -1,   -1,  285,  274,
-   -1,  276,  277,  278,  279,  280,   -1,   -1,   -1,   -1,
-  285,
+  277,  278,  279,  280,   -1,   -1,   -1,  307,  285,  269,
+  270,  271,  272,  273,  274,   -1,  276,  277,  278,  279,
+  280,   -1,   -1,   -1,   -1,  285,   -1,   -1,   -1,   -1,
+  307,  269,  270,  271,  272,  273,  274,   -1,  276,  277,
+  278,  279,  280,  269,   -1,   -1,   -1,  285,  274,   -1,
+  276,  277,  278,  279,  280,  269,   -1,   -1,   -1,  285,
+  274,   -1,  276,  277,  278,  279,  280,  269,   -1,   -1,
+   -1,  285,  274,   -1,  276,  277,  278,  279,  280,   -1,
+   -1,   -1,   -1,  285,
 };
 #define YYFINAL 17
 #ifndef YYDEBUG
@@ -386,6 +384,7 @@ char *yyrule[] = {
 "class_attribute : variable_declaration_statement",
 "function_definition_statement : any_type IDENTIFIER LPAREN formal_parameter_list RPAREN block_statement",
 "variable_set_statement : IDENTIFIER EQ expression SEMICOLON",
+"variable_set_statement : class_attribute_identifier EQ expression SEMICOLON",
 "return_statement : RETURN expression SEMICOLON",
 "return_statement : RETURN SEMICOLON",
 "function_invocation : IDENTIFIER LPAREN parameter_list RPAREN",
@@ -492,12 +491,12 @@ YYSTYPE yylval;
 short yyss[YYSTACKSIZE];
 YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
-#line 1159 "scarl_tokens.y"
+#line 1230 "scarl_tokens.y"
 
 void yyerror(char *s) {
 	fprintf(stderr, "%s at line %i near \'%s\'\n", s, line_number, last_token_text);
 }
-#line 501 "y.tab.c"
+#line 500 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYREJECT goto yyabort
 #define YYACCEPT goto yyaccept
@@ -815,53 +814,68 @@ case 23:
 #line 194 "scarl_tokens.y"
 {
     /* for any variable declared with a type*/
+	
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *declarator_identifier = string_stack_pop();
-	if (debugging_grammar) printf("Match type_declarator (%s)\n", declarator_identifier);
-	struct scarl_ast_node *type_declarator_node = create_typed_ast_node(NON_TERMINAL_TYPE_DECLARATOR, NON_TERMINAL_TYPE_DECLARATOR);
-	struct scarl_ast_node *type_node = yyvsp[-1];
 	struct scarl_ast_node *declarator_identifier_node = create_str_value_ast_node(NON_TERMINAL_IDENTIFIER_VALUE, declarator_identifier);
+	struct scarl_ast_node *type_node = yyvsp[-1];
+	
+	/* bug with grammar - user type is not reduced until the second identifier is recognized*/
+	/* this makes the identifier and user type be in the wrong place*/
+	/* to fix this for now, if the any_type is a user type, then swap the str_values between the identifier and type nodes*/
+	if (type_node->node_type == NON_TERMINAL_IDENTIFIER_VALUE) {
+		/* the string values were likely swapped*/
+		char *temp = declarator_identifier_node->str_value;
+		declarator_identifier_node->str_value = type_node->str_value;
+		type_node->str_value = temp;
+	}
+	
+	if (debugging_grammar) printf("Match type_declarator (type %s, identifier %s)\n", get_ast_node_type_string(type_node->node_type), declarator_identifier);
+	struct scarl_ast_node *type_declarator_node = create_typed_ast_node(NON_TERMINAL_TYPE_DECLARATOR, NON_TERMINAL_TYPE_DECLARATOR);
 	add_child_node(type_declarator_node, type_node);
 	add_child_node(type_declarator_node, declarator_identifier_node);
 	yyval = type_declarator_node;
 }
 break;
 case 24:
-#line 206 "scarl_tokens.y"
-{
-	if (debugging_grammar) printf("Match any_type\n");
-	yyval = yyvsp[0];
-}
-break;
-case 25:
-#line 211 "scarl_tokens.y"
-{
-	if (debugging_grammar) printf("Match any_type\n");
-	yyval = yyvsp[0];
-}
-break;
-case 26:
-#line 216 "scarl_tokens.y"
-{
-	if (debugging_grammar) printf("Match any_type\n");
-	yyval = yyvsp[0];
-}
-break;
-case 27:
 #line 221 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match any_type\n");
 	yyval = yyvsp[0];
 }
 break;
+case 25:
+#line 226 "scarl_tokens.y"
+{
+	if (debugging_grammar) printf("Match any_type\n");
+	yyval = yyvsp[0];
+}
+break;
+case 26:
+#line 231 "scarl_tokens.y"
+{
+	if (debugging_grammar) printf("Match any_type\n");
+	yyval = yyvsp[0];
+}
+break;
+case 27:
+#line 236 "scarl_tokens.y"
+{
+	if (debugging_grammar) printf("Match any_type\n");
+	yyval = yyvsp[0];
+}
+break;
 case 28:
-#line 227 "scarl_tokens.y"
+#line 242 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match any_type\n");
 	yyval = yyvsp[0];
 }
 break;
 case 29:
-#line 232 "scarl_tokens.y"
+#line 247 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match array_type\n");
 	struct scarl_ast_node *array_type_node = create_typed_ast_node(NON_TERMINAL_ARRAY_TYPE, NON_TERMINAL_ARRAY_TYPE);
@@ -873,7 +887,7 @@ case 29:
 }
 break;
 case 30:
-#line 242 "scarl_tokens.y"
+#line 257 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match pointer_type\n");
 	struct scarl_ast_node *pointer_node = create_typed_ast_node(NON_TERMINAL_POINTER_TYPE, NON_TERMINAL_POINTER_TYPE);
@@ -883,15 +897,18 @@ case 30:
 }
 break;
 case 31:
-#line 250 "scarl_tokens.y"
+#line 265 "scarl_tokens.y"
 {
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *user_type_identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match user_type (%s)\n", user_type_identifier);
 	yyval = create_str_value_ast_node(NON_TERMINAL_IDENTIFIER_VALUE, user_type_identifier);
 }
 break;
 case 32:
-#line 256 "scarl_tokens.y"
+#line 274 "scarl_tokens.y"
 {
     /* we must ensure that the evaluated type*/
     /* on the right hand side of the = sign is*/
@@ -907,7 +924,7 @@ case 32:
 }
 break;
 case 33:
-#line 270 "scarl_tokens.y"
+#line 288 "scarl_tokens.y"
 {
 	/* declares a variable without giving it a value - cannot*/
 	/* refer to this variable without assigning it, otherwise */
@@ -919,10 +936,13 @@ case 33:
 }
 break;
 case 34:
-#line 280 "scarl_tokens.y"
+#line 298 "scarl_tokens.y"
 {
 	/* for deallocating a pointer variable*/
 	/* be sure this only occurs on pointer types */
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *deleting_identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match delete_statement (%s)\n", deleting_identifier);
 	struct scarl_ast_node *delete_statement_node = create_typed_ast_node(NON_TERMINAL_DELETE_STATEMENT, NON_TERMINAL_DELETE_STATEMENT);
@@ -932,7 +952,7 @@ case 34:
 }
 break;
 case 35:
-#line 291 "scarl_tokens.y"
+#line 312 "scarl_tokens.y"
 {
     /* functions like the variable_definition_statement*/
     /* except it can only be in global scope and*/
@@ -948,7 +968,7 @@ case 35:
 }
 break;
 case 36:
-#line 305 "scarl_tokens.y"
+#line 326 "scarl_tokens.y"
 {
     /* add this declared class into the symbol*/
     /* table for global scope (classes can only be*/
@@ -964,7 +984,7 @@ case 36:
 }
 break;
 case 37:
-#line 319 "scarl_tokens.y"
+#line 340 "scarl_tokens.y"
 {
     /* this class declarator is a "normal"*/
     /* class. It is not derived from another*/
@@ -977,7 +997,7 @@ case 37:
 }
 break;
 case 38:
-#line 330 "scarl_tokens.y"
+#line 351 "scarl_tokens.y"
 {
     /* this class is derived from some other*/
     /* class. We need to ensure that the*/
@@ -999,29 +1019,35 @@ case 38:
 }
 break;
 case 39:
-#line 350 "scarl_tokens.y"
+#line 371 "scarl_tokens.y"
 {
     /* ensure that the identifier is not*/
     /* being used for something else in*/
     /* this (global) scope*/
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *class_identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match class_name (%s)\n", class_identifier);
 	yyval = create_str_value_ast_node(NON_TERMINAL_IDENTIFIER_VALUE, class_identifier);
 }
 break;
 case 40:
-#line 359 "scarl_tokens.y"
+#line 383 "scarl_tokens.y"
 {
     /* we need to ensure that the*/
     /* identifier is actually a class*/
     /* name defined in the symbol table*/
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *extending_class_identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match class_extending (%s)\n", extending_class_identifier);
 	yyval = create_str_value_ast_node(NON_TERMINAL_IDENTIFIER_VALUE, extending_class_identifier);
 }
 break;
 case 41:
-#line 368 "scarl_tokens.y"
+#line 395 "scarl_tokens.y"
 {
     /* a list of class attributes*/
     /* processing takes place in the*/
@@ -1032,7 +1058,7 @@ case 41:
 }
 break;
 case 42:
-#line 377 "scarl_tokens.y"
+#line 404 "scarl_tokens.y"
 {
     /* finish off the class attribute list*/
 	if (debugging_grammar) printf("Match class_attribute_list\n");
@@ -1043,7 +1069,7 @@ case 42:
 }
 break;
 case 43:
-#line 386 "scarl_tokens.y"
+#line 413 "scarl_tokens.y"
 {
     /* add another attribute to the list*/
 	if (debugging_grammar) printf("Match class_attribute_list\n");
@@ -1054,7 +1080,7 @@ case 43:
 }
 break;
 case 44:
-#line 395 "scarl_tokens.y"
+#line 422 "scarl_tokens.y"
 {
     /* a special location for functions*/
     /* this function definition is actually*/
@@ -1064,7 +1090,7 @@ case 44:
 }
 break;
 case 45:
-#line 403 "scarl_tokens.y"
+#line 430 "scarl_tokens.y"
 {
     /* a special kind of declarator*/
     /* that does not require an initial*/
@@ -1076,13 +1102,16 @@ case 45:
 }
 break;
 case 46:
-#line 413 "scarl_tokens.y"
+#line 440 "scarl_tokens.y"
 {
     /* functions will only be able to return*/
     /* primitives for this version. Hopefully*/
     /* extend it to pointer types later on. Can*/
     /* always pass pointer types as parameters*/
     /* to functions*/
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *function_identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match function_definition_statement (%s)\n", function_identifier);
 	struct scarl_ast_node *function_definition_statement_node = create_typed_ast_node(NON_TERMINAL_FUNCTION_DEFINITION_STATEMENT, NON_TERMINAL_FUNCTION_DEFINITION_STATEMENT);
@@ -1098,12 +1127,15 @@ case 46:
 }
 break;
 case 47:
-#line 433 "scarl_tokens.y"
+#line 463 "scarl_tokens.y"
 {
     /* sets the value for the identifier to the evaluated*/
     /* value of the expression. Need to ensure that the type*/
     /* of the identifier matches or can be converted to the type*/
     /* of the expression. Also ensure that the identifier is in scope*/
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *variable_identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match variable_set_statement (%s)\n", variable_identifier);
 	struct scarl_ast_node *variable_set_statement_node = create_typed_ast_node(NON_TERMINAL_VARIABLE_SET_STATEMENT, NON_TERMINAL_VARIABLE_SET_STATEMENT);
@@ -1115,7 +1147,19 @@ case 47:
 }
 break;
 case 48:
-#line 448 "scarl_tokens.y"
+#line 481 "scarl_tokens.y"
+{
+	struct scarl_ast_node *class_attribute_ident_node = (struct scarl_ast_node *)yyvsp[-3];
+	if (debugging_grammar) printf("Match variable_set_statement (class attribute form, starts with %s)\n", class_attribute_ident_node->first_child->str_value);
+	struct scarl_ast_node *variable_set_statement_node = create_typed_ast_node(NON_TERMINAL_VARIABLE_SET_STATEMENT, NON_TERMINAL_VARIABLE_SET_STATEMENT);
+	struct scarl_ast_node *expression_node = yyvsp[-1];
+	add_child_node(variable_set_statement_node, class_attribute_ident_node);
+	add_child_node(variable_set_statement_node, expression_node);
+	yyval = variable_set_statement_node;
+}
+break;
+case 49:
+#line 491 "scarl_tokens.y"
 {
     /* can only appear in functions.*/
     /* acts like a normal C return statement*/
@@ -1132,8 +1176,8 @@ case 48:
 	yyval = return_statement_node;
 }
 break;
-case 49:
-#line 464 "scarl_tokens.y"
+case 50:
+#line 507 "scarl_tokens.y"
 {
     /* empty return statement.*/
     /* can only occur in void functions*/
@@ -1141,8 +1185,8 @@ case 49:
 	yyval = create_typed_ast_node(NON_TERMINAL_RETURN_STATEMENT, NON_TERMINAL_RETURN_STATEMENT);
 }
 break;
-case 50:
-#line 471 "scarl_tokens.y"
+case 51:
+#line 514 "scarl_tokens.y"
 {
     /* invoke the function with the name*/
     /* of identifier. The types of the parameters*/
@@ -1153,6 +1197,9 @@ case 50:
     /* be checked against a class name and*/
     /* the parameter list against the class's*/
     /* constructors*/
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *function_identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match function_invocation (%s)\n", function_identifier);
 	struct scarl_ast_node *function_invocation_node = create_typed_ast_node(NON_TERMINAL_FUNCTION_INVOCATION, NON_TERMINAL_FUNCTION_INVOCATION);
@@ -1163,8 +1210,8 @@ case 50:
 	yyval = function_invocation_node;
 }
 break;
-case 51:
-#line 491 "scarl_tokens.y"
+case 52:
+#line 537 "scarl_tokens.y"
 {
     /* allows for there to be statements that*/
     /* only call functions*/
@@ -1172,8 +1219,8 @@ case 51:
 	yyval = yyvsp[-1];
 }
 break;
-case 52:
-#line 498 "scarl_tokens.y"
+case 53:
+#line 544 "scarl_tokens.y"
 {
     /* requires more heavy lifting than*/
     /* a function invocation because we need*/
@@ -1190,8 +1237,8 @@ case 52:
 	yyval = method_invocation_node;
 }
 break;
-case 53:
-#line 514 "scarl_tokens.y"
+case 54:
+#line 560 "scarl_tokens.y"
 {
     /* allows for a statement to be only*/
     /* a method invocation*/
@@ -1199,14 +1246,18 @@ case 53:
 	yyval = yyvsp[-1];
 }
 break;
-case 54:
-#line 522 "scarl_tokens.y"
+case 55:
+#line 568 "scarl_tokens.y"
 {
     /* the last case in the chain of*/
     /* identifiers dot identifiers for a method*/
     /* identifier*/
     /* this could also just lead to a field of*/
     /* an object instance, not a method*/
+	if (debugging_grammar) {
+		printf("Popping two identifiers\n");
+		print_string_stack();
+	}
 	char *second_identifier = string_stack_pop();
 	char *first_identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match class_attribute_identifier (%s.%s)\n", first_identifier, second_identifier);
@@ -1219,14 +1270,17 @@ case 54:
 	yyval = class_attribute_node;
 }
 break;
-case 55:
-#line 540 "scarl_tokens.y"
+case 56:
+#line 590 "scarl_tokens.y"
 {
     /* enables the dot operator to*/
     /* act as far as it needs to to*/
     /* get to where a field or method is*/
     /* this could also just lead to a field of*/
     /* an object instance, not a method*/
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match class_attribute_identifier (%s.<more stuff>)\n", identifier);
 	/* we want the children to appear in the order as  they do in the code for the AST*/
@@ -1236,8 +1290,8 @@ case 55:
 	yyval = class_attribute_identifier_node;
 }
 break;
-case 56:
-#line 555 "scarl_tokens.y"
+case 57:
+#line 608 "scarl_tokens.y"
 {
     /* if without else*/
 	if (debugging_grammar) printf("Match if_block_statement\n");
@@ -1249,8 +1303,8 @@ case 56:
 	yyval = if_statement_node;
 }
 break;
-case 57:
-#line 566 "scarl_tokens.y"
+case 58:
+#line 619 "scarl_tokens.y"
 {
     /* if with else*/
 	if (debugging_grammar) printf("Match if_block_statement\n");
@@ -1264,8 +1318,8 @@ case 57:
 	yyval = if_statement_node;
 }
 break;
-case 58:
-#line 579 "scarl_tokens.y"
+case 59:
+#line 632 "scarl_tokens.y"
 {
     /* regular while statement.*/
 	if (debugging_grammar) printf("Match while_block_statement\n");
@@ -1277,8 +1331,8 @@ case 58:
 	yyval = while_statement_node;
 }
 break;
-case 59:
-#line 592 "scarl_tokens.y"
+case 60:
+#line 645 "scarl_tokens.y"
 {
     /* finish the rest of the formal parameter*/
     /* list or this function has 1 parameter*/
@@ -1289,8 +1343,8 @@ case 59:
 	yyval = parameter_list_node;
 }
 break;
-case 60:
-#line 602 "scarl_tokens.y"
+case 61:
+#line 655 "scarl_tokens.y"
 {
     /* continue the list of formal parameters*/
 	if (debugging_grammar) printf("Match formal_parameter_list\n");
@@ -1300,16 +1354,16 @@ case 60:
 	yyval = formal_parameter_list_node;
 }
 break;
-case 61:
-#line 611 "scarl_tokens.y"
+case 62:
+#line 664 "scarl_tokens.y"
 {
     /* allow for empty parameter lists*/
 	if (debugging_grammar) printf("Match formal_parameter_list\n");
 	yyval = create_typed_ast_node(NON_TERMINAL_FORMAL_PARAMETER_LIST, NON_TERMINAL_FORMAL_PARAMETER_LIST);
 }
 break;
-case 62:
-#line 617 "scarl_tokens.y"
+case 63:
+#line 670 "scarl_tokens.y"
 {
     /* finish the rest of the  parameter*/
     /* list or this function has 1 argument*/
@@ -1320,19 +1374,19 @@ case 62:
 	yyval = parameter_list_node;
 }
 break;
-case 63:
-#line 627 "scarl_tokens.y"
+case 64:
+#line 680 "scarl_tokens.y"
 {
     /* continue the list of argument*/
 	if (debugging_grammar) printf("Match parameter_list (expression list)\n");
 	struct scarl_ast_node *expression_node = yyvsp[-2];
 	struct scarl_ast_node *parameter_list_node = yyvsp[0];
-	add_child_node(parameter_list_node, expression_node);
+	push_child_node_front(parameter_list_node, expression_node);
 	yyval = parameter_list_node;
 }
 break;
-case 64:
-#line 636 "scarl_tokens.y"
+case 65:
+#line 689 "scarl_tokens.y"
 {
     /* allow for empty argument function calls*/
 	if (debugging_grammar) printf("Match parameter_list (empty list)\n");
@@ -1340,16 +1394,16 @@ case 64:
 	yyval = create_typed_ast_node(NON_TERMINAL_PARAMETER_LIST, NON_TERMINAL_PARAMETER_LIST);
 }
 break;
-case 65:
-#line 643 "scarl_tokens.y"
+case 66:
+#line 696 "scarl_tokens.y"
 {
     /* base expression*/
 	if (debugging_grammar) printf("Match expression\n");
 	yyval = yyvsp[0];
 }
 break;
-case 66:
-#line 649 "scarl_tokens.y"
+case 67:
+#line 702 "scarl_tokens.y"
 {
     /* allocates are a special kind of*/
     /* expression that can only occur*/
@@ -1358,8 +1412,8 @@ case 66:
 	yyval = yyvsp[0];
 }
 break;
-case 67:
-#line 657 "scarl_tokens.y"
+case 68:
+#line 710 "scarl_tokens.y"
 {
     /* the allocation invocation is*/
     /* a special kind of function invocation*/
@@ -1369,8 +1423,8 @@ case 67:
 	yyval = yyvsp[0]; /* obvious that this is an allocation, unless NON_TERMINAL_POINTER_VALUE ends up showin elsewhere*/
 }
 break;
-case 68:
-#line 677 "scarl_tokens.y"
+case 69:
+#line 730 "scarl_tokens.y"
 {
     /* primitive allocation*/
 	if (debugging_grammar) printf("Match allocation_invocation\n");
@@ -1382,32 +1436,35 @@ case 68:
 	yyval = allocate_node;
 }
 break;
-case 69:
-#line 688 "scarl_tokens.y"
+case 70:
+#line 741 "scarl_tokens.y"
 {
     /* class type allocation*/
     /* identifier must be a class in the*/
     /* symbol table and the parameter list*/
     /* must match one of the constructors*/
-	char *allocating_type_identifier = string_stack_pop();
-	if (debugging_grammar) printf("Match allocation_invocation\n", allocating_type_identifier);
+	if (debugging_grammar) {
+		print_string_stack();
+	}
+	/*char *allocating_type_identifier = string_stack_pop(); // the user type already has a value*/
+	struct scarl_ast_node *allocating_type_identifier = (struct scarl_ast_node *)yyvsp[-3];
+	if (debugging_grammar) printf("Match allocation_invocation (allocating user type %s)\n", allocating_type_identifier->str_value);
 	struct scarl_ast_node *allocate_node = create_typed_ast_node(NON_TERMINAL_POINTER_VALUE, NON_TERMINAL_POINTER_VALUE);
-	struct scarl_ast_node *identifier_node = create_str_value_ast_node(NON_TERMINAL_IDENTIFIER_VALUE, allocating_type_identifier);
 	struct scarl_ast_node *parameter_list_node = yyvsp[-1];
-	add_child_node(allocate_node, identifier_node); /* type defined as a pointer of this type */
+	add_child_node(allocate_node, allocating_type_identifier); /* type defined as a pointer of this type */
 	add_child_node(allocate_node, parameter_list_node); /* constructed with these parameters*/
 	yyval = allocate_node;
 }
 break;
-case 70:
-#line 703 "scarl_tokens.y"
+case 71:
+#line 759 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match logical_expression\n");
 	yyval = yyvsp[0];
 }
 break;
-case 71:
-#line 708 "scarl_tokens.y"
+case 72:
+#line 764 "scarl_tokens.y"
 {
 	/*     logical_expression && logical_and_expression*/
 	/*     logical_expression should be on the LEFT*/
@@ -1422,15 +1479,15 @@ case 71:
 	yyval = operand;
 }
 break;
-case 72:
-#line 722 "scarl_tokens.y"
+case 73:
+#line 778 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match logical_and_expression\n");
 	yyval = yyvsp[0];
 }
 break;
-case 73:
-#line 727 "scarl_tokens.y"
+case 74:
+#line 783 "scarl_tokens.y"
 {
 	/*     logical_and_expression && equality_expression*/
 	/*     logical_and_expression should be on the LEFT*/
@@ -1445,15 +1502,15 @@ case 73:
 	yyval = operand;
 }
 break;
-case 74:
-#line 741 "scarl_tokens.y"
+case 75:
+#line 797 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match equality_expression\n");
 	yyval = yyvsp[0];
 }
 break;
-case 75:
-#line 746 "scarl_tokens.y"
+case 76:
+#line 802 "scarl_tokens.y"
 {
 	/*     equality_expression == relational_expression*/
 	/*     equality_expression should be on the LEFT*/
@@ -1468,8 +1525,8 @@ case 75:
 	yyval = operand;
 }
 break;
-case 76:
-#line 760 "scarl_tokens.y"
+case 77:
+#line 816 "scarl_tokens.y"
 {
 	/*     equality_expression != relational_expression*/
 	/*     equality_expression should be on the LEFT*/
@@ -1484,15 +1541,15 @@ case 76:
 	yyval = operand;
 }
 break;
-case 77:
-#line 774 "scarl_tokens.y"
+case 78:
+#line 830 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match relational_expression\n");
 	yyval = yyvsp[0];
 }
 break;
-case 78:
-#line 779 "scarl_tokens.y"
+case 79:
+#line 835 "scarl_tokens.y"
 {
 	/*     relational_expression > bool_expression*/
 	/*     relational_expression should be on the LEFT*/
@@ -1507,8 +1564,8 @@ case 78:
 	yyval = operand;
 }
 break;
-case 79:
-#line 793 "scarl_tokens.y"
+case 80:
+#line 849 "scarl_tokens.y"
 {
 	/*     relational_expression < bool_expression*/
 	/*     relational_expression should be on the LEFT*/
@@ -1523,8 +1580,8 @@ case 79:
 	yyval = operand;
 }
 break;
-case 80:
-#line 807 "scarl_tokens.y"
+case 81:
+#line 863 "scarl_tokens.y"
 {
 	/*     relational_expression >= bool_expression*/
 	/*     relational_expression should be on the LEFT*/
@@ -1539,8 +1596,8 @@ case 80:
 	yyval = operand;
 }
 break;
-case 81:
-#line 821 "scarl_tokens.y"
+case 82:
+#line 877 "scarl_tokens.y"
 {
 	/*     relational_expression <= bool_expression*/
 	/*     relational_expression should be on the LEFT*/
@@ -1555,15 +1612,15 @@ case 81:
 	yyval = operand;
 }
 break;
-case 82:
-#line 835 "scarl_tokens.y"
+case 83:
+#line 891 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match bool_expression\n");
 	yyval = yyvsp[0];
 }
 break;
-case 83:
-#line 840 "scarl_tokens.y"
+case 84:
+#line 896 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match bool_expression\n");
 	struct scarl_ast_node *operand = create_typed_ast_node(NON_TERMINAL_OPERAND_VALUE, BANG);
@@ -1572,15 +1629,15 @@ case 83:
 	yyval = operand;
 }
 break;
-case 84:
-#line 848 "scarl_tokens.y"
+case 85:
+#line 904 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match arithmetic_expression\n");
 	yyval = yyvsp[0];
 }
 break;
-case 85:
-#line 853 "scarl_tokens.y"
+case 86:
+#line 909 "scarl_tokens.y"
 {
 	/*     arithmetic_expression - arithmetic_factor*/
 	/*     arithmetic_expression should be on the LEFT*/
@@ -1595,8 +1652,8 @@ case 85:
 	yyval = operand;
 }
 break;
-case 86:
-#line 867 "scarl_tokens.y"
+case 87:
+#line 923 "scarl_tokens.y"
 {
 	/*     arithmetic_expression - arithmetic_factor*/
 	/*     arithmetic_expression should be on the LEFT*/
@@ -1611,15 +1668,15 @@ case 86:
 	yyval = operand;
 }
 break;
-case 87:
-#line 881 "scarl_tokens.y"
+case 88:
+#line 937 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match arithmetic_factor\n");
 	yyval = yyvsp[0];
 }
 break;
-case 88:
-#line 886 "scarl_tokens.y"
+case 89:
+#line 942 "scarl_tokens.y"
 {
 	/*     arithmetic_factor * arithmetic_unary*/
 	/*     arithmetic_factor should be on the LEFT*/
@@ -1634,8 +1691,8 @@ case 88:
 	yyval = operand;
 }
 break;
-case 89:
-#line 900 "scarl_tokens.y"
+case 90:
+#line 956 "scarl_tokens.y"
 {
 	/*     arithmetic_factor / arithmetic_unary*/
 	/*     arithmetic_factor should be on the LEFT*/
@@ -1650,15 +1707,15 @@ case 89:
 	yyval = operand;
 }
 break;
-case 90:
-#line 914 "scarl_tokens.y"
+case 91:
+#line 970 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match arithmetic_unary\n");
 	yyval = yyvsp[0];
 }
 break;
-case 91:
-#line 919 "scarl_tokens.y"
+case 92:
+#line 975 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match arithmetic_unary\n");
 	struct scarl_ast_node *unary_node = create_typed_ast_node(NON_TERMINAL_OPERAND_VALUE, MINUS);
@@ -1667,82 +1724,88 @@ case 91:
 	yyval = unary_node;
 }
 break;
-case 92:
-#line 927 "scarl_tokens.y"
+case 93:
+#line 983 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match arithmetic_unary\n");
 	yyval = yyvsp[-1];
 }
 break;
-case 93:
-#line 932 "scarl_tokens.y"
+case 94:
+#line 988 "scarl_tokens.y"
 {
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match unit (%s)\n", identifier);
 	yyval = create_str_value_ast_node(NON_TERMINAL_IDENTIFIER_VALUE, identifier);
 }
 break;
-case 94:
-#line 938 "scarl_tokens.y"
-{
-	if (debugging_grammar) printf("Match unit\n");
-	yyval = yyvsp[0];
-}
-break;
 case 95:
-#line 943 "scarl_tokens.y"
+#line 997 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match unit\n");
 	yyval = yyvsp[0];
 }
 break;
 case 96:
-#line 948 "scarl_tokens.y"
+#line 1002 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match unit\n");
 	yyval = yyvsp[0];
 }
 break;
 case 97:
-#line 953 "scarl_tokens.y"
+#line 1007 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match unit\n");
 	yyval = yyvsp[0];
 }
 break;
 case 98:
-#line 958 "scarl_tokens.y"
+#line 1012 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match unit\n");
 	yyval = yyvsp[0];
 }
 break;
 case 99:
-#line 963 "scarl_tokens.y"
+#line 1017 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match unit\n");
 	yyval = yyvsp[0];
 }
 break;
 case 100:
-#line 968 "scarl_tokens.y"
+#line 1022 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match unit\n");
 	yyval = yyvsp[0];
 }
 break;
 case 101:
-#line 973 "scarl_tokens.y"
+#line 1027 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match unit\n");
 	yyval = yyvsp[0];
 }
 break;
 case 102:
-#line 978 "scarl_tokens.y"
+#line 1032 "scarl_tokens.y"
+{
+	if (debugging_grammar) printf("Match unit\n");
+	yyval = yyvsp[0];
+}
+break;
+case 103:
+#line 1037 "scarl_tokens.y"
 {
     /* ensure that the used identifier is*/
     /* an array type*/
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *array_variable_identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match array_accessor_unit (%s)\n", array_variable_identifier);
 	struct scarl_ast_node *array_accessor_unit = create_typed_ast_node(NON_TERMINAL_ARRAY_ACCESSOR_TYPE, NON_TERMINAL_ARRAY_ACCESSOR_TYPE);
@@ -1753,12 +1816,15 @@ case 102:
 	yyval = array_accessor_unit;
 }
 break;
-case 103:
-#line 991 "scarl_tokens.y"
+case 104:
+#line 1053 "scarl_tokens.y"
 {
     /* ensure that the identifier*/
     /* is a pointer type that is*/
     /* in this scope*/
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *dereferenced_variable_identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match dereferenced_pointer\n", dereferenced_variable_identifier);
 	struct scarl_ast_node *deref_node = create_typed_ast_node(NON_TERMINAL_DEREFERENCED_VALUE, NON_TERMINAL_DEREFERENCED_VALUE); 
@@ -1767,11 +1833,14 @@ case 103:
 	yyval = deref_node;
 }
 break;
-case 104:
-#line 1003 "scarl_tokens.y"
+case 105:
+#line 1068 "scarl_tokens.y"
 {
 	/* string literals are syntactic*/
 	/* sugar for character arrays*/
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *string_literal = string_stack_pop();
 	if (debugging_grammar) printf("Match array_value (%s)\n", string_literal);
 	struct scarl_ast_node *string_node = create_typed_ast_node(NON_TERMINAL_ARRAY_TYPE, NON_TERMINAL_ARRAY_VALUE);
@@ -1785,8 +1854,8 @@ case 104:
 	/* NON_TERMINAL_ARRAY_VALUE*/
 }
 break;
-case 105:
-#line 1019 "scarl_tokens.y"
+case 106:
+#line 1087 "scarl_tokens.y"
 {
 	/* array initializer for arbitrarily typed*/
 	/* initialzers*/
@@ -1794,8 +1863,8 @@ case 105:
 	yyval = yyvsp[0];
 }
 break;
-case 106:
-#line 1026 "scarl_tokens.y"
+case 107:
+#line 1094 "scarl_tokens.y"
 {
 	/* in order to be a valid array initializer,*/
 	/* the types that make up the list of values */
@@ -1812,40 +1881,40 @@ case 106:
 	/* NON_TERMINAL_ARRAY_VALUE*/
 }
 break;
-case 107:
-#line 1042 "scarl_tokens.y"
+case 108:
+#line 1110 "scarl_tokens.y"
 {
 	int decimal_value = int_stack_pop();
 	if (debugging_grammar) printf("Match integer_value (%i)\n", decimal_value);
 	yyval = create_int_value_ast_node(NON_TERMINAL_INTEGER_VALUE, decimal_value);
 }
 break;
-case 108:
-#line 1048 "scarl_tokens.y"
+case 109:
+#line 1116 "scarl_tokens.y"
 {
 	int octal_value = int_stack_pop();
 	if (debugging_grammar) printf("Match integer_value (%i)\n", octal_value);
 	yyval = create_int_value_ast_node(NON_TERMINAL_INTEGER_VALUE, octal_value);
 }
 break;
-case 109:
-#line 1054 "scarl_tokens.y"
+case 110:
+#line 1122 "scarl_tokens.y"
 {
 	int hex_value = int_stack_pop();
 	if (debugging_grammar) printf("Match integer_value (%i)\n", hex_value);
 	yyval = create_int_value_ast_node(NON_TERMINAL_INTEGER_VALUE, hex_value);
 }
 break;
-case 110:
-#line 1060 "scarl_tokens.y"
+case 111:
+#line 1128 "scarl_tokens.y"
 {
 	int binary_value = int_stack_pop();
 	if (debugging_grammar) printf("Match integer_value (%i)\n", binary_value);
 	yyval = create_int_value_ast_node(NON_TERMINAL_INTEGER_VALUE, binary_value);
 }
 break;
-case 111:
-#line 1066 "scarl_tokens.y"
+case 112:
+#line 1134 "scarl_tokens.y"
 {
     /* ensure that the identifier is*/
     /* only a single character long.*/
@@ -1853,6 +1922,9 @@ case 111:
     /* value of the character literal, and*/
     /* not actually be an identifier in the*/
     /* language*/
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *character_literal = string_stack_pop();
 	if (debugging_grammar) printf("Match char_value (%s)\n", character_literal);
 	/* the int value of this node is the character, just cast it back to retrieve the character*/
@@ -1862,112 +1934,112 @@ case 111:
 	/* NON_TERMINAL_CHAR_VALUE*/
 }
 break;
-case 112:
-#line 1082 "scarl_tokens.y"
+case 113:
+#line 1153 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match bool_value\n");
     yyval = create_int_value_ast_node(NON_TERMINAL_BOOL_VALUE, TRUE);
 }
 break;
-case 113:
-#line 1087 "scarl_tokens.y"
+case 114:
+#line 1158 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match bool_value\n");
     yyval = create_int_value_ast_node(NON_TERMINAL_BOOL_VALUE, FALSE);
 }
 break;
-case 114:
-#line 1092 "scarl_tokens.y"
+case 115:
+#line 1163 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match primitive_type\n");
     yyval = create_typed_ast_node(NON_TERMINAL_PRIMITIVE_TYPE, VOID);
 }
 break;
-case 115:
-#line 1097 "scarl_tokens.y"
+case 116:
+#line 1168 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match primitive_type\n");
     yyval = create_typed_ast_node(NON_TERMINAL_PRIMITIVE_TYPE, INT);
 }
 break;
-case 116:
-#line 1102 "scarl_tokens.y"
+case 117:
+#line 1173 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match primitive_type\n");
     yyval = create_typed_ast_node(NON_TERMINAL_PRIMITIVE_TYPE, CHAR);
 }
 break;
-case 117:
-#line 1107 "scarl_tokens.y"
+case 118:
+#line 1178 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match primitive_type\n");
     yyval = create_typed_ast_node(NON_TERMINAL_PRIMITIVE_TYPE, VOID);
 }
 break;
-case 118:
-#line 1112 "scarl_tokens.y"
+case 119:
+#line 1183 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match primitive_type\n");
     yyval = create_typed_ast_node(NON_TERMINAL_PRIMITIVE_TYPE, BYTE);
 }
 break;
-case 119:
-#line 1117 "scarl_tokens.y"
+case 120:
+#line 1188 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match device_type\n");
     yyval = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, LIGHT_ACTUATOR);
 }
 break;
-case 120:
-#line 1122 "scarl_tokens.y"
+case 121:
+#line 1193 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match device_type\n");
     yyval = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, SERVO_ACTUATOR);
 }
 break;
-case 121:
-#line 1127 "scarl_tokens.y"
+case 122:
+#line 1198 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match device_type\n");
     yyval = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, SOUND_SENSOR);
 }
 break;
-case 122:
-#line 1132 "scarl_tokens.y"
+case 123:
+#line 1203 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match device_type\n");
     yyval = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, LIGHT_SENSOR);
 }
 break;
-case 123:
-#line 1137 "scarl_tokens.y"
+case 124:
+#line 1208 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match device_type\n");
     yyval = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, DISTANCE_SENSOR);
 }
 break;
-case 124:
-#line 1142 "scarl_tokens.y"
+case 125:
+#line 1213 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match device_type\n");
 	yyval = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, TEMPERATURE_SENSOR);
 }
 break;
-case 125:
-#line 1147 "scarl_tokens.y"
+case 126:
+#line 1218 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match device_type\n");
 	yyval = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, SERIAL_SENSOR);
 }
 break;
-case 126:
-#line 1152 "scarl_tokens.y"
+case 127:
+#line 1223 "scarl_tokens.y"
 {
 	if (debugging_grammar) printf("Match device_type\n");
 	yyval = create_typed_ast_node(NON_TERMINAL_DEVICE_TYPE, SERIAL_ACTUATOR);
 }
 break;
-#line 1971 "y.tab.c"
+#line 2043 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

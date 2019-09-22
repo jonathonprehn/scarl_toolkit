@@ -74,7 +74,7 @@ struct scarl_symbol_table_entry_identifier {
 
 // symbol table construct initialization functions
 struct scarl_symbol_table *create_st();
-struct scarl_symbol_table *create_st_from_ast(struct scarl_symbol_table *current_scope_st, struct scarl_ast_node *node); // direct creation, recursive
+struct scarl_symbol_table *create_st_from_ast(struct scarl_symbol_table *current_scope_st, struct scarl_symbol_table *st, struct scarl_ast_node *node); // direct creation, recursive
 struct scarl_symbol_table_entry *create_st_entry(struct scarl_symbol_table_entry_identifier *ident, struct scarl_type_descriptor *type);
 struct scarl_symbol_table_entry_identifier *create_st_entry_identifier(char *ident_str, struct scarl_type_descriptor *parameter_list); // parameter list already built
 struct scarl_symbol_table_entry_identifier *create_st_entry_identifier_var(char *ident_str, int param_count, ...); // a variable number of type descriptors

@@ -4,6 +4,6 @@ class A {
 }
 
 void main() {
-	A a;
+	A a = allocate A();
 	constant int x = 5;
 }

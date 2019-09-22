@@ -193,11 +193,26 @@ statement_block_level : constant_definition_statement {
 
 type_declarator : any_type IDENTIFIER {
     // for any variable declared with a type
+	
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *declarator_identifier = string_stack_pop();
-	if (debugging_grammar) printf("Match type_declarator (%s)\n", declarator_identifier);
-	struct scarl_ast_node *type_declarator_node = create_typed_ast_node(NON_TERMINAL_TYPE_DECLARATOR, NON_TERMINAL_TYPE_DECLARATOR);
-	struct scarl_ast_node *type_node = $1;
 	struct scarl_ast_node *declarator_identifier_node = create_str_value_ast_node(NON_TERMINAL_IDENTIFIER_VALUE, declarator_identifier);
+	struct scarl_ast_node *type_node = $1;
+	
+	// bug with grammar - user type is not reduced until the second identifier is recognized
+	// this makes the identifier and user type be in the wrong place
+	// to fix this for now, if the any_type is a user type, then swap the str_values between the identifier and type nodes
+	if (type_node->node_type == NON_TERMINAL_IDENTIFIER_VALUE) {
+		// the string values were likely swapped
+		char *temp = declarator_identifier_node->str_value;
+		declarator_identifier_node->str_value = type_node->str_value;
+		type_node->str_value = temp;
+	}
+	
+	if (debugging_grammar) printf("Match type_declarator (type %s, identifier %s)\n", get_ast_node_type_string(type_node->node_type), declarator_identifier);
+	struct scarl_ast_node *type_declarator_node = create_typed_ast_node(NON_TERMINAL_TYPE_DECLARATOR, NON_TERMINAL_TYPE_DECLARATOR);
 	add_child_node(type_declarator_node, type_node);
 	add_child_node(type_declarator_node, declarator_identifier_node);
 	$$ = type_declarator_node;
@@ -248,6 +263,9 @@ pointer_type : any_type POINTER {
 }
 
 user_type : IDENTIFIER {
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *user_type_identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match user_type (%s)\n", user_type_identifier);
 	$$ = create_str_value_ast_node(NON_TERMINAL_IDENTIFIER_VALUE, user_type_identifier);
@@ -280,6 +298,9 @@ variable_declaration_statement : type_declarator SEMICOLON {
 delete_statement : DELETE IDENTIFIER SEMICOLON {
 	// for deallocating a pointer variable
 	// be sure this only occurs on pointer types 
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *deleting_identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match delete_statement (%s)\n", deleting_identifier);
 	struct scarl_ast_node *delete_statement_node = create_typed_ast_node(NON_TERMINAL_DELETE_STATEMENT, NON_TERMINAL_DELETE_STATEMENT);
@@ -351,6 +372,9 @@ class_name : CLASS IDENTIFIER {
     // ensure that the identifier is not
     // being used for something else in
     // this (global) scope
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *class_identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match class_name (%s)\n", class_identifier);
 	$$ = create_str_value_ast_node(NON_TERMINAL_IDENTIFIER_VALUE, class_identifier);
@@ -360,6 +384,9 @@ class_extending : EXTENDS IDENTIFIER {
     // we need to ensure that the
     // identifier is actually a class
     // name defined in the symbol table
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *extending_class_identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match class_extending (%s)\n", extending_class_identifier);
 	$$ = create_str_value_ast_node(NON_TERMINAL_IDENTIFIER_VALUE, extending_class_identifier);
@@ -416,6 +443,9 @@ function_definition_statement : any_type IDENTIFIER LPAREN formal_parameter_list
     // extend it to pointer types later on. Can
     // always pass pointer types as parameters
     // to functions
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *function_identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match function_definition_statement (%s)\n", function_identifier);
 	struct scarl_ast_node *function_definition_statement_node = create_typed_ast_node(NON_TERMINAL_FUNCTION_DEFINITION_STATEMENT, NON_TERMINAL_FUNCTION_DEFINITION_STATEMENT);
@@ -435,12 +465,25 @@ variable_set_statement : IDENTIFIER EQ expression SEMICOLON {
     // value of the expression. Need to ensure that the type
     // of the identifier matches or can be converted to the type
     // of the expression. Also ensure that the identifier is in scope
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *variable_identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match variable_set_statement (%s)\n", variable_identifier);
 	struct scarl_ast_node *variable_set_statement_node = create_typed_ast_node(NON_TERMINAL_VARIABLE_SET_STATEMENT, NON_TERMINAL_VARIABLE_SET_STATEMENT);
 	struct scarl_ast_node *variable_identifier_node = create_str_value_ast_node(NON_TERMINAL_IDENTIFIER_VALUE, variable_identifier);
 	struct scarl_ast_node *expression_node = $3;
 	add_child_node(variable_set_statement_node, variable_identifier_node);
+	add_child_node(variable_set_statement_node, expression_node);
+	$$ = variable_set_statement_node;
+}
+
+variable_set_statement : class_attribute_identifier EQ expression SEMICOLON {
+	struct scarl_ast_node *class_attribute_ident_node = (struct scarl_ast_node *)$1;
+	if (debugging_grammar) printf("Match variable_set_statement (class attribute form, starts with %s)\n", class_attribute_ident_node->first_child->str_value);
+	struct scarl_ast_node *variable_set_statement_node = create_typed_ast_node(NON_TERMINAL_VARIABLE_SET_STATEMENT, NON_TERMINAL_VARIABLE_SET_STATEMENT);
+	struct scarl_ast_node *expression_node = $3;
+	add_child_node(variable_set_statement_node, class_attribute_ident_node);
 	add_child_node(variable_set_statement_node, expression_node);
 	$$ = variable_set_statement_node;
 }
@@ -478,6 +521,9 @@ function_invocation : IDENTIFIER LPAREN parameter_list RPAREN {
     // be checked against a class name and
     // the parameter list against the class's
     // constructors
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *function_identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match function_invocation (%s)\n", function_identifier);
 	struct scarl_ast_node *function_invocation_node = create_typed_ast_node(NON_TERMINAL_FUNCTION_INVOCATION, NON_TERMINAL_FUNCTION_INVOCATION);
@@ -525,6 +571,10 @@ class_attribute_identifier : IDENTIFIER DOT IDENTIFIER {
     // identifier
     // this could also just lead to a field of
     // an object instance, not a method
+	if (debugging_grammar) {
+		printf("Popping two identifiers\n");
+		print_string_stack();
+	}
 	char *second_identifier = string_stack_pop();
 	char *first_identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match class_attribute_identifier (%s.%s)\n", first_identifier, second_identifier);
@@ -543,6 +593,9 @@ class_attribute_identifier : IDENTIFIER DOT class_attribute_identifier {
     // get to where a field or method is
     // this could also just lead to a field of
     // an object instance, not a method
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match class_attribute_identifier (%s.<more stuff>)\n", identifier);
 	// we want the children to appear in the order as  they do in the code for the AST
@@ -629,7 +682,7 @@ parameter_list : expression COMMA parameter_list {
 	if (debugging_grammar) printf("Match parameter_list (expression list)\n");
 	struct scarl_ast_node *expression_node = $1;
 	struct scarl_ast_node *parameter_list_node = $3;
-	add_child_node(parameter_list_node, expression_node);
+	push_child_node_front(parameter_list_node, expression_node);
 	$$ = parameter_list_node;
 }
 
@@ -690,12 +743,15 @@ allocation_invocation : user_type LPAREN parameter_list RPAREN {
     // identifier must be a class in the
     // symbol table and the parameter list
     // must match one of the constructors
-	char *allocating_type_identifier = string_stack_pop();
-	if (debugging_grammar) printf("Match allocation_invocation\n", allocating_type_identifier);
+	if (debugging_grammar) {
+		print_string_stack();
+	}
+	//char *allocating_type_identifier = string_stack_pop(); // the user type already has a value
+	struct scarl_ast_node *allocating_type_identifier = (struct scarl_ast_node *)$1;
+	if (debugging_grammar) printf("Match allocation_invocation (allocating user type %s)\n", allocating_type_identifier->str_value);
 	struct scarl_ast_node *allocate_node = create_typed_ast_node(NON_TERMINAL_POINTER_VALUE, NON_TERMINAL_POINTER_VALUE);
-	struct scarl_ast_node *identifier_node = create_str_value_ast_node(NON_TERMINAL_IDENTIFIER_VALUE, allocating_type_identifier);
 	struct scarl_ast_node *parameter_list_node = $3;
-	add_child_node(allocate_node, identifier_node); // type defined as a pointer of this type 
+	add_child_node(allocate_node, allocating_type_identifier); // type defined as a pointer of this type 
 	add_child_node(allocate_node, parameter_list_node); // constructed with these parameters
 	$$ = allocate_node;
 }
@@ -930,6 +986,9 @@ arithmetic_unary : LPAREN arithmetic_expression RPAREN {
 }
 
 unit : IDENTIFIER {
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match unit (%s)\n", identifier);
 	$$ = create_str_value_ast_node(NON_TERMINAL_IDENTIFIER_VALUE, identifier);
@@ -978,6 +1037,9 @@ unit : array_value {
 array_accessor_unit : IDENTIFIER LBRACKET arithmetic_expression RBRACKET {
     // ensure that the used identifier is
     // an array type
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *array_variable_identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match array_accessor_unit (%s)\n", array_variable_identifier);
 	struct scarl_ast_node *array_accessor_unit = create_typed_ast_node(NON_TERMINAL_ARRAY_ACCESSOR_TYPE, NON_TERMINAL_ARRAY_ACCESSOR_TYPE);
@@ -992,6 +1054,9 @@ dereferenced_pointer : DEREF IDENTIFIER {
     // ensure that the identifier
     // is a pointer type that is
     // in this scope
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *dereferenced_variable_identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match dereferenced_pointer\n", dereferenced_variable_identifier);
 	struct scarl_ast_node *deref_node = create_typed_ast_node(NON_TERMINAL_DEREFERENCED_VALUE, NON_TERMINAL_DEREFERENCED_VALUE); 
@@ -1003,6 +1068,9 @@ dereferenced_pointer : DEREF IDENTIFIER {
 array_value : STRING_LITERAL {
 	// string literals are syntactic
 	// sugar for character arrays
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *string_literal = string_stack_pop();
 	if (debugging_grammar) printf("Match array_value (%s)\n", string_literal);
 	struct scarl_ast_node *string_node = create_typed_ast_node(NON_TERMINAL_ARRAY_TYPE, NON_TERMINAL_ARRAY_VALUE);
@@ -1070,6 +1138,9 @@ char_value : CHAR_LITERAL {
     // value of the character literal, and
     // not actually be an identifier in the
     // language
+	if (debugging_grammar) {
+		print_string_stack();
+	}
 	char *character_literal = string_stack_pop();
 	if (debugging_grammar) printf("Match char_value (%s)\n", character_literal);
 	// the int value of this node is the character, just cast it back to retrieve the character

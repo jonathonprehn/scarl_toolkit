@@ -8,5 +8,7 @@ class A {
 
 void main() {
 	A a = allocate A();
-	a.funcOfclass();
+	a.field = 12; // setting attributes?
+	//a.funcOfclass();
+	int k;
 }

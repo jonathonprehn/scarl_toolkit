@@ -22,6 +22,7 @@ along with SCARL.  If not, see <https://www.gnu.org/licenses/>.
 
 void string_stack_push(char *str);
 char *string_stack_pop();
+void print_string_stack();
 
 // also implement a similar integer stack
 #define SCARL_INT_STACK_SIZE 256

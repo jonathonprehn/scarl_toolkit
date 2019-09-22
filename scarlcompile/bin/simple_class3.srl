@@ -4,6 +4,9 @@ class A {
 	int funcOfClass() {
 		field = field + 2;	
 	}
+	bool truthy(bool anotherBool) {
+		return !anotherBool;
+	}
 }
 
 class B extends A {

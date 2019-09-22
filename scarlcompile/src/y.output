@@ -70,116 +70,117 @@
   46  function_definition_statement : any_type IDENTIFIER LPAREN formal_parameter_list RPAREN block_statement
 
   47  variable_set_statement : IDENTIFIER EQ expression SEMICOLON
+  48                         | class_attribute_identifier EQ expression SEMICOLON
 
-  48  return_statement : RETURN expression SEMICOLON
-  49                   | RETURN SEMICOLON
+  49  return_statement : RETURN expression SEMICOLON
+  50                   | RETURN SEMICOLON
 
-  50  function_invocation : IDENTIFIER LPAREN parameter_list RPAREN
+  51  function_invocation : IDENTIFIER LPAREN parameter_list RPAREN
 
-  51  function_invocation_statement : function_invocation SEMICOLON
+  52  function_invocation_statement : function_invocation SEMICOLON
 
-  52  method_invocation : class_attribute_identifier LPAREN parameter_list RPAREN
+  53  method_invocation : class_attribute_identifier LPAREN parameter_list RPAREN
 
-  53  method_invocation_statement : method_invocation SEMICOLON
+  54  method_invocation_statement : method_invocation SEMICOLON
 
-  54  class_attribute_identifier : IDENTIFIER DOT IDENTIFIER
-  55                             | IDENTIFIER DOT class_attribute_identifier
+  55  class_attribute_identifier : IDENTIFIER DOT IDENTIFIER
+  56                             | IDENTIFIER DOT class_attribute_identifier
 
-  56  if_block_statement : IF LPAREN expression RPAREN block_statement
-  57                     | IF LPAREN expression RPAREN block_statement ELSE block_statement
+  57  if_block_statement : IF LPAREN expression RPAREN block_statement
+  58                     | IF LPAREN expression RPAREN block_statement ELSE block_statement
 
-  58  while_block_statement : WHILE LPAREN expression RPAREN block_statement
+  59  while_block_statement : WHILE LPAREN expression RPAREN block_statement
 
-  59  formal_parameter_list : type_declarator
-  60                        | type_declarator COMMA formal_parameter_list
-  61                        |
+  60  formal_parameter_list : type_declarator
+  61                        | type_declarator COMMA formal_parameter_list
+  62                        |
 
-  62  parameter_list : expression
-  63                 | expression COMMA parameter_list
-  64                 |
+  63  parameter_list : expression
+  64                 | expression COMMA parameter_list
+  65                 |
 
-  65  expression : logical_expression
-  66             | allocation_expression
+  66  expression : logical_expression
+  67             | allocation_expression
 
-  67  allocation_expression : ALLOCATE allocation_invocation
+  68  allocation_expression : ALLOCATE allocation_invocation
 
-  68  allocation_invocation : primitive_type LPAREN parameter_list RPAREN
-  69                        | user_type LPAREN parameter_list RPAREN
+  69  allocation_invocation : primitive_type LPAREN parameter_list RPAREN
+  70                        | user_type LPAREN parameter_list RPAREN
 
-  70  logical_expression : logical_and_expression
-  71                     | logical_expression OR logical_and_expression
+  71  logical_expression : logical_and_expression
+  72                     | logical_expression OR logical_and_expression
 
-  72  logical_and_expression : equality_expression
-  73                         | logical_and_expression AND equality_expression
+  73  logical_and_expression : equality_expression
+  74                         | logical_and_expression AND equality_expression
 
-  74  equality_expression : relational_expression
-  75                      | equality_expression DBL_EQ relational_expression
-  76                      | equality_expression NOT_EQ relational_expression
+  75  equality_expression : relational_expression
+  76                      | equality_expression DBL_EQ relational_expression
+  77                      | equality_expression NOT_EQ relational_expression
 
-  77  relational_expression : bool_expression
-  78                        | relational_expression GTR bool_expression
-  79                        | relational_expression LESS bool_expression
-  80                        | relational_expression GTR_EQ bool_expression
-  81                        | relational_expression LESS_EQ bool_expression
+  78  relational_expression : bool_expression
+  79                        | relational_expression GTR bool_expression
+  80                        | relational_expression LESS bool_expression
+  81                        | relational_expression GTR_EQ bool_expression
+  82                        | relational_expression LESS_EQ bool_expression
 
-  82  bool_expression : arithmetic_expression
-  83                  | BANG arithmetic_expression
+  83  bool_expression : arithmetic_expression
+  84                  | BANG arithmetic_expression
 
-  84  arithmetic_expression : arithmetic_factor
-  85                        | arithmetic_expression PLUS arithmetic_factor
-  86                        | arithmetic_expression MINUS arithmetic_factor
+  85  arithmetic_expression : arithmetic_factor
+  86                        | arithmetic_expression PLUS arithmetic_factor
+  87                        | arithmetic_expression MINUS arithmetic_factor
 
-  87  arithmetic_factor : arithmetic_unary
-  88                    | arithmetic_factor STAR arithmetic_unary
-  89                    | arithmetic_factor SLASH arithmetic_unary
+  88  arithmetic_factor : arithmetic_unary
+  89                    | arithmetic_factor STAR arithmetic_unary
+  90                    | arithmetic_factor SLASH arithmetic_unary
 
-  90  arithmetic_unary : unit
-  91                   | MINUS arithmetic_unary
-  92                   | LPAREN arithmetic_expression RPAREN
+  91  arithmetic_unary : unit
+  92                   | MINUS arithmetic_unary
+  93                   | LPAREN arithmetic_expression RPAREN
 
-  93  unit : IDENTIFIER
-  94       | integer_value
-  95       | char_value
-  96       | bool_value
-  97       | function_invocation
-  98       | array_accessor_unit
-  99       | method_invocation
- 100       | dereferenced_pointer
- 101       | array_value
+  94  unit : IDENTIFIER
+  95       | integer_value
+  96       | char_value
+  97       | bool_value
+  98       | function_invocation
+  99       | array_accessor_unit
+ 100       | method_invocation
+ 101       | dereferenced_pointer
+ 102       | array_value
 
- 102  array_accessor_unit : IDENTIFIER LBRACKET arithmetic_expression RBRACKET
+ 103  array_accessor_unit : IDENTIFIER LBRACKET arithmetic_expression RBRACKET
 
- 103  dereferenced_pointer : DEREF IDENTIFIER
+ 104  dereferenced_pointer : DEREF IDENTIFIER
 
- 104  array_value : STRING_LITERAL
- 105              | array_initializer
+ 105  array_value : STRING_LITERAL
+ 106              | array_initializer
 
- 106  array_initializer : LBRACE parameter_list RBRACE
+ 107  array_initializer : LBRACE parameter_list RBRACE
 
- 107  integer_value : DECIMAL
- 108                | OCTAL
- 109                | HEX
- 110                | BINARY
+ 108  integer_value : DECIMAL
+ 109                | OCTAL
+ 110                | HEX
+ 111                | BINARY
 
- 111  char_value : CHAR_LITERAL
+ 112  char_value : CHAR_LITERAL
 
- 112  bool_value : TRUE
- 113             | FALSE
+ 113  bool_value : TRUE
+ 114             | FALSE
 
- 114  primitive_type : BOOL
- 115                 | INT
- 116                 | CHAR
- 117                 | VOID
- 118                 | BYTE
+ 115  primitive_type : BOOL
+ 116                 | INT
+ 117                 | CHAR
+ 118                 | VOID
+ 119                 | BYTE
 
- 119  device_type : LIGHT_ACTUATOR
- 120              | SERVO_ACTUATOR
- 121              | SOUND_SENSOR
- 122              | LIGHT_SENSOR
- 123              | DISTANCE_SENSOR
- 124              | TEMPERATURE_SENSOR
- 125              | SERIAL_SENSOR
- 126              | SERIAL_ACTUATOR
+ 120  device_type : LIGHT_ACTUATOR
+ 121              | SERVO_ACTUATOR
+ 122              | SOUND_SENSOR
+ 123              | LIGHT_SENSOR
+ 124              | DISTANCE_SENSOR
+ 125              | TEMPERATURE_SENSOR
+ 126              | SERIAL_SENSOR
+ 127              | SERIAL_ACTUATOR
 
 state 0
 	$accept : . program $end  (0)
@@ -228,63 +229,63 @@ state 1
 
 
 state 2
-	primitive_type : BOOL .  (114)
-
-	.  reduce 114
-
-
-state 3
-	primitive_type : INT .  (115)
+	primitive_type : BOOL .  (115)
 
 	.  reduce 115
 
 
-state 4
-	primitive_type : CHAR .  (116)
+state 3
+	primitive_type : INT .  (116)
 
 	.  reduce 116
 
 
-state 5
-	primitive_type : VOID .  (117)
+state 4
+	primitive_type : CHAR .  (117)
 
 	.  reduce 117
 
 
+state 5
+	primitive_type : VOID .  (118)
+
+	.  reduce 118
+
+
 state 6
-	device_type : LIGHT_ACTUATOR .  (119)
-
-	.  reduce 119
-
-
-state 7
-	device_type : SERVO_ACTUATOR .  (120)
+	device_type : LIGHT_ACTUATOR .  (120)
 
 	.  reduce 120
 
 
-state 8
-	device_type : SOUND_SENSOR .  (121)
+state 7
+	device_type : SERVO_ACTUATOR .  (121)
 
 	.  reduce 121
 
 
-state 9
-	device_type : LIGHT_SENSOR .  (122)
+state 8
+	device_type : SOUND_SENSOR .  (122)
 
 	.  reduce 122
 
 
-state 10
-	device_type : DISTANCE_SENSOR .  (123)
+state 9
+	device_type : LIGHT_SENSOR .  (123)
 
 	.  reduce 123
 
 
-state 11
-	device_type : TEMPERATURE_SENSOR .  (124)
+state 10
+	device_type : DISTANCE_SENSOR .  (124)
 
 	.  reduce 124
+
+
+state 11
+	device_type : TEMPERATURE_SENSOR .  (125)
+
+	.  reduce 125
 
 
 state 12
@@ -323,21 +324,21 @@ state 13
 
 
 state 14
-	device_type : SERIAL_SENSOR .  (125)
-
-	.  reduce 125
-
-
-state 15
-	device_type : SERIAL_ACTUATOR .  (126)
+	device_type : SERIAL_SENSOR .  (126)
 
 	.  reduce 126
 
 
-state 16
-	primitive_type : BYTE .  (118)
+state 15
+	device_type : SERIAL_ACTUATOR .  (127)
 
-	.  reduce 118
+	.  reduce 127
+
+
+state 16
+	primitive_type : BYTE .  (119)
+
+	.  reduce 119
 
 
 state 17
@@ -544,9 +545,9 @@ state 38
 
 	arithmetic_expression  goto 64
 	expression  goto 65
-	function_invocation  goto 66
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
 	logical_expression  goto 69
 	allocation_expression  goto 70
 	logical_and_expression  goto 71
@@ -605,9 +606,9 @@ state 42
 	.  error
 
 	arithmetic_expression  goto 86
-	function_invocation  goto 66
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
 	arithmetic_factor  goto 75
 	arithmetic_unary  goto 76
 	unit  goto 77
@@ -693,9 +694,9 @@ state 47
 
 	arithmetic_expression  goto 64
 	expression  goto 93
-	function_invocation  goto 66
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
 	logical_expression  goto 69
 	allocation_expression  goto 70
 	logical_and_expression  goto 71
@@ -721,36 +722,36 @@ state 48
 
 
 state 49
-	function_invocation : IDENTIFIER . LPAREN parameter_list RPAREN  (50)
-	class_attribute_identifier : IDENTIFIER . DOT IDENTIFIER  (54)
-	class_attribute_identifier : IDENTIFIER . DOT class_attribute_identifier  (55)
-	unit : IDENTIFIER .  (93)
-	array_accessor_unit : IDENTIFIER . LBRACKET arithmetic_expression RBRACKET  (102)
+	function_invocation : IDENTIFIER . LPAREN parameter_list RPAREN  (51)
+	class_attribute_identifier : IDENTIFIER . DOT IDENTIFIER  (55)
+	class_attribute_identifier : IDENTIFIER . DOT class_attribute_identifier  (56)
+	unit : IDENTIFIER .  (94)
+	array_accessor_unit : IDENTIFIER . LBRACKET arithmetic_expression RBRACKET  (103)
 
 	LPAREN  shift 94
 	LBRACKET  shift 95
 	DOT  shift 96
-	PLUS  reduce 93
-	MINUS  reduce 93
-	STAR  reduce 93
-	SLASH  reduce 93
-	RPAREN  reduce 93
-	GTR  reduce 93
-	LESS  reduce 93
-	GTR_EQ  reduce 93
-	LESS_EQ  reduce 93
-	DBL_EQ  reduce 93
-	NOT_EQ  reduce 93
-	OR  reduce 93
-	AND  reduce 93
-	COMMA  reduce 93
-	SEMICOLON  reduce 93
-	RBRACE  reduce 93
-	RBRACKET  reduce 93
+	PLUS  reduce 94
+	MINUS  reduce 94
+	STAR  reduce 94
+	SLASH  reduce 94
+	RPAREN  reduce 94
+	GTR  reduce 94
+	LESS  reduce 94
+	GTR_EQ  reduce 94
+	LESS_EQ  reduce 94
+	DBL_EQ  reduce 94
+	NOT_EQ  reduce 94
+	OR  reduce 94
+	AND  reduce 94
+	COMMA  reduce 94
+	SEMICOLON  reduce 94
+	RBRACE  reduce 94
+	RBRACKET  reduce 94
 
 
 state 50
-	arithmetic_unary : MINUS . arithmetic_unary  (91)
+	arithmetic_unary : MINUS . arithmetic_unary  (92)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -767,9 +768,9 @@ state 50
 	CHAR_LITERAL  shift 63
 	.  error
 
-	function_invocation  goto 66
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
 	arithmetic_unary  goto 97
 	unit  goto 77
 	integer_value  goto 78
@@ -782,7 +783,7 @@ state 50
 
 
 state 51
-	bool_expression : BANG . arithmetic_expression  (83)
+	bool_expression : BANG . arithmetic_expression  (84)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -800,9 +801,9 @@ state 51
 	.  error
 
 	arithmetic_expression  goto 98
-	function_invocation  goto 66
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
 	arithmetic_factor  goto 75
 	arithmetic_unary  goto 76
 	unit  goto 77
@@ -816,7 +817,7 @@ state 51
 
 
 state 52
-	arithmetic_unary : LPAREN . arithmetic_expression RPAREN  (92)
+	arithmetic_unary : LPAREN . arithmetic_expression RPAREN  (93)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -834,9 +835,9 @@ state 52
 	.  error
 
 	arithmetic_expression  goto 99
-	function_invocation  goto 66
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
 	arithmetic_factor  goto 75
 	arithmetic_unary  goto 76
 	unit  goto 77
@@ -850,8 +851,8 @@ state 52
 
 
 state 53
-	array_initializer : LBRACE . parameter_list RBRACE  (106)
-	parameter_list : .  (64)
+	array_initializer : LBRACE . parameter_list RBRACE  (107)
+	parameter_list : .  (65)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -868,14 +869,14 @@ state 53
 	DEREF  shift 61
 	STRING_LITERAL  shift 62
 	CHAR_LITERAL  shift 63
-	RBRACE  reduce 64
+	RBRACE  reduce 65
 
 	arithmetic_expression  goto 64
 	expression  goto 100
-	function_invocation  goto 66
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
 	parameter_list  goto 101
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	method_invocation  goto 68
 	logical_expression  goto 69
 	allocation_expression  goto 70
 	logical_and_expression  goto 71
@@ -895,43 +896,43 @@ state 53
 
 
 state 54
-	integer_value : DECIMAL .  (107)
-
-	.  reduce 107
-
-
-state 55
-	integer_value : OCTAL .  (108)
+	integer_value : DECIMAL .  (108)
 
 	.  reduce 108
 
 
-state 56
-	integer_value : HEX .  (109)
+state 55
+	integer_value : OCTAL .  (109)
 
 	.  reduce 109
 
 
-state 57
-	integer_value : BINARY .  (110)
+state 56
+	integer_value : HEX .  (110)
 
 	.  reduce 110
 
 
+state 57
+	integer_value : BINARY .  (111)
+
+	.  reduce 111
+
+
 state 58
-	bool_value : TRUE .  (112)
-
-	.  reduce 112
-
-
-state 59
-	bool_value : FALSE .  (113)
+	bool_value : TRUE .  (113)
 
 	.  reduce 113
 
 
+state 59
+	bool_value : FALSE .  (114)
+
+	.  reduce 114
+
+
 state 60
-	allocation_expression : ALLOCATE . allocation_invocation  (67)
+	allocation_expression : ALLOCATE . allocation_invocation  (68)
 
 	IDENTIFIER  shift 1
 	BOOL  shift 2
@@ -947,43 +948,43 @@ state 60
 
 
 state 61
-	dereferenced_pointer : DEREF . IDENTIFIER  (103)
+	dereferenced_pointer : DEREF . IDENTIFIER  (104)
 
 	IDENTIFIER  shift 105
 	.  error
 
 
 state 62
-	array_value : STRING_LITERAL .  (104)
+	array_value : STRING_LITERAL .  (105)
 
-	.  reduce 104
+	.  reduce 105
 
 
 state 63
-	char_value : CHAR_LITERAL .  (111)
+	char_value : CHAR_LITERAL .  (112)
 
-	.  reduce 111
+	.  reduce 112
 
 
 state 64
-	bool_expression : arithmetic_expression .  (82)
-	arithmetic_expression : arithmetic_expression . PLUS arithmetic_factor  (85)
-	arithmetic_expression : arithmetic_expression . MINUS arithmetic_factor  (86)
+	bool_expression : arithmetic_expression .  (83)
+	arithmetic_expression : arithmetic_expression . PLUS arithmetic_factor  (86)
+	arithmetic_expression : arithmetic_expression . MINUS arithmetic_factor  (87)
 
 	PLUS  shift 106
 	MINUS  shift 107
-	RPAREN  reduce 82
-	GTR  reduce 82
-	LESS  reduce 82
-	GTR_EQ  reduce 82
-	LESS_EQ  reduce 82
-	DBL_EQ  reduce 82
-	NOT_EQ  reduce 82
-	OR  reduce 82
-	AND  reduce 82
-	COMMA  reduce 82
-	SEMICOLON  reduce 82
-	RBRACE  reduce 82
+	RPAREN  reduce 83
+	GTR  reduce 83
+	LESS  reduce 83
+	GTR_EQ  reduce 83
+	LESS_EQ  reduce 83
+	DBL_EQ  reduce 83
+	NOT_EQ  reduce 83
+	OR  reduce 83
+	AND  reduce 83
+	COMMA  reduce 83
+	SEMICOLON  reduce 83
+	RBRACE  reduce 83
 
 
 state 65
@@ -994,176 +995,176 @@ state 65
 
 
 state 66
-	unit : function_invocation .  (97)
-
-	.  reduce 97
-
-
-state 67
-	unit : method_invocation .  (99)
-
-	.  reduce 99
-
-
-state 68
-	method_invocation : class_attribute_identifier . LPAREN parameter_list RPAREN  (52)
+	method_invocation : class_attribute_identifier . LPAREN parameter_list RPAREN  (53)
 
 	LPAREN  shift 109
 	.  error
 
 
+state 67
+	unit : function_invocation .  (98)
+
+	.  reduce 98
+
+
+state 68
+	unit : method_invocation .  (100)
+
+	.  reduce 100
+
+
 state 69
-	expression : logical_expression .  (65)
-	logical_expression : logical_expression . OR logical_and_expression  (71)
+	expression : logical_expression .  (66)
+	logical_expression : logical_expression . OR logical_and_expression  (72)
 
 	OR  shift 110
-	RPAREN  reduce 65
-	COMMA  reduce 65
-	SEMICOLON  reduce 65
-	RBRACE  reduce 65
+	RPAREN  reduce 66
+	COMMA  reduce 66
+	SEMICOLON  reduce 66
+	RBRACE  reduce 66
 
 
 state 70
-	expression : allocation_expression .  (66)
+	expression : allocation_expression .  (67)
 
-	.  reduce 66
+	.  reduce 67
 
 
 state 71
-	logical_expression : logical_and_expression .  (70)
-	logical_and_expression : logical_and_expression . AND equality_expression  (73)
+	logical_expression : logical_and_expression .  (71)
+	logical_and_expression : logical_and_expression . AND equality_expression  (74)
 
 	AND  shift 111
-	RPAREN  reduce 70
-	OR  reduce 70
-	COMMA  reduce 70
-	SEMICOLON  reduce 70
-	RBRACE  reduce 70
+	RPAREN  reduce 71
+	OR  reduce 71
+	COMMA  reduce 71
+	SEMICOLON  reduce 71
+	RBRACE  reduce 71
 
 
 state 72
-	logical_and_expression : equality_expression .  (72)
-	equality_expression : equality_expression . DBL_EQ relational_expression  (75)
-	equality_expression : equality_expression . NOT_EQ relational_expression  (76)
+	logical_and_expression : equality_expression .  (73)
+	equality_expression : equality_expression . DBL_EQ relational_expression  (76)
+	equality_expression : equality_expression . NOT_EQ relational_expression  (77)
 
 	DBL_EQ  shift 112
 	NOT_EQ  shift 113
-	RPAREN  reduce 72
-	OR  reduce 72
-	AND  reduce 72
-	COMMA  reduce 72
-	SEMICOLON  reduce 72
-	RBRACE  reduce 72
+	RPAREN  reduce 73
+	OR  reduce 73
+	AND  reduce 73
+	COMMA  reduce 73
+	SEMICOLON  reduce 73
+	RBRACE  reduce 73
 
 
 state 73
-	equality_expression : relational_expression .  (74)
-	relational_expression : relational_expression . GTR bool_expression  (78)
-	relational_expression : relational_expression . LESS bool_expression  (79)
-	relational_expression : relational_expression . GTR_EQ bool_expression  (80)
-	relational_expression : relational_expression . LESS_EQ bool_expression  (81)
+	equality_expression : relational_expression .  (75)
+	relational_expression : relational_expression . GTR bool_expression  (79)
+	relational_expression : relational_expression . LESS bool_expression  (80)
+	relational_expression : relational_expression . GTR_EQ bool_expression  (81)
+	relational_expression : relational_expression . LESS_EQ bool_expression  (82)
 
 	GTR  shift 114
 	LESS  shift 115
 	GTR_EQ  shift 116
 	LESS_EQ  shift 117
-	RPAREN  reduce 74
-	DBL_EQ  reduce 74
-	NOT_EQ  reduce 74
-	OR  reduce 74
-	AND  reduce 74
-	COMMA  reduce 74
-	SEMICOLON  reduce 74
-	RBRACE  reduce 74
+	RPAREN  reduce 75
+	DBL_EQ  reduce 75
+	NOT_EQ  reduce 75
+	OR  reduce 75
+	AND  reduce 75
+	COMMA  reduce 75
+	SEMICOLON  reduce 75
+	RBRACE  reduce 75
 
 
 state 74
-	relational_expression : bool_expression .  (77)
+	relational_expression : bool_expression .  (78)
 
-	.  reduce 77
+	.  reduce 78
 
 
 state 75
-	arithmetic_expression : arithmetic_factor .  (84)
-	arithmetic_factor : arithmetic_factor . STAR arithmetic_unary  (88)
-	arithmetic_factor : arithmetic_factor . SLASH arithmetic_unary  (89)
+	arithmetic_expression : arithmetic_factor .  (85)
+	arithmetic_factor : arithmetic_factor . STAR arithmetic_unary  (89)
+	arithmetic_factor : arithmetic_factor . SLASH arithmetic_unary  (90)
 
 	STAR  shift 118
 	SLASH  shift 119
-	PLUS  reduce 84
-	MINUS  reduce 84
-	RPAREN  reduce 84
-	GTR  reduce 84
-	LESS  reduce 84
-	GTR_EQ  reduce 84
-	LESS_EQ  reduce 84
-	DBL_EQ  reduce 84
-	NOT_EQ  reduce 84
-	OR  reduce 84
-	AND  reduce 84
-	COMMA  reduce 84
-	SEMICOLON  reduce 84
-	RBRACE  reduce 84
-	RBRACKET  reduce 84
+	PLUS  reduce 85
+	MINUS  reduce 85
+	RPAREN  reduce 85
+	GTR  reduce 85
+	LESS  reduce 85
+	GTR_EQ  reduce 85
+	LESS_EQ  reduce 85
+	DBL_EQ  reduce 85
+	NOT_EQ  reduce 85
+	OR  reduce 85
+	AND  reduce 85
+	COMMA  reduce 85
+	SEMICOLON  reduce 85
+	RBRACE  reduce 85
+	RBRACKET  reduce 85
 
 
 state 76
-	arithmetic_factor : arithmetic_unary .  (87)
+	arithmetic_factor : arithmetic_unary .  (88)
 
-	.  reduce 87
+	.  reduce 88
 
 
 state 77
-	arithmetic_unary : unit .  (90)
+	arithmetic_unary : unit .  (91)
 
-	.  reduce 90
+	.  reduce 91
 
 
 state 78
-	unit : integer_value .  (94)
-
-	.  reduce 94
-
-
-state 79
-	unit : char_value .  (95)
+	unit : integer_value .  (95)
 
 	.  reduce 95
 
 
-state 80
-	unit : bool_value .  (96)
+state 79
+	unit : char_value .  (96)
 
 	.  reduce 96
 
 
-state 81
-	unit : array_accessor_unit .  (98)
+state 80
+	unit : bool_value .  (97)
 
-	.  reduce 98
+	.  reduce 97
+
+
+state 81
+	unit : array_accessor_unit .  (99)
+
+	.  reduce 99
 
 
 state 82
-	unit : dereferenced_pointer .  (100)
-
-	.  reduce 100
-
-
-state 83
-	unit : array_value .  (101)
+	unit : dereferenced_pointer .  (101)
 
 	.  reduce 101
 
 
-state 84
-	array_value : array_initializer .  (105)
+state 83
+	unit : array_value .  (102)
 
-	.  reduce 105
+	.  reduce 102
+
+
+state 84
+	array_value : array_initializer .  (106)
+
+	.  reduce 106
 
 
 state 85
 	function_definition_statement : any_type IDENTIFIER LPAREN . formal_parameter_list RPAREN block_statement  (46)
-	formal_parameter_list : .  (61)
+	formal_parameter_list : .  (62)
 
 	IDENTIFIER  shift 1
 	BOOL  shift 2
@@ -1179,7 +1180,7 @@ state 85
 	SERIAL_SENSOR  shift 14
 	SERIAL_ACTUATOR  shift 15
 	BYTE  shift 16
-	RPAREN  reduce 61
+	RPAREN  reduce 62
 
 	type_declarator  goto 120
 	any_type  goto 35
@@ -1193,8 +1194,8 @@ state 85
 
 state 86
 	array_type : any_type LBRACKET arithmetic_expression . RBRACKET  (29)
-	arithmetic_expression : arithmetic_expression . PLUS arithmetic_factor  (85)
-	arithmetic_expression : arithmetic_expression . MINUS arithmetic_factor  (86)
+	arithmetic_expression : arithmetic_expression . PLUS arithmetic_factor  (86)
+	arithmetic_expression : arithmetic_expression . MINUS arithmetic_factor  (87)
 
 	PLUS  shift 106
 	MINUS  shift 107
@@ -1275,8 +1276,8 @@ state 93
 
 
 state 94
-	function_invocation : IDENTIFIER LPAREN . parameter_list RPAREN  (50)
-	parameter_list : .  (64)
+	function_invocation : IDENTIFIER LPAREN . parameter_list RPAREN  (51)
+	parameter_list : .  (65)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -1293,14 +1294,14 @@ state 94
 	DEREF  shift 61
 	STRING_LITERAL  shift 62
 	CHAR_LITERAL  shift 63
-	RPAREN  reduce 64
+	RPAREN  reduce 65
 
 	arithmetic_expression  goto 64
 	expression  goto 100
-	function_invocation  goto 66
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
 	parameter_list  goto 126
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	method_invocation  goto 68
 	logical_expression  goto 69
 	allocation_expression  goto 70
 	logical_and_expression  goto 71
@@ -1320,7 +1321,7 @@ state 94
 
 
 state 95
-	array_accessor_unit : IDENTIFIER LBRACKET . arithmetic_expression RBRACKET  (102)
+	array_accessor_unit : IDENTIFIER LBRACKET . arithmetic_expression RBRACKET  (103)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -1338,9 +1339,9 @@ state 95
 	.  error
 
 	arithmetic_expression  goto 127
-	function_invocation  goto 66
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
 	arithmetic_factor  goto 75
 	arithmetic_unary  goto 76
 	unit  goto 77
@@ -1354,8 +1355,8 @@ state 95
 
 
 state 96
-	class_attribute_identifier : IDENTIFIER DOT . IDENTIFIER  (54)
-	class_attribute_identifier : IDENTIFIER DOT . class_attribute_identifier  (55)
+	class_attribute_identifier : IDENTIFIER DOT . IDENTIFIER  (55)
+	class_attribute_identifier : IDENTIFIER DOT . class_attribute_identifier  (56)
 
 	IDENTIFIER  shift 128
 	.  error
@@ -1364,36 +1365,36 @@ state 96
 
 
 state 97
-	arithmetic_unary : MINUS arithmetic_unary .  (91)
+	arithmetic_unary : MINUS arithmetic_unary .  (92)
 
-	.  reduce 91
+	.  reduce 92
 
 
 state 98
-	bool_expression : BANG arithmetic_expression .  (83)
-	arithmetic_expression : arithmetic_expression . PLUS arithmetic_factor  (85)
-	arithmetic_expression : arithmetic_expression . MINUS arithmetic_factor  (86)
+	bool_expression : BANG arithmetic_expression .  (84)
+	arithmetic_expression : arithmetic_expression . PLUS arithmetic_factor  (86)
+	arithmetic_expression : arithmetic_expression . MINUS arithmetic_factor  (87)
 
 	PLUS  shift 106
 	MINUS  shift 107
-	RPAREN  reduce 83
-	GTR  reduce 83
-	LESS  reduce 83
-	GTR_EQ  reduce 83
-	LESS_EQ  reduce 83
-	DBL_EQ  reduce 83
-	NOT_EQ  reduce 83
-	OR  reduce 83
-	AND  reduce 83
-	COMMA  reduce 83
-	SEMICOLON  reduce 83
-	RBRACE  reduce 83
+	RPAREN  reduce 84
+	GTR  reduce 84
+	LESS  reduce 84
+	GTR_EQ  reduce 84
+	LESS_EQ  reduce 84
+	DBL_EQ  reduce 84
+	NOT_EQ  reduce 84
+	OR  reduce 84
+	AND  reduce 84
+	COMMA  reduce 84
+	SEMICOLON  reduce 84
+	RBRACE  reduce 84
 
 
 state 99
-	arithmetic_expression : arithmetic_expression . PLUS arithmetic_factor  (85)
-	arithmetic_expression : arithmetic_expression . MINUS arithmetic_factor  (86)
-	arithmetic_unary : LPAREN arithmetic_expression . RPAREN  (92)
+	arithmetic_expression : arithmetic_expression . PLUS arithmetic_factor  (86)
+	arithmetic_expression : arithmetic_expression . MINUS arithmetic_factor  (87)
+	arithmetic_unary : LPAREN arithmetic_expression . RPAREN  (93)
 
 	PLUS  shift 106
 	MINUS  shift 107
@@ -1402,49 +1403,49 @@ state 99
 
 
 state 100
-	parameter_list : expression .  (62)
-	parameter_list : expression . COMMA parameter_list  (63)
+	parameter_list : expression .  (63)
+	parameter_list : expression . COMMA parameter_list  (64)
 
 	COMMA  shift 131
-	RPAREN  reduce 62
-	RBRACE  reduce 62
+	RPAREN  reduce 63
+	RBRACE  reduce 63
 
 
 state 101
-	array_initializer : LBRACE parameter_list . RBRACE  (106)
+	array_initializer : LBRACE parameter_list . RBRACE  (107)
 
 	RBRACE  shift 132
 	.  error
 
 
 state 102
-	allocation_invocation : primitive_type . LPAREN parameter_list RPAREN  (68)
+	allocation_invocation : primitive_type . LPAREN parameter_list RPAREN  (69)
 
 	LPAREN  shift 133
 	.  error
 
 
 state 103
-	allocation_invocation : user_type . LPAREN parameter_list RPAREN  (69)
+	allocation_invocation : user_type . LPAREN parameter_list RPAREN  (70)
 
 	LPAREN  shift 134
 	.  error
 
 
 state 104
-	allocation_expression : ALLOCATE allocation_invocation .  (67)
+	allocation_expression : ALLOCATE allocation_invocation .  (68)
 
-	.  reduce 67
+	.  reduce 68
 
 
 state 105
-	dereferenced_pointer : DEREF IDENTIFIER .  (103)
+	dereferenced_pointer : DEREF IDENTIFIER .  (104)
 
-	.  reduce 103
+	.  reduce 104
 
 
 state 106
-	arithmetic_expression : arithmetic_expression PLUS . arithmetic_factor  (85)
+	arithmetic_expression : arithmetic_expression PLUS . arithmetic_factor  (86)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -1461,9 +1462,9 @@ state 106
 	CHAR_LITERAL  shift 63
 	.  error
 
-	function_invocation  goto 66
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
 	arithmetic_factor  goto 135
 	arithmetic_unary  goto 76
 	unit  goto 77
@@ -1477,7 +1478,7 @@ state 106
 
 
 state 107
-	arithmetic_expression : arithmetic_expression MINUS . arithmetic_factor  (86)
+	arithmetic_expression : arithmetic_expression MINUS . arithmetic_factor  (87)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -1494,9 +1495,9 @@ state 107
 	CHAR_LITERAL  shift 63
 	.  error
 
-	function_invocation  goto 66
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
 	arithmetic_factor  goto 136
 	arithmetic_unary  goto 76
 	unit  goto 77
@@ -1516,8 +1517,8 @@ state 108
 
 
 state 109
-	method_invocation : class_attribute_identifier LPAREN . parameter_list RPAREN  (52)
-	parameter_list : .  (64)
+	method_invocation : class_attribute_identifier LPAREN . parameter_list RPAREN  (53)
+	parameter_list : .  (65)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -1534,14 +1535,14 @@ state 109
 	DEREF  shift 61
 	STRING_LITERAL  shift 62
 	CHAR_LITERAL  shift 63
-	RPAREN  reduce 64
+	RPAREN  reduce 65
 
 	arithmetic_expression  goto 64
 	expression  goto 100
-	function_invocation  goto 66
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
 	parameter_list  goto 137
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	method_invocation  goto 68
 	logical_expression  goto 69
 	allocation_expression  goto 70
 	logical_and_expression  goto 71
@@ -1561,7 +1562,7 @@ state 109
 
 
 state 110
-	logical_expression : logical_expression OR . logical_and_expression  (71)
+	logical_expression : logical_expression OR . logical_and_expression  (72)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -1580,9 +1581,9 @@ state 110
 	.  error
 
 	arithmetic_expression  goto 64
-	function_invocation  goto 66
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
 	logical_and_expression  goto 138
 	equality_expression  goto 72
 	relational_expression  goto 73
@@ -1600,7 +1601,7 @@ state 110
 
 
 state 111
-	logical_and_expression : logical_and_expression AND . equality_expression  (73)
+	logical_and_expression : logical_and_expression AND . equality_expression  (74)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -1619,9 +1620,9 @@ state 111
 	.  error
 
 	arithmetic_expression  goto 64
-	function_invocation  goto 66
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
 	equality_expression  goto 139
 	relational_expression  goto 73
 	bool_expression  goto 74
@@ -1638,7 +1639,7 @@ state 111
 
 
 state 112
-	equality_expression : equality_expression DBL_EQ . relational_expression  (75)
+	equality_expression : equality_expression DBL_EQ . relational_expression  (76)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -1657,9 +1658,9 @@ state 112
 	.  error
 
 	arithmetic_expression  goto 64
-	function_invocation  goto 66
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
 	relational_expression  goto 140
 	bool_expression  goto 74
 	arithmetic_factor  goto 75
@@ -1675,7 +1676,7 @@ state 112
 
 
 state 113
-	equality_expression : equality_expression NOT_EQ . relational_expression  (76)
+	equality_expression : equality_expression NOT_EQ . relational_expression  (77)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -1694,9 +1695,9 @@ state 113
 	.  error
 
 	arithmetic_expression  goto 64
-	function_invocation  goto 66
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
 	relational_expression  goto 141
 	bool_expression  goto 74
 	arithmetic_factor  goto 75
@@ -1712,7 +1713,7 @@ state 113
 
 
 state 114
-	relational_expression : relational_expression GTR . bool_expression  (78)
+	relational_expression : relational_expression GTR . bool_expression  (79)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -1731,9 +1732,9 @@ state 114
 	.  error
 
 	arithmetic_expression  goto 64
-	function_invocation  goto 66
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
 	bool_expression  goto 142
 	arithmetic_factor  goto 75
 	arithmetic_unary  goto 76
@@ -1748,7 +1749,7 @@ state 114
 
 
 state 115
-	relational_expression : relational_expression LESS . bool_expression  (79)
+	relational_expression : relational_expression LESS . bool_expression  (80)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -1767,9 +1768,9 @@ state 115
 	.  error
 
 	arithmetic_expression  goto 64
-	function_invocation  goto 66
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
 	bool_expression  goto 143
 	arithmetic_factor  goto 75
 	arithmetic_unary  goto 76
@@ -1784,7 +1785,7 @@ state 115
 
 
 state 116
-	relational_expression : relational_expression GTR_EQ . bool_expression  (80)
+	relational_expression : relational_expression GTR_EQ . bool_expression  (81)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -1803,9 +1804,9 @@ state 116
 	.  error
 
 	arithmetic_expression  goto 64
-	function_invocation  goto 66
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
 	bool_expression  goto 144
 	arithmetic_factor  goto 75
 	arithmetic_unary  goto 76
@@ -1820,7 +1821,7 @@ state 116
 
 
 state 117
-	relational_expression : relational_expression LESS_EQ . bool_expression  (81)
+	relational_expression : relational_expression LESS_EQ . bool_expression  (82)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -1839,9 +1840,9 @@ state 117
 	.  error
 
 	arithmetic_expression  goto 64
-	function_invocation  goto 66
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
 	bool_expression  goto 145
 	arithmetic_factor  goto 75
 	arithmetic_unary  goto 76
@@ -1856,7 +1857,7 @@ state 117
 
 
 state 118
-	arithmetic_factor : arithmetic_factor STAR . arithmetic_unary  (88)
+	arithmetic_factor : arithmetic_factor STAR . arithmetic_unary  (89)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -1873,9 +1874,9 @@ state 118
 	CHAR_LITERAL  shift 63
 	.  error
 
-	function_invocation  goto 66
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
 	arithmetic_unary  goto 146
 	unit  goto 77
 	integer_value  goto 78
@@ -1888,7 +1889,7 @@ state 118
 
 
 state 119
-	arithmetic_factor : arithmetic_factor SLASH . arithmetic_unary  (89)
+	arithmetic_factor : arithmetic_factor SLASH . arithmetic_unary  (90)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -1905,9 +1906,9 @@ state 119
 	CHAR_LITERAL  shift 63
 	.  error
 
-	function_invocation  goto 66
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
 	arithmetic_unary  goto 147
 	unit  goto 77
 	integer_value  goto 78
@@ -1920,11 +1921,11 @@ state 119
 
 
 state 120
-	formal_parameter_list : type_declarator .  (59)
-	formal_parameter_list : type_declarator . COMMA formal_parameter_list  (60)
+	formal_parameter_list : type_declarator .  (60)
+	formal_parameter_list : type_declarator . COMMA formal_parameter_list  (61)
 
 	COMMA  shift 148
-	RPAREN  reduce 59
+	RPAREN  reduce 60
 
 
 state 121
@@ -1959,16 +1960,16 @@ state 125
 
 
 state 126
-	function_invocation : IDENTIFIER LPAREN parameter_list . RPAREN  (50)
+	function_invocation : IDENTIFIER LPAREN parameter_list . RPAREN  (51)
 
 	RPAREN  shift 150
 	.  error
 
 
 state 127
-	arithmetic_expression : arithmetic_expression . PLUS arithmetic_factor  (85)
-	arithmetic_expression : arithmetic_expression . MINUS arithmetic_factor  (86)
-	array_accessor_unit : IDENTIFIER LBRACKET arithmetic_expression . RBRACKET  (102)
+	arithmetic_expression : arithmetic_expression . PLUS arithmetic_factor  (86)
+	arithmetic_expression : arithmetic_expression . MINUS arithmetic_factor  (87)
+	array_accessor_unit : IDENTIFIER LBRACKET arithmetic_expression . RBRACKET  (103)
 
 	PLUS  shift 106
 	MINUS  shift 107
@@ -1977,29 +1978,30 @@ state 127
 
 
 state 128
-	class_attribute_identifier : IDENTIFIER . DOT IDENTIFIER  (54)
-	class_attribute_identifier : IDENTIFIER DOT IDENTIFIER .  (54)
-	class_attribute_identifier : IDENTIFIER . DOT class_attribute_identifier  (55)
+	class_attribute_identifier : IDENTIFIER . DOT IDENTIFIER  (55)
+	class_attribute_identifier : IDENTIFIER DOT IDENTIFIER .  (55)
+	class_attribute_identifier : IDENTIFIER . DOT class_attribute_identifier  (56)
 
 	DOT  shift 96
-	LPAREN  reduce 54
+	LPAREN  reduce 55
+	EQ  reduce 55
 
 
 state 129
-	class_attribute_identifier : IDENTIFIER DOT class_attribute_identifier .  (55)
+	class_attribute_identifier : IDENTIFIER DOT class_attribute_identifier .  (56)
 
-	.  reduce 55
+	.  reduce 56
 
 
 state 130
-	arithmetic_unary : LPAREN arithmetic_expression RPAREN .  (92)
+	arithmetic_unary : LPAREN arithmetic_expression RPAREN .  (93)
 
-	.  reduce 92
+	.  reduce 93
 
 
 state 131
-	parameter_list : expression COMMA . parameter_list  (63)
-	parameter_list : .  (64)
+	parameter_list : expression COMMA . parameter_list  (64)
+	parameter_list : .  (65)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -2016,15 +2018,15 @@ state 131
 	DEREF  shift 61
 	STRING_LITERAL  shift 62
 	CHAR_LITERAL  shift 63
-	RPAREN  reduce 64
-	RBRACE  reduce 64
+	RPAREN  reduce 65
+	RBRACE  reduce 65
 
 	arithmetic_expression  goto 64
 	expression  goto 100
-	function_invocation  goto 66
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
 	parameter_list  goto 152
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	method_invocation  goto 68
 	logical_expression  goto 69
 	allocation_expression  goto 70
 	logical_and_expression  goto 71
@@ -2044,14 +2046,14 @@ state 131
 
 
 state 132
-	array_initializer : LBRACE parameter_list RBRACE .  (106)
+	array_initializer : LBRACE parameter_list RBRACE .  (107)
 
-	.  reduce 106
+	.  reduce 107
 
 
 state 133
-	allocation_invocation : primitive_type LPAREN . parameter_list RPAREN  (68)
-	parameter_list : .  (64)
+	allocation_invocation : primitive_type LPAREN . parameter_list RPAREN  (69)
+	parameter_list : .  (65)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -2068,14 +2070,14 @@ state 133
 	DEREF  shift 61
 	STRING_LITERAL  shift 62
 	CHAR_LITERAL  shift 63
-	RPAREN  reduce 64
+	RPAREN  reduce 65
 
 	arithmetic_expression  goto 64
 	expression  goto 100
-	function_invocation  goto 66
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
 	parameter_list  goto 153
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	method_invocation  goto 68
 	logical_expression  goto 69
 	allocation_expression  goto 70
 	logical_and_expression  goto 71
@@ -2095,8 +2097,8 @@ state 133
 
 
 state 134
-	allocation_invocation : user_type LPAREN . parameter_list RPAREN  (69)
-	parameter_list : .  (64)
+	allocation_invocation : user_type LPAREN . parameter_list RPAREN  (70)
+	parameter_list : .  (65)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -2113,14 +2115,14 @@ state 134
 	DEREF  shift 61
 	STRING_LITERAL  shift 62
 	CHAR_LITERAL  shift 63
-	RPAREN  reduce 64
+	RPAREN  reduce 65
 
 	arithmetic_expression  goto 64
 	expression  goto 100
-	function_invocation  goto 66
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
 	parameter_list  goto 154
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	method_invocation  goto 68
 	logical_expression  goto 69
 	allocation_expression  goto 70
 	logical_and_expression  goto 71
@@ -2140,33 +2142,9 @@ state 134
 
 
 state 135
-	arithmetic_expression : arithmetic_expression PLUS arithmetic_factor .  (85)
-	arithmetic_factor : arithmetic_factor . STAR arithmetic_unary  (88)
-	arithmetic_factor : arithmetic_factor . SLASH arithmetic_unary  (89)
-
-	STAR  shift 118
-	SLASH  shift 119
-	PLUS  reduce 85
-	MINUS  reduce 85
-	RPAREN  reduce 85
-	GTR  reduce 85
-	LESS  reduce 85
-	GTR_EQ  reduce 85
-	LESS_EQ  reduce 85
-	DBL_EQ  reduce 85
-	NOT_EQ  reduce 85
-	OR  reduce 85
-	AND  reduce 85
-	COMMA  reduce 85
-	SEMICOLON  reduce 85
-	RBRACE  reduce 85
-	RBRACKET  reduce 85
-
-
-state 136
-	arithmetic_expression : arithmetic_expression MINUS arithmetic_factor .  (86)
-	arithmetic_factor : arithmetic_factor . STAR arithmetic_unary  (88)
-	arithmetic_factor : arithmetic_factor . SLASH arithmetic_unary  (89)
+	arithmetic_expression : arithmetic_expression PLUS arithmetic_factor .  (86)
+	arithmetic_factor : arithmetic_factor . STAR arithmetic_unary  (89)
+	arithmetic_factor : arithmetic_factor . SLASH arithmetic_unary  (90)
 
 	STAR  shift 118
 	SLASH  shift 119
@@ -2187,67 +2165,70 @@ state 136
 	RBRACKET  reduce 86
 
 
+state 136
+	arithmetic_expression : arithmetic_expression MINUS arithmetic_factor .  (87)
+	arithmetic_factor : arithmetic_factor . STAR arithmetic_unary  (89)
+	arithmetic_factor : arithmetic_factor . SLASH arithmetic_unary  (90)
+
+	STAR  shift 118
+	SLASH  shift 119
+	PLUS  reduce 87
+	MINUS  reduce 87
+	RPAREN  reduce 87
+	GTR  reduce 87
+	LESS  reduce 87
+	GTR_EQ  reduce 87
+	LESS_EQ  reduce 87
+	DBL_EQ  reduce 87
+	NOT_EQ  reduce 87
+	OR  reduce 87
+	AND  reduce 87
+	COMMA  reduce 87
+	SEMICOLON  reduce 87
+	RBRACE  reduce 87
+	RBRACKET  reduce 87
+
+
 state 137
-	method_invocation : class_attribute_identifier LPAREN parameter_list . RPAREN  (52)
+	method_invocation : class_attribute_identifier LPAREN parameter_list . RPAREN  (53)
 
 	RPAREN  shift 155
 	.  error
 
 
 state 138
-	logical_expression : logical_expression OR logical_and_expression .  (71)
-	logical_and_expression : logical_and_expression . AND equality_expression  (73)
+	logical_expression : logical_expression OR logical_and_expression .  (72)
+	logical_and_expression : logical_and_expression . AND equality_expression  (74)
 
 	AND  shift 111
-	RPAREN  reduce 71
-	OR  reduce 71
-	COMMA  reduce 71
-	SEMICOLON  reduce 71
-	RBRACE  reduce 71
+	RPAREN  reduce 72
+	OR  reduce 72
+	COMMA  reduce 72
+	SEMICOLON  reduce 72
+	RBRACE  reduce 72
 
 
 state 139
-	logical_and_expression : logical_and_expression AND equality_expression .  (73)
-	equality_expression : equality_expression . DBL_EQ relational_expression  (75)
-	equality_expression : equality_expression . NOT_EQ relational_expression  (76)
+	logical_and_expression : logical_and_expression AND equality_expression .  (74)
+	equality_expression : equality_expression . DBL_EQ relational_expression  (76)
+	equality_expression : equality_expression . NOT_EQ relational_expression  (77)
 
 	DBL_EQ  shift 112
 	NOT_EQ  shift 113
-	RPAREN  reduce 73
-	OR  reduce 73
-	AND  reduce 73
-	COMMA  reduce 73
-	SEMICOLON  reduce 73
-	RBRACE  reduce 73
+	RPAREN  reduce 74
+	OR  reduce 74
+	AND  reduce 74
+	COMMA  reduce 74
+	SEMICOLON  reduce 74
+	RBRACE  reduce 74
 
 
 state 140
-	equality_expression : equality_expression DBL_EQ relational_expression .  (75)
-	relational_expression : relational_expression . GTR bool_expression  (78)
-	relational_expression : relational_expression . LESS bool_expression  (79)
-	relational_expression : relational_expression . GTR_EQ bool_expression  (80)
-	relational_expression : relational_expression . LESS_EQ bool_expression  (81)
-
-	GTR  shift 114
-	LESS  shift 115
-	GTR_EQ  shift 116
-	LESS_EQ  shift 117
-	RPAREN  reduce 75
-	DBL_EQ  reduce 75
-	NOT_EQ  reduce 75
-	OR  reduce 75
-	AND  reduce 75
-	COMMA  reduce 75
-	SEMICOLON  reduce 75
-	RBRACE  reduce 75
-
-
-state 141
-	equality_expression : equality_expression NOT_EQ relational_expression .  (76)
-	relational_expression : relational_expression . GTR bool_expression  (78)
-	relational_expression : relational_expression . LESS bool_expression  (79)
-	relational_expression : relational_expression . GTR_EQ bool_expression  (80)
-	relational_expression : relational_expression . LESS_EQ bool_expression  (81)
+	equality_expression : equality_expression DBL_EQ relational_expression .  (76)
+	relational_expression : relational_expression . GTR bool_expression  (79)
+	relational_expression : relational_expression . LESS bool_expression  (80)
+	relational_expression : relational_expression . GTR_EQ bool_expression  (81)
+	relational_expression : relational_expression . LESS_EQ bool_expression  (82)
 
 	GTR  shift 114
 	LESS  shift 115
@@ -2263,45 +2244,66 @@ state 141
 	RBRACE  reduce 76
 
 
+state 141
+	equality_expression : equality_expression NOT_EQ relational_expression .  (77)
+	relational_expression : relational_expression . GTR bool_expression  (79)
+	relational_expression : relational_expression . LESS bool_expression  (80)
+	relational_expression : relational_expression . GTR_EQ bool_expression  (81)
+	relational_expression : relational_expression . LESS_EQ bool_expression  (82)
+
+	GTR  shift 114
+	LESS  shift 115
+	GTR_EQ  shift 116
+	LESS_EQ  shift 117
+	RPAREN  reduce 77
+	DBL_EQ  reduce 77
+	NOT_EQ  reduce 77
+	OR  reduce 77
+	AND  reduce 77
+	COMMA  reduce 77
+	SEMICOLON  reduce 77
+	RBRACE  reduce 77
+
+
 state 142
-	relational_expression : relational_expression GTR bool_expression .  (78)
-
-	.  reduce 78
-
-
-state 143
-	relational_expression : relational_expression LESS bool_expression .  (79)
+	relational_expression : relational_expression GTR bool_expression .  (79)
 
 	.  reduce 79
 
 
-state 144
-	relational_expression : relational_expression GTR_EQ bool_expression .  (80)
+state 143
+	relational_expression : relational_expression LESS bool_expression .  (80)
 
 	.  reduce 80
 
 
-state 145
-	relational_expression : relational_expression LESS_EQ bool_expression .  (81)
+state 144
+	relational_expression : relational_expression GTR_EQ bool_expression .  (81)
 
 	.  reduce 81
 
 
+state 145
+	relational_expression : relational_expression LESS_EQ bool_expression .  (82)
+
+	.  reduce 82
+
+
 state 146
-	arithmetic_factor : arithmetic_factor STAR arithmetic_unary .  (88)
-
-	.  reduce 88
-
-
-state 147
-	arithmetic_factor : arithmetic_factor SLASH arithmetic_unary .  (89)
+	arithmetic_factor : arithmetic_factor STAR arithmetic_unary .  (89)
 
 	.  reduce 89
 
 
+state 147
+	arithmetic_factor : arithmetic_factor SLASH arithmetic_unary .  (90)
+
+	.  reduce 90
+
+
 state 148
-	formal_parameter_list : type_declarator COMMA . formal_parameter_list  (60)
-	formal_parameter_list : .  (61)
+	formal_parameter_list : type_declarator COMMA . formal_parameter_list  (61)
+	formal_parameter_list : .  (62)
 
 	IDENTIFIER  shift 1
 	BOOL  shift 2
@@ -2317,7 +2319,7 @@ state 148
 	SERIAL_SENSOR  shift 14
 	SERIAL_ACTUATOR  shift 15
 	BYTE  shift 16
-	RPAREN  reduce 61
+	RPAREN  reduce 62
 
 	type_declarator  goto 120
 	any_type  goto 35
@@ -2339,47 +2341,47 @@ state 149
 
 
 state 150
-	function_invocation : IDENTIFIER LPAREN parameter_list RPAREN .  (50)
+	function_invocation : IDENTIFIER LPAREN parameter_list RPAREN .  (51)
 
-	.  reduce 50
+	.  reduce 51
 
 
 state 151
-	array_accessor_unit : IDENTIFIER LBRACKET arithmetic_expression RBRACKET .  (102)
+	array_accessor_unit : IDENTIFIER LBRACKET arithmetic_expression RBRACKET .  (103)
 
-	.  reduce 102
+	.  reduce 103
 
 
 state 152
-	parameter_list : expression COMMA parameter_list .  (63)
+	parameter_list : expression COMMA parameter_list .  (64)
 
-	.  reduce 63
+	.  reduce 64
 
 
 state 153
-	allocation_invocation : primitive_type LPAREN parameter_list . RPAREN  (68)
+	allocation_invocation : primitive_type LPAREN parameter_list . RPAREN  (69)
 
 	RPAREN  shift 159
 	.  error
 
 
 state 154
-	allocation_invocation : user_type LPAREN parameter_list . RPAREN  (69)
+	allocation_invocation : user_type LPAREN parameter_list . RPAREN  (70)
 
 	RPAREN  shift 160
 	.  error
 
 
 state 155
-	method_invocation : class_attribute_identifier LPAREN parameter_list RPAREN .  (52)
+	method_invocation : class_attribute_identifier LPAREN parameter_list RPAREN .  (53)
 
-	.  reduce 52
+	.  reduce 53
 
 
 state 156
-	formal_parameter_list : type_declarator COMMA formal_parameter_list .  (60)
+	formal_parameter_list : type_declarator COMMA formal_parameter_list .  (61)
 
-	.  reduce 60
+	.  reduce 61
 
 
 state 157
@@ -2427,9 +2429,9 @@ state 157
 	primitive_type  goto 29
 	user_type  goto 30
 	device_type  goto 31
-	function_invocation  goto 179
-	method_invocation  goto 180
-	class_attribute_identifier  goto 68
+	class_attribute_identifier  goto 179
+	function_invocation  goto 180
+	method_invocation  goto 181
 
 
 state 158
@@ -2439,26 +2441,26 @@ state 158
 
 
 state 159
-	allocation_invocation : primitive_type LPAREN parameter_list RPAREN .  (68)
+	allocation_invocation : primitive_type LPAREN parameter_list RPAREN .  (69)
 
-	.  reduce 68
+	.  reduce 69
 
 
 state 160
-	allocation_invocation : user_type LPAREN parameter_list RPAREN .  (69)
+	allocation_invocation : user_type LPAREN parameter_list RPAREN .  (70)
 
-	.  reduce 69
+	.  reduce 70
 
 
 state 161
 	user_type : IDENTIFIER .  (31)
 	variable_set_statement : IDENTIFIER . EQ expression SEMICOLON  (47)
-	function_invocation : IDENTIFIER . LPAREN parameter_list RPAREN  (50)
-	class_attribute_identifier : IDENTIFIER . DOT IDENTIFIER  (54)
-	class_attribute_identifier : IDENTIFIER . DOT class_attribute_identifier  (55)
+	function_invocation : IDENTIFIER . LPAREN parameter_list RPAREN  (51)
+	class_attribute_identifier : IDENTIFIER . DOT IDENTIFIER  (55)
+	class_attribute_identifier : IDENTIFIER . DOT class_attribute_identifier  (56)
 
 	LPAREN  shift 94
-	EQ  shift 181
+	EQ  shift 182
 	DOT  shift 96
 	IDENTIFIER  reduce 31
 	POINTER  reduce 31
@@ -2466,29 +2468,29 @@ state 161
 
 
 state 162
-	if_block_statement : IF . LPAREN expression RPAREN block_statement  (56)
-	if_block_statement : IF . LPAREN expression RPAREN block_statement ELSE block_statement  (57)
-
-	LPAREN  shift 182
-	.  error
-
-
-state 163
-	while_block_statement : WHILE . LPAREN expression RPAREN block_statement  (58)
+	if_block_statement : IF . LPAREN expression RPAREN block_statement  (57)
+	if_block_statement : IF . LPAREN expression RPAREN block_statement ELSE block_statement  (58)
 
 	LPAREN  shift 183
 	.  error
 
 
+state 163
+	while_block_statement : WHILE . LPAREN expression RPAREN block_statement  (59)
+
+	LPAREN  shift 184
+	.  error
+
+
 state 164
-	return_statement : RETURN . expression SEMICOLON  (48)
-	return_statement : RETURN . SEMICOLON  (49)
+	return_statement : RETURN . expression SEMICOLON  (49)
+	return_statement : RETURN . SEMICOLON  (50)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
 	BANG  shift 51
 	LPAREN  shift 52
-	SEMICOLON  shift 184
+	SEMICOLON  shift 185
 	LBRACE  shift 53
 	DECIMAL  shift 54
 	OCTAL  shift 55
@@ -2503,10 +2505,10 @@ state 164
 	.  error
 
 	arithmetic_expression  goto 64
-	expression  goto 185
-	function_invocation  goto 66
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	expression  goto 186
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
 	logical_expression  goto 69
 	allocation_expression  goto 70
 	logical_and_expression  goto 71
@@ -2528,7 +2530,7 @@ state 164
 state 165
 	delete_statement : DELETE . IDENTIFIER SEMICOLON  (34)
 
-	IDENTIFIER  shift 186
+	IDENTIFIER  shift 187
 	.  error
 
 
@@ -2559,7 +2561,7 @@ state 169
 state 170
 	block_statement : LBRACE statement_list_block_level . RBRACE  (9)
 
-	RBRACE  shift 187
+	RBRACE  shift 188
 	.  error
 
 
@@ -2593,7 +2595,7 @@ state 171
 	constant_definition_statement  goto 167
 	variable_declaration_statement  goto 168
 	block_statement  goto 169
-	statement_list_block_level  goto 188
+	statement_list_block_level  goto 189
 	statement_block_level  goto 171
 	variable_set_statement  goto 172
 	function_invocation_statement  goto 173
@@ -2609,9 +2611,9 @@ state 171
 	primitive_type  goto 29
 	user_type  goto 30
 	device_type  goto 31
-	function_invocation  goto 179
-	method_invocation  goto 180
-	class_attribute_identifier  goto 68
+	class_attribute_identifier  goto 179
+	function_invocation  goto 180
+	method_invocation  goto 181
 
 
 state 172
@@ -2657,20 +2659,29 @@ state 178
 
 
 state 179
-	function_invocation_statement : function_invocation . SEMICOLON  (51)
+	variable_set_statement : class_attribute_identifier . EQ expression SEMICOLON  (48)
+	method_invocation : class_attribute_identifier . LPAREN parameter_list RPAREN  (53)
 
-	SEMICOLON  shift 189
+	LPAREN  shift 109
+	EQ  shift 190
 	.  error
 
 
 state 180
-	method_invocation_statement : method_invocation . SEMICOLON  (53)
+	function_invocation_statement : function_invocation . SEMICOLON  (52)
 
-	SEMICOLON  shift 190
+	SEMICOLON  shift 191
 	.  error
 
 
 state 181
+	method_invocation_statement : method_invocation . SEMICOLON  (54)
+
+	SEMICOLON  shift 192
+	.  error
+
+
+state 182
 	variable_set_statement : IDENTIFIER EQ . expression SEMICOLON  (47)
 
 	IDENTIFIER  shift 49
@@ -2691,54 +2702,10 @@ state 181
 	.  error
 
 	arithmetic_expression  goto 64
-	expression  goto 191
-	function_invocation  goto 66
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
-	logical_expression  goto 69
-	allocation_expression  goto 70
-	logical_and_expression  goto 71
-	equality_expression  goto 72
-	relational_expression  goto 73
-	bool_expression  goto 74
-	arithmetic_factor  goto 75
-	arithmetic_unary  goto 76
-	unit  goto 77
-	integer_value  goto 78
-	char_value  goto 79
-	bool_value  goto 80
-	array_accessor_unit  goto 81
-	dereferenced_pointer  goto 82
-	array_value  goto 83
-	array_initializer  goto 84
-
-
-state 182
-	if_block_statement : IF LPAREN . expression RPAREN block_statement  (56)
-	if_block_statement : IF LPAREN . expression RPAREN block_statement ELSE block_statement  (57)
-
-	IDENTIFIER  shift 49
-	MINUS  shift 50
-	BANG  shift 51
-	LPAREN  shift 52
-	LBRACE  shift 53
-	DECIMAL  shift 54
-	OCTAL  shift 55
-	HEX  shift 56
-	BINARY  shift 57
-	TRUE  shift 58
-	FALSE  shift 59
-	ALLOCATE  shift 60
-	DEREF  shift 61
-	STRING_LITERAL  shift 62
-	CHAR_LITERAL  shift 63
-	.  error
-
-	arithmetic_expression  goto 64
-	expression  goto 192
-	function_invocation  goto 66
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	expression  goto 193
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
 	logical_expression  goto 69
 	allocation_expression  goto 70
 	logical_and_expression  goto 71
@@ -2758,7 +2725,8 @@ state 182
 
 
 state 183
-	while_block_statement : WHILE LPAREN . expression RPAREN block_statement  (58)
+	if_block_statement : IF LPAREN . expression RPAREN block_statement  (57)
+	if_block_statement : IF LPAREN . expression RPAREN block_statement ELSE block_statement  (58)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -2778,10 +2746,10 @@ state 183
 	.  error
 
 	arithmetic_expression  goto 64
-	expression  goto 193
-	function_invocation  goto 66
-	method_invocation  goto 67
-	class_attribute_identifier  goto 68
+	expression  goto 194
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
 	logical_expression  goto 69
 	allocation_expression  goto 70
 	logical_and_expression  goto 71
@@ -2801,156 +2769,255 @@ state 183
 
 
 state 184
-	return_statement : RETURN SEMICOLON .  (49)
+	while_block_statement : WHILE LPAREN . expression RPAREN block_statement  (59)
 
-	.  reduce 49
+	IDENTIFIER  shift 49
+	MINUS  shift 50
+	BANG  shift 51
+	LPAREN  shift 52
+	LBRACE  shift 53
+	DECIMAL  shift 54
+	OCTAL  shift 55
+	HEX  shift 56
+	BINARY  shift 57
+	TRUE  shift 58
+	FALSE  shift 59
+	ALLOCATE  shift 60
+	DEREF  shift 61
+	STRING_LITERAL  shift 62
+	CHAR_LITERAL  shift 63
+	.  error
+
+	arithmetic_expression  goto 64
+	expression  goto 195
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
+	logical_expression  goto 69
+	allocation_expression  goto 70
+	logical_and_expression  goto 71
+	equality_expression  goto 72
+	relational_expression  goto 73
+	bool_expression  goto 74
+	arithmetic_factor  goto 75
+	arithmetic_unary  goto 76
+	unit  goto 77
+	integer_value  goto 78
+	char_value  goto 79
+	bool_value  goto 80
+	array_accessor_unit  goto 81
+	dereferenced_pointer  goto 82
+	array_value  goto 83
+	array_initializer  goto 84
 
 
 state 185
-	return_statement : RETURN expression . SEMICOLON  (48)
+	return_statement : RETURN SEMICOLON .  (50)
 
-	SEMICOLON  shift 194
-	.  error
+	.  reduce 50
 
 
 state 186
-	delete_statement : DELETE IDENTIFIER . SEMICOLON  (34)
-
-	SEMICOLON  shift 195
-	.  error
-
-
-state 187
-	block_statement : LBRACE statement_list_block_level RBRACE .  (9)
-
-	.  reduce 9
-
-
-state 188
-	statement_list_block_level : statement_block_level statement_list_block_level .  (11)
-
-	.  reduce 11
-
-
-state 189
-	function_invocation_statement : function_invocation SEMICOLON .  (51)
-
-	.  reduce 51
-
-
-state 190
-	method_invocation_statement : method_invocation SEMICOLON .  (53)
-
-	.  reduce 53
-
-
-state 191
-	variable_set_statement : IDENTIFIER EQ expression . SEMICOLON  (47)
+	return_statement : RETURN expression . SEMICOLON  (49)
 
 	SEMICOLON  shift 196
 	.  error
 
 
-state 192
-	if_block_statement : IF LPAREN expression . RPAREN block_statement  (56)
-	if_block_statement : IF LPAREN expression . RPAREN block_statement ELSE block_statement  (57)
+state 187
+	delete_statement : DELETE IDENTIFIER . SEMICOLON  (34)
 
-	RPAREN  shift 197
+	SEMICOLON  shift 197
 	.  error
 
 
-state 193
-	while_block_statement : WHILE LPAREN expression . RPAREN block_statement  (58)
+state 188
+	block_statement : LBRACE statement_list_block_level RBRACE .  (9)
 
-	RPAREN  shift 198
+	.  reduce 9
+
+
+state 189
+	statement_list_block_level : statement_block_level statement_list_block_level .  (11)
+
+	.  reduce 11
+
+
+state 190
+	variable_set_statement : class_attribute_identifier EQ . expression SEMICOLON  (48)
+
+	IDENTIFIER  shift 49
+	MINUS  shift 50
+	BANG  shift 51
+	LPAREN  shift 52
+	LBRACE  shift 53
+	DECIMAL  shift 54
+	OCTAL  shift 55
+	HEX  shift 56
+	BINARY  shift 57
+	TRUE  shift 58
+	FALSE  shift 59
+	ALLOCATE  shift 60
+	DEREF  shift 61
+	STRING_LITERAL  shift 62
+	CHAR_LITERAL  shift 63
+	.  error
+
+	arithmetic_expression  goto 64
+	expression  goto 198
+	class_attribute_identifier  goto 66
+	function_invocation  goto 67
+	method_invocation  goto 68
+	logical_expression  goto 69
+	allocation_expression  goto 70
+	logical_and_expression  goto 71
+	equality_expression  goto 72
+	relational_expression  goto 73
+	bool_expression  goto 74
+	arithmetic_factor  goto 75
+	arithmetic_unary  goto 76
+	unit  goto 77
+	integer_value  goto 78
+	char_value  goto 79
+	bool_value  goto 80
+	array_accessor_unit  goto 81
+	dereferenced_pointer  goto 82
+	array_value  goto 83
+	array_initializer  goto 84
+
+
+state 191
+	function_invocation_statement : function_invocation SEMICOLON .  (52)
+
+	.  reduce 52
+
+
+state 192
+	method_invocation_statement : method_invocation SEMICOLON .  (54)
+
+	.  reduce 54
+
+
+state 193
+	variable_set_statement : IDENTIFIER EQ expression . SEMICOLON  (47)
+
+	SEMICOLON  shift 199
 	.  error
 
 
 state 194
-	return_statement : RETURN expression SEMICOLON .  (48)
+	if_block_statement : IF LPAREN expression . RPAREN block_statement  (57)
+	if_block_statement : IF LPAREN expression . RPAREN block_statement ELSE block_statement  (58)
 
-	.  reduce 48
+	RPAREN  shift 200
+	.  error
 
 
 state 195
+	while_block_statement : WHILE LPAREN expression . RPAREN block_statement  (59)
+
+	RPAREN  shift 201
+	.  error
+
+
+state 196
+	return_statement : RETURN expression SEMICOLON .  (49)
+
+	.  reduce 49
+
+
+state 197
 	delete_statement : DELETE IDENTIFIER SEMICOLON .  (34)
 
 	.  reduce 34
 
 
-state 196
+state 198
+	variable_set_statement : class_attribute_identifier EQ expression . SEMICOLON  (48)
+
+	SEMICOLON  shift 202
+	.  error
+
+
+state 199
 	variable_set_statement : IDENTIFIER EQ expression SEMICOLON .  (47)
 
 	.  reduce 47
 
 
-state 197
-	if_block_statement : IF LPAREN expression RPAREN . block_statement  (56)
-	if_block_statement : IF LPAREN expression RPAREN . block_statement ELSE block_statement  (57)
-
-	LBRACE  shift 157
-	.  error
-
-	block_statement  goto 199
-
-
-state 198
-	while_block_statement : WHILE LPAREN expression RPAREN . block_statement  (58)
-
-	LBRACE  shift 157
-	.  error
-
-	block_statement  goto 200
-
-
-state 199
-	if_block_statement : IF LPAREN expression RPAREN block_statement .  (56)
-	if_block_statement : IF LPAREN expression RPAREN block_statement . ELSE block_statement  (57)
-
-	ELSE  shift 201
-	IDENTIFIER  reduce 56
-	BOOL  reduce 56
-	INT  reduce 56
-	CHAR  reduce 56
-	VOID  reduce 56
-	IF  reduce 56
-	WHILE  reduce 56
-	LBRACE  reduce 56
-	RBRACE  reduce 56
-	LIGHT_ACTUATOR  reduce 56
-	SERVO_ACTUATOR  reduce 56
-	SOUND_SENSOR  reduce 56
-	LIGHT_SENSOR  reduce 56
-	DISTANCE_SENSOR  reduce 56
-	TEMPERATURE_SENSOR  reduce 56
-	CONSTANT  reduce 56
-	RETURN  reduce 56
-	DELETE  reduce 56
-	SERIAL_SENSOR  reduce 56
-	SERIAL_ACTUATOR  reduce 56
-	BYTE  reduce 56
-
-
 state 200
-	while_block_statement : WHILE LPAREN expression RPAREN block_statement .  (58)
+	if_block_statement : IF LPAREN expression RPAREN . block_statement  (57)
+	if_block_statement : IF LPAREN expression RPAREN . block_statement ELSE block_statement  (58)
+
+	LBRACE  shift 157
+	.  error
+
+	block_statement  goto 203
+
+
+state 201
+	while_block_statement : WHILE LPAREN expression RPAREN . block_statement  (59)
+
+	LBRACE  shift 157
+	.  error
+
+	block_statement  goto 204
+
+
+state 202
+	variable_set_statement : class_attribute_identifier EQ expression SEMICOLON .  (48)
+
+	.  reduce 48
+
+
+state 203
+	if_block_statement : IF LPAREN expression RPAREN block_statement .  (57)
+	if_block_statement : IF LPAREN expression RPAREN block_statement . ELSE block_statement  (58)
+
+	ELSE  shift 205
+	IDENTIFIER  reduce 57
+	BOOL  reduce 57
+	INT  reduce 57
+	CHAR  reduce 57
+	VOID  reduce 57
+	IF  reduce 57
+	WHILE  reduce 57
+	LBRACE  reduce 57
+	RBRACE  reduce 57
+	LIGHT_ACTUATOR  reduce 57
+	SERVO_ACTUATOR  reduce 57
+	SOUND_SENSOR  reduce 57
+	LIGHT_SENSOR  reduce 57
+	DISTANCE_SENSOR  reduce 57
+	TEMPERATURE_SENSOR  reduce 57
+	CONSTANT  reduce 57
+	RETURN  reduce 57
+	DELETE  reduce 57
+	SERIAL_SENSOR  reduce 57
+	SERIAL_ACTUATOR  reduce 57
+	BYTE  reduce 57
+
+
+state 204
+	while_block_statement : WHILE LPAREN expression RPAREN block_statement .  (59)
+
+	.  reduce 59
+
+
+state 205
+	if_block_statement : IF LPAREN expression RPAREN block_statement ELSE . block_statement  (58)
+
+	LBRACE  shift 157
+	.  error
+
+	block_statement  goto 206
+
+
+state 206
+	if_block_statement : IF LPAREN expression RPAREN block_statement ELSE block_statement .  (58)
 
 	.  reduce 58
 
 
-state 201
-	if_block_statement : IF LPAREN expression RPAREN block_statement ELSE . block_statement  (57)
-
-	LBRACE  shift 157
-	.  error
-
-	block_statement  goto 202
-
-
-state 202
-	if_block_statement : IF LPAREN expression RPAREN block_statement ELSE block_statement .  (57)
-
-	.  reduce 57
-
-
 59 terminals, 56 nonterminals
-127 grammar rules, 203 states
+128 grammar rules, 207 states

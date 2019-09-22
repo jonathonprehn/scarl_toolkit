@@ -433,7 +433,8 @@ int main(int argc, char *argv[]) {
 	printf("\nTraversing the AST to build the symbol table...\n");
 	
 	// create the symbol table for this compiled program 
-	root_st = create_st_from_ast(NULL, program_ast);
+	struct scarl_symbol_table *root_internal_st = create_st();
+	root_st = create_st_from_ast(NULL, root_internal_st, program_ast);
 	printf("Obtained symbol table(s):\n");
 	print_st(root_st);
 	

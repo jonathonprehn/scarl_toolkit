@@ -15,6 +15,10 @@ class MyClass {
 	}
 }
 
+int dummyFunction(int x, int y, int z, int w) {
+	return x * y * z * w;
+}
+
 // the 5 types that can be function parameters
 // (cannot use functions as parameters; polymorphism is for that)
 int complicatedFunction(int i, LightActuator li, MyClass cls, int pointer p, int[5] arr) {

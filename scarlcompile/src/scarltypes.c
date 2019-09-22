@@ -262,7 +262,7 @@ struct scarl_type_descriptor *create_type_descriptor_for_entry_identifier(struct
 		5. Array type (calls this function recursively)
 	*/
 	
-	printf("Creating type descriptor for entry identifier node type: %s\n", get_ast_node_type_string(node->node_type));
+	//printf("Creating type descriptor for entry identifier node type: %s\n", get_ast_node_type_string(node->node_type));
 	
 	// store the created type descriptor here
 	struct scarl_type_descriptor *returning_td = NULL;
@@ -432,7 +432,7 @@ void append_type_descriptor(struct scarl_type_descriptor *lst, struct scarl_type
 	}
 	else {
 		struct scarl_type_descriptor *td = lst;
-		while (td->next == NULL) {
+		while (td->next != NULL) {
 			td = td->next;
 		}
 		td->next = adding;
