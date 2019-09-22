@@ -221,6 +221,12 @@ int is_constant_expression(struct scarl_symbol_table *current_scope_st, struct s
 // gets the compile time value of the constant expression (this assumes it has already been checked to be constant)
 int eval_constant_expression(struct scarl_symbol_table *current_scope_st, struct scarl_ast_node *expr_node);
 
+// classification functions to help the above functions
+int is_bool_operator_node(struct scarl_ast_node *node); // !, &&, ||, <, >, <=, >=, ==
+int is_int_operator_node(struct scarl_ast_node *node); // +, -, *, /
+int is_int_value_node(struct scarl_ast_node *node); // constant int value
+int is_str_value_node(struct scarl_ast_node *node); // identifier node
+
 // initialization
 // make sure to verify the input data 
 struct scarl_primitive_type *create_primitive_type(int primitive_type);
@@ -233,12 +239,15 @@ struct scarl_class_type *create_class_type(char *class_name_identifier, char *pa
 struct scarl_type_descriptor *create_type_descriptor_for_entry_identifier(struct scarl_symbol_table *current_scope, struct scarl_ast_node *node);
 // type descriptors for the symbol table entry - creates symbol tables from nodes
 // -- has different expectations for nodes than the entry_identifier one 
-struct scarl_type_descriptor *create_type_descriptor_for_symbol_table(struct scarl_symbol_table *current_scope, struct scarl_ast_node *node);
+//struct scarl_type_descriptor *create_type_descriptor_for_symbol_table(struct scarl_symbol_table *current_scope, struct scarl_ast_node *node);
 // exact match, TRUE/FALSE equals
 int compare_type_descriptors(struct scarl_type_descriptor *lhs, struct scarl_type_descriptor *rhs);
 
 // list functions 
 void append_type_descriptor(struct scarl_type_descriptor *lst, struct scarl_type_descriptor *adding);
 int get_type_descriptor_list_count(struct scarl_type_descriptor *lst);
+
+// debug
+char *get_type_class_str(int type_class);
 
 #endif // SCARLTYPES_H_INCLUDED

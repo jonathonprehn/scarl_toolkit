@@ -42,7 +42,7 @@ extern struct scarl_ast_node *program_ast;
 //for the compiling unit, this is intermediatary code
 extern FILE *code_file;
 
-unsigned debugging_grammar = 1;
+unsigned debugging_grammar = 0;
 
 %}
 

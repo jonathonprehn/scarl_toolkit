@@ -1,4 +1,5 @@
 
+constant int x = 10;
 void main() {
 	int dec = 53;
 	int bin = 0b0011101;

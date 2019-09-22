@@ -20,7 +20,7 @@ along with SCARL.  If not, see <https://www.gnu.org/licenses/>.
 #include <string.h>
 
 #include "scarltypes.h"
-
+#include "y.tab.h"
 
 /* Is the right hand side a descendent of the left hand side? */
 int is_descendant_of(struct scarl_class_type *lhs, struct scarl_class_type *rhs) {
@@ -56,18 +56,134 @@ int can_coerce_expression_to_type_class(struct scarl_symbol_table *current_scope
 	return 0;
 }
 
+// declare for recursive call
+int is_constant_expression_r(struct scarl_symbol_table *current_scope_st, struct scarl_ast_node *expr_node);
+
+int is_constant_expression_r(struct scarl_symbol_table *current_scope_st, struct scarl_ast_node *expr_node) {
+	// assumed true until proven false
+	int is_constant = 1;
+	if (is_int_value_node(expr_node)) {
+		return 1;
+	} else if (is_int_operator_node(expr_node)) {
+		int child_count = get_children_count(expr_node);
+		assert(child_count == 1 || child_count == 2);
+		if (child_count == 1) {
+			return is_constant_expression_r(current_scope_st, expr_node->first_child);
+		} else if (child_count == 2) {
+			return is_constant_expression_r(current_scope_st, expr_node->first_child);
+			return is_constant_expression_r(current_scope_st, expr_node->first_child->next_sibling);
+		}
+	} 
+	else if (is_str_value_node(expr_node)) {
+		// this is an identifier to lookup in the current scope
+		struct scarl_symbol_table_entry *entry = lookup_char_str(current_scope_st, expr_node->str_value);
+		if (entry == NULL) {
+			return 0; // does not exists in this scope
+		}
+		else {
+			return entry->is_constant;
+		}
+	}
+	// may discover more situations down the road and in testing
+	else {
+		return 0;
+	}
+	return is_constant;
+}
 
 /* Determines if the expression is constant. That is, is its value deterministic at compile time? TRUE/FALSE */
 int is_constant_expression(struct scarl_symbol_table *current_scope_st, struct scarl_ast_node *expr_node) {
-	
-	return 0;
+	// determined recursively 
+	// assumed true until proven false
+	return is_constant_expression_r(current_scope_st, expr_node);
+}
+
+
+int eval_constant_expression_r(struct scarl_symbol_table *current_scope_st, struct scarl_ast_node *expr_node);
+
+int eval_constant_expression_r(struct scarl_symbol_table *current_scope_st, struct scarl_ast_node *expr_node) {
+	// this function is only called if it passes the is_constant_expression function
+	if (is_int_value_node(expr_node)) {
+		return expr_node->int_value;
+	} else if (is_int_operator_node(expr_node)) {
+		int child_count = get_children_count(expr_node);
+		assert(child_count == 1 || child_count == 2);
+		if (child_count == 1) {
+			if (expr_node->type_value == MINUS) {
+				return -eval_constant_expression_r(current_scope_st, expr_node->first_child);
+			}
+		} else if (child_count == 2) {
+			if (expr_node->type_value == PLUS) {
+				return eval_constant_expression_r(current_scope_st, expr_node->first_child)
+						+ eval_constant_expression_r(current_scope_st, expr_node->first_child->next_sibling);
+			}
+			else if (expr_node->type_value == MINUS) {
+				return eval_constant_expression_r(current_scope_st, expr_node->first_child)
+						- eval_constant_expression_r(current_scope_st, expr_node->first_child->next_sibling);
+			}
+			else if (expr_node->type_value == STAR) {
+				return eval_constant_expression_r(current_scope_st, expr_node->first_child)
+						* eval_constant_expression_r(current_scope_st, expr_node->first_child->next_sibling);
+			}
+			else if (expr_node->type_value == SLASH) {
+				return eval_constant_expression_r(current_scope_st, expr_node->first_child)
+						/ eval_constant_expression_r(current_scope_st, expr_node->first_child->next_sibling);
+			}
+		}
+	} 
+	else if (is_str_value_node(expr_node)) {
+		// this is an identifier to lookup in the current scope
+		struct scarl_symbol_table_entry *entry = lookup_char_str(current_scope_st, expr_node->str_value);
+		return entry->compile_time_value;
+	}
 }
 
 /* Gets the compile time value of a constant expression */
 int eval_constant_expression(struct scarl_symbol_table *current_scope_st, struct scarl_ast_node *expr_node) {
-	
-	return 0;
+	// this function is only called if it passes the is_constant_expression function
+	return eval_constant_expression_r(current_scope_st, expr_node);
 }
+
+// !, &&, ||, <, >, <=, >=, ==
+int is_bool_operator_node(struct scarl_ast_node *node) {
+	if (node->node_type == NON_TERMINAL_OPERAND_VALUE) {
+		return node->type_value == BANG ||
+			node->type_value == LESS_EQ ||
+			node->type_value == GTR_EQ ||
+			node->type_value == LESS ||
+			node->type_value == GTR ||
+			node->type_value == NOT_EQ ||
+			node->type_value == DBL_EQ ||
+			node->type_value == AND ||
+			node->type_value == OR;
+	}
+	else {
+		return 0;
+	}
+}
+
+// +, -, *, /
+int is_int_operator_node(struct scarl_ast_node *node) {
+	if (node->node_type == NON_TERMINAL_OPERAND_VALUE) {
+		return node->type_value == PLUS ||
+			node->type_value == MINUS ||
+			node->type_value == STAR ||
+			node->type_value == SLASH;
+	}
+	else {
+		return 0;
+	}
+}
+
+// constant int value
+int is_int_value_node(struct scarl_ast_node *node) {
+	return node->node_type == NON_TERMINAL_INTEGER_VALUE;
+}
+
+// identifier node
+int is_str_value_node(struct scarl_ast_node *node) {
+	return node->node_type == NON_TERMINAL_IDENTIFIER_VALUE;
+}	
 
 // initialization
 // make sure to verify the input data 
@@ -146,6 +262,8 @@ struct scarl_type_descriptor *create_type_descriptor_for_entry_identifier(struct
 		5. Array type (calls this function recursively)
 	*/
 	
+	printf("Creating type descriptor for entry identifier node type: %s\n", get_ast_node_type_string(node->node_type));
+	
 	// store the created type descriptor here
 	struct scarl_type_descriptor *returning_td = NULL;
 	
@@ -217,6 +335,7 @@ struct scarl_type_descriptor *create_type_descriptor_for_entry_identifier(struct
 	return returning_td;
 }
 
+/*
 // assuming that the entire definition is there
 // for applicable nodes 
 // so that all type information can be created
@@ -224,7 +343,7 @@ struct scarl_type_descriptor *create_type_descriptor_for_symbol_table(struct sca
 	
 	return NULL;
 }
-
+*/
 
 
 // "shallow" comparison, putting faith in
@@ -321,16 +440,26 @@ void append_type_descriptor(struct scarl_type_descriptor *lst, struct scarl_type
 }
 
 int get_type_descriptor_list_count(struct scarl_type_descriptor *lst) {
-	if (lst->next == NULL) {
-		return 1;
+	if (lst == NULL) {
+		return 0;
 	}
 	else {
 		struct scarl_type_descriptor *td = lst;
 		int count = 0;
-		while(td->next != NULL) {
+		while(td != NULL) {
 			td = td->next;
 			count++;
 		}
 		return count;
 	}
 }
+
+char *get_type_class_str(int type_class) {
+	if (type_class == PRIMITIVE_TYPE) { return "PRIMITIVE_TYPE"; }
+	else if (type_class == POINTER_TYPE) { return "POINTER_TYPE"; }
+	else if (type_class == ARRAY_TYPE) { return "ARRAY_TYPE"; }
+	else if (type_class == FUNCTION_TYPE) { return "FUNCTION_TYPE"; }
+	else if (type_class == CLASS_TYPE) { return "CLASS_TYPE"; }
+	else if (type_class == DEVICE_TYPE) { return "DEVICE_TYPE"; }
+}
+

@@ -90,7 +90,7 @@ int get_children_count(struct scarl_ast_node *node) {
 		return 0;
 	}
 	else {
-		int count = 1;
+		int count = 0;
 		struct scarl_ast_node *n = node->first_child;
 		while(n != NULL) {
 			n = n->next_sibling;

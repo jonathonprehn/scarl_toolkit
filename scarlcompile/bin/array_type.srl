@@ -1,7 +1,10 @@
 
+constant int arrayLength = 8 * 2;
 void main() {
 	int x = 3; // this does not break it
 	int nonArrayType; // this breaks it too
 	int[5] arr;  //broken
 	int[2] thing = { 3, 2, 1 };
+	int[10 + 5] exprArr;
+	int[arrayLength] parameterized;
 }

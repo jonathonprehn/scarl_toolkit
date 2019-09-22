@@ -24,6 +24,8 @@ along with SCARL.  If not, see <https://www.gnu.org/licenses/>.
 #include "scarlastnode.h"
 #include "scarlsymboltable.h"
 
+const unsigned debug_st = 1;
+
 // symbol table construct initialization functions
 struct scarl_symbol_table *create_st() {
 	struct scarl_symbol_table *st = (struct scarl_symbol_table*)malloc(sizeof(struct scarl_symbol_table));
@@ -40,8 +42,15 @@ struct scarl_symbol_table *create_st_from_ast(
 ) {
 	struct scarl_symbol_table *st = create_st();
 	
+	if (debug_st) {
+		printf("Creating symbol table from st: top-level node is of type %s\n", get_ast_node_type_string(node->node_type)); 
+	}
+	
 	// add this to the parent st if it exists
 	if (current_scope_st != NULL) {
+		if (debug_st) {
+			printf("Adding this symbol table as a child of another symbol table\n");
+		}
 		add_child_st(current_scope_st, st); // to be able to search parent scope
 	}
 	
@@ -49,9 +58,7 @@ struct scarl_symbol_table *create_st_from_ast(
 	struct scarl_ast_node *statement = NULL;
 	struct scarl_ast_node *statement_block_level = NULL;
 	struct scarl_ast_node *class_attribute = NULL;
-	
-	int debug_st = 1;
-	
+		
 	/*
 		For each context,
 		1. Construct entry
@@ -70,7 +77,10 @@ struct scarl_symbol_table *create_st_from_ast(
 				switch(statement->node_type) {
 					case NON_TERMINAL_VARIABLE_DEFINITION_STATEMENT:
 					{
-						if (debug_st) printf("statement_list variable_definition_statement\n");
+						if (debug_st) { 
+							printf("statement_list variable_definition_statement\n");
+						}
+						
 						struct scarl_ast_node *type_node = statement->first_child->first_child;
 						struct scarl_ast_node *ident_node = statement->first_child->first_child->next_sibling;
 						struct scarl_type_descriptor *type_desc = create_type_descriptor_for_entry_identifier(st, type_node);
@@ -82,18 +92,25 @@ struct scarl_symbol_table *create_st_from_ast(
 					break;
 					case NON_TERMINAL_VARIABLE_DECLARATION_STATEMENT:
 					{
-						if (debug_st) printf("statement_list variable_declaration_statement\n");
+						if (debug_st) {
+							printf("statement_list variable_declaration_statement\n");
+						}
+						
 						struct scarl_ast_node *type_node = statement->first_child->first_child;
 						struct scarl_ast_node *ident_node = statement->first_child->first_child->next_sibling;
 						struct scarl_type_descriptor *type_desc = create_type_descriptor_for_entry_identifier(st, type_node);
 						struct scarl_symbol_table_entry_identifier *var_decl_ident = create_st_entry_identifier(strdup(ident_node->str_value), NULL);
 						struct scarl_symbol_table_entry *var_decl_entry = create_st_entry(var_decl_ident, type_desc);
+						var_decl_entry->defined = 0;
 						add_st_entry(st, var_decl_entry);
 					}						
 					break;
 					case NON_TERMINAL_CONSTANT_DEFINITION_STATEMENT:
 					{
-						if (debug_st) printf("statement_list constant_definition_statement\n");
+						if (debug_st) {
+							printf("statement_list constant_definition_statement\n");
+						}
+						
 						struct scarl_ast_node *type_node = statement->first_child->first_child;
 						struct scarl_ast_node *ident_node = statement->first_child->first_child->next_sibling;
 						struct scarl_type_descriptor *type_desc = create_type_descriptor_for_entry_identifier(st, type_node);
@@ -101,15 +118,30 @@ struct scarl_symbol_table *create_st_from_ast(
 						struct scarl_symbol_table_entry *var_const_entry = create_st_entry(var_const_ident, type_desc);
 						var_const_entry->defined = 1;
 						var_const_entry->is_constant = 1;
+						// evaluate the expression 
+						struct scarl_ast_node *expr_node = statement->first_child->next_sibling;
+						if (is_constant_expression(st, expr_node)) {
+							var_const_entry->compile_time_value = eval_constant_expression(st, expr_node);
+						}
 						add_st_entry(st, var_const_entry);
 					}
 					break;
 					case NON_TERMINAL_CLASS_DEFINITION_STATEMENT:
 					{
-						if (debug_st) printf("statement_list class_definition_statement\n");
+						if (debug_st){
+							printf("statement_list class_definition_statement\n");
+						}	
+						
 						struct scarl_ast_node *class_decl = statement->first_child;
 						struct scarl_ast_node *class_attribute_list = statement->first_child->next_sibling;
+						if (debug_st) {
+							printf("class declarator node type: %s\n", get_ast_node_type_string(class_decl->node_type));
+							printf("class attribute list node type: %s\n", get_ast_node_type_string(class_attribute_list->node_type));
+						}
 						int class_decl_child_count = get_children_count(class_decl);
+						if (debug_st) {
+							printf("class declarator has %i children\n", class_decl_child_count);
+						}
 						char *class_name = NULL;
 						char *parent_class = NULL;
 						if (class_decl_child_count == 1) {
@@ -128,12 +160,16 @@ struct scarl_symbol_table *create_st_from_ast(
 						struct scarl_class_type *class_type_desc = create_class_type(class_name, parent_class, class_st);
 						struct scarl_symbol_table_entry_identifier *class_ident = create_st_entry_identifier(strdup(class_name), NULL);
 						struct scarl_symbol_table_entry *class_entry = create_st_entry(class_ident, (struct scarl_type_descriptor*)class_type_desc);
+						class_entry->defined = 1;
 						add_st_entry(st, class_entry);
 					}
 					break;
 					case NON_TERMINAL_FUNCTION_DEFINITION_STATEMENT:
 					{
-						if (debug_st) printf("statement_list function_definition_statement\n");
+						if (debug_st) {
+							printf("statement_list function_definition_statement\n");
+						}
+						
 						struct scarl_ast_node *return_type_node = statement->first_child;
 						struct scarl_ast_node *func_ident_node = statement->first_child->next_sibling;
 						struct scarl_ast_node *formal_param_node = statement->first_child->next_sibling->next_sibling;
@@ -144,17 +180,33 @@ struct scarl_symbol_table *create_st_from_ast(
 						//	   struct scarl_type_descriptor *formal_parameters, 
 						//	   struct scarl_symbol_table *function_st
 						//);
-						struct scarl_type_descriptor *return_type_desc = create_type_descriptor_for_symbol_table(st, return_type_node);
-						int formal_param_count = get_children_count(formal_param_node);
-						struct scarl_ast_node *fp_to_process = formal_param_node->first_child;
-						struct scarl_type_descriptor *formal_parameter_td_list = create_type_descriptor_for_entry_identifier(st, fp_to_process);
-						fp_to_process = fp_to_process->next_sibling;
-						for (int i = 1; i <formal_param_count; i++) {
-							struct scarl_type_descriptor *current_fp_td = create_type_descriptor_for_symbol_table(st, fp_to_process);
-							append_type_descriptor(formal_parameter_td_list, current_fp_td);
-							fp_to_process = fp_to_process->next_sibling;
-						}
 						
+						if (debug_st) {
+							printf("creating return type descriptor for function type \n");
+						}
+						struct scarl_type_descriptor *return_type_desc = create_type_descriptor_for_entry_identifier(st, return_type_node);
+						if (debug_st) {
+							printf("counting the number of formal parameters in the function\n");
+						}
+						int formal_param_count = get_children_count(formal_param_node);
+						struct scarl_type_descriptor *formal_parameter_td_list = NULL; // the list of type descriptors that describe this function (to support overloading)
+						if (formal_param_count > 0) {
+							struct scarl_ast_node *fp_to_process = formal_param_node->first_child;
+							if (debug_st) {
+								printf("creating the type descriptor for the entry identifier from the first formal parameter\n");
+								printf("node type of first formal parameter: %s\n", get_ast_node_type_string(fp_to_process->first_child->node_type));
+							}
+							formal_parameter_td_list = create_type_descriptor_for_entry_identifier(st, fp_to_process->first_child);
+							fp_to_process = fp_to_process->next_sibling;
+							for (int i = 1; i <formal_param_count; i++) {
+								if (debug_st) {
+									printf("creating the type descriptor for the entry identifier from formal parameters %i\n", i);
+								}
+								struct scarl_type_descriptor *current_fp_td = create_type_descriptor_for_entry_identifier(st, fp_to_process->first_child);
+								append_type_descriptor(formal_parameter_td_list, current_fp_td);
+								fp_to_process = fp_to_process->next_sibling;
+							}
+						}
 						// reusing the same list and string, which should be ok as long as they are only read from 
 						// need to test this intensely or just pay attention to code 
 						struct scarl_symbol_table_entry_identifier* func_entry_identifier = create_st_entry_identifier(func_ident_node->str_value, formal_parameter_td_list);
@@ -172,6 +224,7 @@ struct scarl_symbol_table *create_st_from_ast(
 						);
 						
 						struct scarl_symbol_table_entry *func_entry = create_st_entry(func_entry_identifier, (struct scarl_type_descriptor*)func_type_desc);
+						func_entry->defined = 1;
 						add_st_entry(st, func_entry);
 					}
 					break;
@@ -192,9 +245,11 @@ struct scarl_symbol_table *create_st_from_ast(
 					{
 						if (debug_st) printf("statement_list_block_level variable_definition_statement\n");
 						// define this variable as the expression (1 new symbol table entry)
-						struct scarl_type_descriptor *type_desc_var = create_type_descriptor_for_entry_identifier(st, statement_block_level->first_child);
-						struct scarl_symbol_table_entry_identifier *var_def_ident = create_st_entry_identifier_from_ast_node(st, statement_block_level->first_child->next_sibling);
+						struct scarl_type_descriptor *type_desc_var = create_type_descriptor_for_entry_identifier(st, statement_block_level->first_child->first_child);
+						struct scarl_ast_node *ident_node = statement_block_level->first_child->first_child->next_sibling;
+						struct scarl_symbol_table_entry_identifier *var_def_ident = create_st_entry_identifier(strdup(ident_node->str_value), NULL);
 						struct scarl_symbol_table_entry *var_def_entry = create_st_entry(var_def_ident, type_desc_var);
+						var_def_entry->defined = 1;
 						add_st_entry(st, var_def_entry);
 					}
 					break;
@@ -202,10 +257,12 @@ struct scarl_symbol_table *create_st_from_ast(
 					{
 						if (debug_st) printf("statement_list_block_level variable_declaration_statement\n");
 						// declare this variable (1 new symbol table entry)
-						struct scarl_type_descriptor *type_desc_var = create_type_descriptor_for_entry_identifier(st, statement_block_level->first_child);
-						struct scarl_symbol_table_entry_identifier *var_def_ident = create_st_entry_identifier_from_ast_node(st, statement_block_level->first_child->next_sibling);
-						struct scarl_symbol_table_entry *var_def_entry = create_st_entry(var_def_ident, type_desc_var);
-						add_st_entry(st, var_def_entry);
+						struct scarl_type_descriptor *type_desc_var = create_type_descriptor_for_entry_identifier(st, statement_block_level->first_child->first_child);
+						struct scarl_ast_node *ident_node = statement_block_level->first_child->first_child->next_sibling;
+						struct scarl_symbol_table_entry_identifier *var_decl_ident = create_st_entry_identifier(strdup(ident_node->str_value), NULL);
+						struct scarl_symbol_table_entry *var_decl_entry = create_st_entry(var_decl_ident, type_desc_var);
+						var_decl_entry->defined = 0;
+						add_st_entry(st, var_decl_entry);
 					}
 					break;
 					case NON_TERMINAL_VARIABLE_SET_STATEMENT:
@@ -220,6 +277,7 @@ struct scarl_symbol_table *create_st_from_ast(
 						if (debug_st) printf("statement_list_block_level statement_list_block_level\n");
 						// recursive call to this function (no new symbol table entry)
 						struct scarl_symbol_table *block_st = create_st_from_ast(st, statement_block_level);
+						// the block_st has already been added to the st as a child (see beginning of this function)
 					}
 					break;
 					case NON_TERMINAL_FUNCTION_INVOCATION:
@@ -244,13 +302,13 @@ struct scarl_symbol_table *create_st_from_ast(
 						int child_count = get_children_count(statement_block_level);
 						if (child_count == 2) {
 							struct scarl_symbol_table *if_block = create_st_from_ast(st, statement_block_level->first_child->next_sibling);
-							add_child_st(st, if_block);
+							//add_child_st(st, if_block); // already added - see the start of this function
 						}
 						else if (child_count == 3) {
 							struct scarl_symbol_table *if_block = create_st_from_ast(st, statement_block_level->first_child->next_sibling);
 							struct scarl_symbol_table *else_block = create_st_from_ast(st, statement_block_level->first_child->next_sibling->next_sibling);
-							add_child_st(st, if_block);
-							add_child_st(st, else_block);
+							//add_child_st(st, if_block); // already added - see the start of this function
+							//add_child_st(st, else_block); // already added - see the start of this function
 						}
 					}
 					break;
@@ -260,7 +318,7 @@ struct scarl_symbol_table *create_st_from_ast(
 						if (debug_st) printf("statement_list_block_level while_block_statement\n");
 						
 						struct scarl_symbol_table *while_block = create_st_from_ast(st, statement_block_level->first_child->next_sibling);
-						add_child_st(st, while_block);
+						//add_child_st(st, while_block); // already added - see the start of this function
 					}
 					break;
 					case NON_TERMINAL_DELETE_STATEMENT:
@@ -288,10 +346,12 @@ struct scarl_symbol_table *create_st_from_ast(
 							// add a class attribute to this class (1 new entry)
 							if (debug_st) printf("class_attribute variable_declaration\n");
 							
-							struct scarl_type_descriptor *type_desc_var = create_type_descriptor_for_entry_identifier(st, class_attribute->first_child);
-							struct scarl_symbol_table_entry_identifier *var_def_ident = create_st_entry_identifier_from_ast_node(st, class_attribute->first_child->next_sibling);
-							struct scarl_symbol_table_entry *var_def_entry = create_st_entry(var_def_ident, type_desc_var);
-							add_st_entry(st, var_def_entry);
+							struct scarl_type_descriptor *type_desc_var = create_type_descriptor_for_entry_identifier(st, class_attribute->first_child->first_child);
+							struct scarl_ast_node *ident_node = class_attribute->first_child->first_child->next_sibling;
+							struct scarl_symbol_table_entry_identifier *var_decl_ident = create_st_entry_identifier(strdup(ident_node->str_value), NULL);
+							struct scarl_symbol_table_entry *var_decl_entry = create_st_entry(var_decl_ident, type_desc_var);
+							var_decl_entry->defined = 0;
+							add_st_entry(st, var_decl_entry);
 						}
 						break;
 						case NON_TERMINAL_FUNCTION_DEFINITION_STATEMENT:
@@ -299,7 +359,64 @@ struct scarl_symbol_table *create_st_from_ast(
 							// define a new method for this class (1 new entry)
 							if (debug_st) printf("class_attribute function_definition_statement\n");
 							
-							//TODO: implement when the function one works
+							// copy and pasted from NON_TERMINAL_FUNCTION_DEFINITION_STATEMENT above.....
+							
+							struct scarl_ast_node *return_type_node = class_attribute->first_child;
+							struct scarl_ast_node *func_ident_node = class_attribute->first_child->next_sibling;
+							struct scarl_ast_node *formal_param_node = class_attribute->first_child->next_sibling->next_sibling;
+							struct scarl_ast_node *func_body_node = class_attribute->first_child->next_sibling->next_sibling->next_sibling;
+
+							//create_function_type(char *func_name, 
+							//	   struct type_descriptor *return_type,
+							//	   struct scarl_type_descriptor *formal_parameters, 
+							//	   struct scarl_symbol_table *function_st
+							//);
+							
+							if (debug_st) {
+								printf("creating return type descriptor for function type \n");
+							}
+							struct scarl_type_descriptor *return_type_desc = create_type_descriptor_for_entry_identifier(st, return_type_node);
+							if (debug_st) {
+								printf("counting the number of formal parameters in the function\n");
+							}
+							int formal_param_count = get_children_count(formal_param_node);
+							struct scarl_type_descriptor *formal_parameter_td_list = NULL; // the list of type descriptors that describe this function (to support overloading)
+							if (formal_param_count > 0) {
+								struct scarl_ast_node *fp_to_process = formal_param_node->first_child;
+								if (debug_st) {
+									printf("creating the type descriptor for the entry identifier from the first formal parameter\n");
+									printf("node type of first formal parameter: %s\n", get_ast_node_type_string(fp_to_process->first_child->node_type));
+								}
+								formal_parameter_td_list = create_type_descriptor_for_entry_identifier(st, fp_to_process->first_child);
+								fp_to_process = fp_to_process->next_sibling;
+								for (int i = 1; i <formal_param_count; i++) {
+									if (debug_st) {
+										printf("creating the type descriptor for the entry identifier from formal parameters %i\n", i);
+									}
+									struct scarl_type_descriptor *current_fp_td = create_type_descriptor_for_entry_identifier(st, fp_to_process->first_child);
+									append_type_descriptor(formal_parameter_td_list, current_fp_td);
+									fp_to_process = fp_to_process->next_sibling;
+								}
+							}
+							// reusing the same list and string, which should be ok as long as they are only read from 
+							// need to test this intensely or just pay attention to code 
+							struct scarl_symbol_table_entry_identifier* func_entry_identifier = create_st_entry_identifier(func_ident_node->str_value, formal_parameter_td_list);
+							
+							// need to stamp down architecture for this 
+							// function types need a type descriptor list for both
+							// formal parameters and entry identifiers?
+							
+							struct scarl_symbol_table *function_st = create_st_from_ast(st, func_body_node);
+							struct scarl_function_type *func_type_desc = create_function_type(
+								func_ident_node->str_value,
+								return_type_desc,
+								formal_parameter_td_list,
+								function_st
+							);
+							
+							struct scarl_symbol_table_entry *func_entry = create_st_entry(func_entry_identifier, (struct scarl_type_descriptor*)func_type_desc);
+							func_entry->defined = 1;
+							add_st_entry(st, func_entry);
 						}
 						break;
 					}
@@ -313,6 +430,7 @@ struct scarl_symbol_table *create_st_from_ast(
 			st = NULL;
 	}
 	assert(st != NULL);
+	printf("Finished processing this symbol table with %i entries\n", get_entry_count(st));
 	return st;
 }
 
@@ -360,6 +478,7 @@ struct scarl_symbol_table_entry_identifier *create_st_entry_identifier_var(char 
 	return id;
 }
 
+/*
 struct scarl_symbol_table_entry_identifier *create_st_entry_identifier_from_ast_node(struct scarl_symbol_table *current_scope_st, struct scarl_ast_node *node) { 
 	// direct from the AST
 	
@@ -377,7 +496,7 @@ struct scarl_symbol_table_entry_identifier *create_st_entry_identifier_from_ast_
 		The function is the only one that uses 
 		the parameter_list 
 	*/
-	
+/*
 	struct scarl_symbol_table_entry_identifier *returning_entry = NULL;
 	char *ident_cpy = NULL;
 	
@@ -448,6 +567,7 @@ struct scarl_symbol_table_entry_identifier *create_st_entry_identifier_from_ast_
 	assert(returning_entry != NULL);
 	return returning_entry;
 }
+*/
 
 // structure and debugging functions
 void add_child_st(struct scarl_symbol_table *parent, struct scarl_symbol_table *adding) {
@@ -455,16 +575,22 @@ void add_child_st(struct scarl_symbol_table *parent, struct scarl_symbol_table *
 	if (parent->first_child == NULL) {
 		parent->first_child = adding;
 		adding->parent_st = parent;
+		if (debug_st) {
+			printf("Added a symbol table as the first child to another symbol table\n");
+		}
 	}
 	else {
+		int nth = 1;
 		struct scarl_symbol_table *n = parent->first_child;
 		while(n->next_sibling != NULL) {
 			n = n->next_sibling;
+			nth++;
 		}
 		// add the ast node to the next sibling, which is
 		// in the list of children for this parent
 		n->next_sibling = adding;
 		adding->parent_st = parent;
+		printf("Added a symbol table as its %i'th child to another symbol table\n", nth);
 	}
 }
 
@@ -487,8 +613,95 @@ int get_child_st_count(struct scarl_symbol_table *st) {
 	}
 }
 
+
+void print_st_r(struct scarl_symbol_table *st, int level);
+
 void print_st(struct scarl_symbol_table *st) {
+	print_st_r(st, 0);
+}
+
+void print_st_r(struct scarl_symbol_table *st, int level) {
+	struct scarl_symbol_table_entry *entry = st->entries; // first entry
+	for (int i = 0; i < level; i++) printf("    "); // indent for level
+	if (level == 0) printf("ROOT ");
+	printf("Symbol table:\n");
+	if (entry == NULL) {
+		for (int i = 0; i < level; i++) printf("    "); // indent for level
+		printf("empty symbol table\n");
+	} else {		
+		int entry_index = 0;
+		while (entry != NULL) {
+			for (int i = 0; i < level; i++) printf("    "); // indent for level
+			printf("%i - ident: %s; ", entry_index, entry->ident->ident_str);
+			if (entry->is_constant) {
+				printf("constant; ");
+			}
+			printf("type %s; ", get_type_class_str(entry->type->type_class));
+			switch(entry->type->type_class) {
+				case PRIMITIVE_TYPE: {
+					
+				}
+				break;
+				case POINTER_TYPE: {
+					struct scarl_pointer_type *ptr_type = (struct scarl_pointer_type*)entry->type;
+					printf("pointer to type: %s; ", get_type_class_str(ptr_type->pointing_to->type_class));
+				}
+				break;
+				case ARRAY_TYPE: {
+					struct scarl_array_type *arr_type = (struct scarl_array_type*)entry->type;
+					printf("array of type: %s; ", get_type_class_str(arr_type->containing_type->type_class));
+					printf("length = %i; ", arr_type->length);
+				}
+				break;
+				case FUNCTION_TYPE: { 
+					struct scarl_function_type *func_type = (struct scarl_function_type*)entry->type;
+					int param_count = get_type_descriptor_list_count(func_type->formal_parameters);
+					printf("parameter count: %i; ", param_count);
+					if (param_count > 0) {
+						printf("parameter type(s): ");
+						struct scarl_type_descriptor *fp = func_type->formal_parameters;
+						while (fp != NULL) {
+							printf("%s", get_type_class_str(fp->type_class));
+							fp = fp->next;
+							if (fp != NULL) {
+								printf(", ");
+							}
+						}
+					}
+				}
+				break;
+				case CLASS_TYPE: {
+					
+				}
+				break;
+				case DEVICE_TYPE: {
+					
+				}
+				break;
+			}
+			printf("\n");
+			entry = entry->next;
+			entry_index++;
+		}
+	}
+	for (int i = 0; i < level; i++) printf("    "); // indent for level
 	
+	struct scarl_symbol_table *child_st = st->first_child;
+	if (child_st == NULL) {
+		printf("no child symbol tables\n");
+	} else {
+		printf("Child symbol tables {\n");
+		int table_index = 0;
+		while (child_st != NULL) {
+			for (int i = 0; i < level; i++) printf("    "); // indent for level
+			printf("Table Index: %i\n", table_index);
+			print_st_r(child_st, level + 1);
+			child_st = child_st->next_sibling;
+			table_index++;
+		}
+		for (int i = 0; i < level; i++) printf("    "); // indent for level
+		printf("}\n");
+	}
 }
 
 void add_st_entry(struct scarl_symbol_table *parent, struct scarl_symbol_table_entry *entry) {
@@ -512,6 +725,28 @@ void add_st_entry(struct scarl_symbol_table *parent, struct scarl_symbol_table_e
 // lookup and usage functions
 
 // searches current scope first, and searches parent scope recursively until it is found or the root table has been searched 
+struct scarl_symbol_table_entry *lookup_char_str(struct scarl_symbol_table *current_scope_st, char* ident) {
+	struct scarl_symbol_table_entry *entry = NULL;
+	// search this scope
+	entry = current_scope_st->entries;
+	while (entry != NULL) {
+		if (strcmp(ident, entry->ident->ident_str) == 0) {
+			return entry;
+		}
+		else {
+			entry = entry->next;
+		}
+	}
+	// if we are here, it means we did not find it
+	// try the outer scope if there is one 
+	if (current_scope_st->parent_st != NULL) {
+		return lookup_char_str(current_scope_st->parent_st, ident);
+	}
+	return entry;
+}
+
+
+// searches current scope first, and searches parent scope recursively until it is found or the root table has been searched 
 struct scarl_symbol_table_entry *lookup(struct scarl_symbol_table *current_scope_st, struct scarl_symbol_table_entry_identifier *ident) {
 	struct scarl_symbol_table_entry *entry = NULL;
 	// search this scope
@@ -530,6 +765,16 @@ struct scarl_symbol_table_entry *lookup(struct scarl_symbol_table *current_scope
 		return lookup(current_scope_st->parent_st, ident);
 	}
 	return entry;
+}
+
+int get_entry_count(struct scarl_symbol_table *st) {
+	int count = 0;
+	struct scarl_symbol_table_entry *entry = st->entries;
+	while (entry != NULL) {
+		entry = entry->next;
+		count++;
+	}
+	return count;
 }
 
 // searches the specified symbol table only

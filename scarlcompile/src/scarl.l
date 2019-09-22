@@ -426,11 +426,16 @@ int main(int argc, char *argv[]) {
 		fprintf(stderr, "\nFailed to parse. Check your file.\n"); 
 		return 1; //error
 	}
-	// create the symbol table for this compiled program 
-	root_st = create_st_from_ast(NULL, program_ast);
 	
 	printf("Hey, the source file was parsed successfully! Here is the AST:\n");
 	print_tree(program_ast);
+	
+	printf("\nTraversing the AST to build the symbol table...\n");
+	
+	// create the symbol table for this compiled program 
+	root_st = create_st_from_ast(NULL, program_ast);
+	printf("Obtained symbol table(s):\n");
+	print_st(root_st);
 	
 	// first pass to gather
 	
