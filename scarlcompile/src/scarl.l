@@ -21,6 +21,7 @@ along with SCARL.  If not, see <https://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include <string.h>
 
+#include "scarlcodegenerator.h"
 #include "scarlastnode.h"
 #include "scarlsymboltable.h"
 #include "stringstack.h"
@@ -362,15 +363,28 @@ int yywrap() {
 	return 1;
 }
 
+// whether to print program compilation info
+int debug_compilation = 0;
+
 int main(int argc, char *argv[]) {
-    printf("Welcome to the SCARL compiler version 2\n");
+    printf("Welcome to the SCARL compiler version 0.2\n"); // this version number makes more sense
 	
 	// process arguments here
 	if (argc <= 1) {
-		//print help
-		
+		// TODO: print help
+		printf("Usage:\n");
+		printf("\n");
+		printf("scarlcompile {-option-name option-parameter}* [source file]\n");
+		printf("\n");
+		printf("Options:\n");
+		printf("-o    output file name (.rcl). Default is \"compiled.rcl\"\n");
+		printf("-d    [on|off] - on for developer mode. Default is off.");
 		return 0;
 	}
+	// the name of the output file 
+	char *out_file_name = "compiled.rcl";
+
+	
 	//otherwise we have arguments to process
 	int i;
 	int src_file_counter = 0;
@@ -382,13 +396,23 @@ int main(int argc, char *argv[]) {
 				return 1;
 			}
 			else {
-				printf("get option and parameter\n");
+				//printf("get option and parameter\n");
 				char *option = argv[i];
 				char *param = argv[i+1];
 				i++;
 				
-				//process option here
-				printf("Processed option %s with parameter %s\n", option, param);
+				if (strcmp(option, "-o") == 0) {
+					out_file_name = strdup(param);
+				}
+				else if (strcmp(option, "-d") == 0) {
+					if (strcmp(param, "on") == 0) {
+						printf("development output ON\n");
+						debug_compilation = 1;
+					}
+				}
+				
+				// process option here
+				// printf("Processed option %s with parameter %s\n", option, param);
 			}
 		}
 		else {
@@ -410,9 +434,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 	}
-	
-	printf("Compiling file...\n");
-	
+		
 	program_ast = NULL; // the program abstract syntax tree - initialize to ensure it is NULL if parsing fails
 	root_st = NULL; // the root symbol table
 	line_number = 1; // count line number for error
@@ -426,20 +448,28 @@ int main(int argc, char *argv[]) {
 		fprintf(stderr, "\nFailed to parse. Check your file.\n"); 
 		return 1; //error
 	}
+	if (debug_compilation) {
+		printf("Hey, the source file was parsed successfully! Here is the AST:\n");
+		print_tree(program_ast);
+		
+		printf("\nTraversing the AST to build the symbol table...\n");
+	}
 	
-	printf("Hey, the source file was parsed successfully! Here is the AST:\n");
-	print_tree(program_ast);
-	
-	printf("\nTraversing the AST to build the symbol table...\n");
-	
-	// create the symbol table for this compiled program 
+	// create the symbol table for the compiled program  
 	struct scarl_symbol_table *root_internal_st = create_st();
 	root_st = create_st_from_ast(NULL, root_internal_st, program_ast);
-	printf("Obtained symbol table(s):\n");
-	print_st(root_st);
+	// TODO: fix create_st_from_ast to ensure that identifiers in expressions
+		// are defined before they are used in an expression.
+	calculate_byte_sizes(root_st);
 	
-	// first pass to gather
+	if (debug_compilation) {
+		printf("Obtained symbol table(s):\n");
+		print_st(root_st);
+	}
 	
+	FILE *gen_file = fopen(out_file_name, "w");
+	generate_code_ast(gen_file, root_st, program_ast);
+	fclose(gen_file);
 	
     return 0;
 }

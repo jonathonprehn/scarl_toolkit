@@ -20,16 +20,21 @@ along with SCARL.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "scarlastnode.h"
 #include "scarlsymboltable.h"
+#include "scarlregister.h"
 
 /* Support the implementation of different target languages */
 
 // taken from the original scarlcodegen.h file
 void generate_code_file(FILE *output);
-void generate_arithmetic_expression(FILE *output, struct scarl_ast_node *node);
-void generate_boolean_expression(FILE *output, struct scarl_ast_node *node);
-void generate_statements_in_block(FILE *output, struct scarl_ast_node *node);
-void generate_function_invocation(FILE *output, struct scarl_ast_node *node);
+void generate_code_ast(FILE *output, struct scarl_symbol_table *associated_scope_st, struct scarl_ast_node *node);
+void generate_expression_value(FILE *output, struct scarl_symbol_table *associated_scope_st, struct scarl_ast_node *node);
+void generate_local_memory_write(FILE *output, struct scarl_symbol_table *associated_scope_st, struct scarl_symbol_table_entry *st_entry, struct scarl_ast_node *result_node);
+void generate_statements_in_block(FILE *output, struct scarl_symbol_table *associated_scope_st, struct scarl_ast_node *node);
+void generate_class_body(FILE *output, char *class_name, struct scarl_symbol_table *associated_scope_st, struct scarl_ast_node *node);
+void generate_function_invocation(FILE *output, struct scarl_symbol_table *associated_scope_st, struct scarl_ast_node *node);
 void generate_register_save(FILE *output);
 void generate_register_load(FILE *output);
+
+char *build_arcl_procedure_name(char *class_name, struct scarl_symbol_table_entry_identifier* func_entry_identifier);
 
 #endif // SCARLCODEGENERATOR_H_INCLUDED

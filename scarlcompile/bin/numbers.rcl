@@ -1,0 +1,19 @@
+PROC CMethod_someClass__value_
+RET
+PROC _main_
+LOADL R0 53
+LOADL R1 0
+TODO: Writing R0 into stack memory offset 4
+TODO: Writing R1 into stack memory offset 5
+LOADL R1 70
+LOADL R2 0
+TODO: Writing R1 into stack memory offset 4
+TODO: Writing R2 into stack memory offset 5
+LOADL R2 5
+LOADL R3 0
+TODO: Writing R2 into stack memory offset 4
+TODO: Writing R3 into stack memory offset 5
+LOADL R3 10
+LOADL R4 0
+TODO: Writing R3 into stack memory offset 0
+TODO: Writing R4 into stack memory offset 1

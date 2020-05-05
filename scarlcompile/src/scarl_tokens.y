@@ -63,7 +63,7 @@ unsigned debugging_grammar = 0;
 %%
 
 program : statement_list {
-	printf("Match program\n");
+	if (debugging_grammar) printf("Match program\n");
 	//pass the completed AST back to the main program for further processing
 	program_ast = $1;
 	$$ = $1;
@@ -579,8 +579,8 @@ class_attribute_identifier : IDENTIFIER DOT IDENTIFIER {
 	char *first_identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match class_attribute_identifier (%s.%s)\n", first_identifier, second_identifier);
 	struct scarl_ast_node *class_attribute_node = create_typed_ast_node(NON_TERMINAL_CLASS_ATTRIBUTE_IDENTIFIER, NON_TERMINAL_CLASS_ATTRIBUTE_IDENTIFIER);
-	struct scarl_ast_node *first_identifier_node = create_str_value_ast_node(NON_TERMINAL_IDENTIFIER_VALUE, $1);
-	struct scarl_ast_node *second_identifier_node = create_str_value_ast_node(NON_TERMINAL_IDENTIFIER_VALUE, $3);
+	struct scarl_ast_node *first_identifier_node = create_str_value_ast_node(NON_TERMINAL_IDENTIFIER_VALUE, first_identifier);
+	struct scarl_ast_node *second_identifier_node = create_str_value_ast_node(NON_TERMINAL_IDENTIFIER_VALUE, second_identifier);
 	// this node's value is the sum of its children (an ordered list of identifiers)
 	add_child_node(class_attribute_node, first_identifier_node);
 	add_child_node(class_attribute_node, second_identifier_node);
@@ -599,7 +599,7 @@ class_attribute_identifier : IDENTIFIER DOT class_attribute_identifier {
 	char *identifier = string_stack_pop();
 	if (debugging_grammar) printf("Match class_attribute_identifier (%s.<more stuff>)\n", identifier);
 	// we want the children to appear in the order as  they do in the code for the AST
-	struct scarl_ast_node *next_identifier = create_str_value_ast_node(NON_TERMINAL_IDENTIFIER_VALUE, $1);
+	struct scarl_ast_node *next_identifier = create_str_value_ast_node(NON_TERMINAL_IDENTIFIER_VALUE, identifier);
 	struct scarl_ast_node *class_attribute_identifier_node = $3;
 	push_child_node_front(class_attribute_identifier_node, next_identifier);
 	$$ = class_attribute_identifier_node;
@@ -713,7 +713,7 @@ allocation_expression : ALLOCATE allocation_invocation {
     // that needs its own production rule to
     // avoid confusion
 	if (debugging_grammar) printf("Match allocation_expression\n");
-	$$ = $2; // obvious that this is an allocation, unless NON_TERMINAL_POINTER_VALUE ends up showin elsewhere
+	$$ = $2; // obvious that this is an allocation, unless NON_TERMINAL_POINTER_VALUE ends up showing elsewhere
 }
 
 // NOTE for allocation_invocation
@@ -994,6 +994,11 @@ unit : IDENTIFIER {
 	$$ = create_str_value_ast_node(NON_TERMINAL_IDENTIFIER_VALUE, identifier);
 }
 
+unit : class_attribute_identifier {
+	if (debugging_grammar) printf("Match unit\n");
+	$$ = $1;
+}
+
 unit : integer_value {
 	if (debugging_grammar) printf("Match unit\n");
 	$$ = $1;
@@ -1162,7 +1167,7 @@ bool_value : FALSE {
 
 primitive_type : BOOL {
 	if (debugging_grammar) printf("Match primitive_type\n");
-    $$ = create_typed_ast_node(NON_TERMINAL_PRIMITIVE_TYPE, VOID);
+    $$ = create_typed_ast_node(NON_TERMINAL_PRIMITIVE_TYPE, BOOL);
 }
 
 primitive_type : INT {

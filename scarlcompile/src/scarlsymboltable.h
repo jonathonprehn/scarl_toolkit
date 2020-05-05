@@ -39,6 +39,9 @@ struct scarl_symbol_table {
     struct scarl_symbol_table *parent_st;
 	struct scarl_symbol_table *next_sibling;
 	struct scarl_symbol_table *first_child;
+	
+	int frameByteTotalSize; // the total frame size of this symbol table,
+							// this frame size includes child tables
 };
 
 struct scarl_symbol_table_entry {
@@ -58,6 +61,10 @@ struct scarl_symbol_table_entry {
 	int is_constant;
 	int compile_time_value; // for constant expressions only
 	int defined; //operational
+	
+	// memory management about this entry 
+	int frameByteSize; // space taken up in the frame it lives in 
+	int frameByteOffset; // 0-based index offset from frame base
 };
 
 struct scarl_symbol_table_entry_identifier {
@@ -87,6 +94,7 @@ int get_child_st_count(struct scarl_symbol_table *st);
 void print_st(struct scarl_symbol_table *st);
 void add_st_entry(struct scarl_symbol_table *parent, struct scarl_symbol_table_entry *entry);
 int get_entry_count(struct scarl_symbol_table *st);
+void calculate_byte_sizes(struct scarl_symbol_table *st);
 
 // lookup and usage functions
 

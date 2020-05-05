@@ -1,6 +1,12 @@
 
 class A {
 	int field;
+	A pointer A() {
+		// constructor for class A
+		field = 10;
+	}
+	int getField() { return field; }
+	void setField(int i) { field = i; }
 }
 
 void main() {

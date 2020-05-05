@@ -1,0 +1,4 @@
+PROC CMethod_A__funcOfClass_
+RET
+PROC _main_
+RET

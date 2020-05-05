@@ -19,6 +19,7 @@ along with SCARL.  If not, see <https://www.gnu.org/licenses/>.
 #define SCARLASTNODE_H_INCLUDED
 
 #include "scarltypes.h"
+#include "scarlsymboltable.h"
 
 struct scarl_ast_node;
 
@@ -35,6 +36,11 @@ struct scarl_ast_node {
 	// a general tree is a binary tree in disguise
 	struct scarl_ast_node *next_sibling;
 	struct scarl_ast_node *first_child;
+	
+	// symbol table/verification/code generation variables
+	struct scarl_symbol_table *assoc_st; // for anonymous block statements
+	int reg_low;
+	int reg_high;
 };
 
 struct scarl_ast_node *create_template_ast_node();

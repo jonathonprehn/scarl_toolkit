@@ -1,0 +1,8 @@
+PROC _foo__264_
+RET
+PROC _foo__267_
+RET
+PROC _foo__264__264_
+RET
+PROC _main_
+RET

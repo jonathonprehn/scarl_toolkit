@@ -1,0 +1,8 @@
+PROC CMethod_A__A_
+RET
+PROC CMethod_A__getField_
+RET
+PROC CMethod_A__setField__264_
+RET
+PROC _main_
+RET

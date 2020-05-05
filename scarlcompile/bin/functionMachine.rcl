@@ -1,0 +1,6 @@
+PROC _swapLights_
+RET
+PROC _swapLights__264_
+RET
+PROC _main_
+RET

@@ -1,0 +1,4 @@
+PROC _stuff_
+RET
+PROC _main_
+RET

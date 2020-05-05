@@ -208,10 +208,9 @@ int is_ancestor_of(struct scarl_class_type *lhs, struct scarl_class_type *rhs);
 /* not be able to convert from B back to A (think about class hierarchies in polymorphism)              */
 int directional_type_equality(struct scarl_type_descriptor *from_type, struct scarl_type_descriptor *to_type);
 
-/* Returns one of: PRIMITIVE_TYPE, POINTER_TYPE, ARRAY_TYPE, FUNCTION_TYPE, CLASS_TYPE or DEVICE_TYPE */
 /* This function attempts to figure out which type the expression will eventually be converted to,    */
 /* taking the "most straightforward" approach to guessing, given its context (symbol table)    */
-int assume_type_class_of_expression_st(struct scarl_symbol_table *current_scope_st, struct scarl_ast_node *expr_node);
+struct scarl_type_descriptor *assume_type_of_expression_st(struct scarl_symbol_table *current_scope_st, struct scarl_ast_node *expr_node);
 
 /* Determines if the expression can be converted to a requested type given its context (symbol table)  */
 int can_coerce_expression_to_type_class(struct scarl_symbol_table *current_scope_st, struct scarl_ast_node *expr_node, struct scarl_type_descriptor *type);
@@ -237,6 +236,7 @@ struct scarl_function_type *create_function_type(char *func_name, struct scarl_t
 struct scarl_class_type *create_class_type(char *class_name_identifier, char *parent_class_identifier, struct scarl_symbol_table *class_st);
 // type descriptors for identifiers - does not create symbol tables 
 struct scarl_type_descriptor *create_type_descriptor_for_entry_identifier(struct scarl_symbol_table *current_scope, struct scarl_ast_node *node);
+struct scarl_type_descriptor *create_type_descriptor_list_from_formal_parameter_node(struct scarl_symbol_table *current_scope, struct scarl_ast_node *formal_param_node);
 // type descriptors for the symbol table entry - creates symbol tables from nodes
 // -- has different expectations for nodes than the entry_identifier one 
 //struct scarl_type_descriptor *create_type_descriptor_for_symbol_table(struct scarl_symbol_table *current_scope, struct scarl_ast_node *node);
@@ -246,6 +246,9 @@ int compare_type_descriptors(struct scarl_type_descriptor *lhs, struct scarl_typ
 // list functions 
 void append_type_descriptor(struct scarl_type_descriptor *lst, struct scarl_type_descriptor *adding);
 int get_type_descriptor_list_count(struct scarl_type_descriptor *lst);
+
+// memory management 
+int size_of_scarl_type(struct scarl_type_descriptor *type, struct scarl_symbol_table *st);
 
 // debug
 char *get_type_class_str(int type_class);

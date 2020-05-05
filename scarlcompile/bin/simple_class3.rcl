@@ -1,0 +1,6 @@
+PROC CMethod_A__funcOfClass_
+RET
+PROC CMethod_A__truthy__267_
+RET
+PROC _main_
+RET

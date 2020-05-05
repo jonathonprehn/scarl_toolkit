@@ -24,7 +24,7 @@ along with SCARL.  If not, see <https://www.gnu.org/licenses/>.
 #include "scarlastnode.h"
 #include "scarlsymboltable.h"
 
-const unsigned debug_st = 1;
+const unsigned debug_st = 0;
 
 // symbol table construct initialization functions
 struct scarl_symbol_table *create_st() {
@@ -33,6 +33,7 @@ struct scarl_symbol_table *create_st() {
 	st->parent_st = NULL;
 	st->next_sibling = NULL;
 	st->first_child = NULL;
+	st->frameByteTotalSize = 0; // calculate later on
 	return st;
 }
 
@@ -43,15 +44,15 @@ struct scarl_symbol_table *create_st_from_ast(
 ) {
 	//struct scarl_symbol_table *st = create_st();
 	
-	if (debug_st) {
-		//printf("Creating symbol table from st: top-level node is of type %s\n", get_ast_node_type_string(node->node_type)); 
-	}
+	//if (debug_st) {
+	//	printf("Creating symbol table from st: top-level node is of type %s\n", get_ast_node_type_string(node->node_type)); 
+	//}
 	
 	// add this to the parent st if it exists
 	if (current_scope_st != NULL) {
-		if (debug_st) {
-			//printf("Adding this symbol table as a child of another symbol table\n");
-		}
+		//if (debug_st) {
+		//	printf("Adding this symbol table as a child of another symbol table\n");
+		//}
 		add_child_st(current_scope_st, st); // to be able to search parent scope
 	}
 	
@@ -86,6 +87,13 @@ struct scarl_symbol_table *create_st_from_ast(
 						struct scarl_ast_node *ident_node = statement->first_child->first_child->next_sibling;
 						struct scarl_type_descriptor *type_desc = create_type_descriptor_for_entry_identifier(st, type_node);
 						struct scarl_symbol_table_entry_identifier *var_def_ident = create_st_entry_identifier(strdup(ident_node->str_value), NULL);
+						
+						// error out if there is already an object with the same identifier in this  scope
+						if (lookup_in_scope(st, var_def_ident) != NULL) {
+							fprintf(stderr, "ERROR: Duplicate identifier \"%s\" in scope\n", var_def_ident->ident_str);
+							exit(1);
+						}
+						
 						struct scarl_symbol_table_entry *var_def_entry = create_st_entry(var_def_ident, type_desc);
 						var_def_entry->defined = 1;
 						add_st_entry(st, var_def_entry);
@@ -101,6 +109,13 @@ struct scarl_symbol_table *create_st_from_ast(
 						struct scarl_ast_node *ident_node = statement->first_child->first_child->next_sibling;
 						struct scarl_type_descriptor *type_desc = create_type_descriptor_for_entry_identifier(st, type_node);
 						struct scarl_symbol_table_entry_identifier *var_decl_ident = create_st_entry_identifier(strdup(ident_node->str_value), NULL);
+						
+						// error out if there is already an object with the same identifier in this  scope
+						if (lookup_in_scope(st, var_decl_ident) != NULL) {
+							fprintf(stderr, "ERROR: Duplicate identifier \"%s\" in scope\n", var_decl_ident->ident_str);
+							exit(1);
+						}
+						
 						struct scarl_symbol_table_entry *var_decl_entry = create_st_entry(var_decl_ident, type_desc);
 						var_decl_entry->defined = 0;
 						add_st_entry(st, var_decl_entry);
@@ -116,6 +131,13 @@ struct scarl_symbol_table *create_st_from_ast(
 						struct scarl_ast_node *ident_node = statement->first_child->first_child->next_sibling;
 						struct scarl_type_descriptor *type_desc = create_type_descriptor_for_entry_identifier(st, type_node);
 						struct scarl_symbol_table_entry_identifier *var_const_ident = create_st_entry_identifier(strdup(ident_node->str_value), NULL);
+						
+						// error out if there is already an object with the same identifier in this  scope
+						if (lookup_in_scope(st, var_const_ident) != NULL) {
+							fprintf(stderr, "ERROR: Duplicate identifier \"%s\" in scope\n", var_const_ident->ident_str);
+							exit(1);
+						}
+						
 						struct scarl_symbol_table_entry *var_const_entry = create_st_entry(var_const_ident, type_desc);
 						var_const_entry->defined = 1;
 						var_const_entry->is_constant = 1;
@@ -145,18 +167,33 @@ struct scarl_symbol_table *create_st_from_ast(
 							class_name = strdup(class_decl->first_child->str_value);
 							// the parent class is the one this class "extends" from
 							parent_class = strdup(class_decl->first_child->next_sibling->str_value);
+							
+							if (lookup_char_str(st, parent_class) == NULL) {
+								fprintf(stderr, "Parent class of %s \"%s\" does not exist\n", class_name, parent_class);
+								exit(1);
+							}
 						}
 						else {
 							fprintf(stderr, "A class declarator has more than 2 child nodes\n");
 							assert(0);
 						}
 						struct scarl_symbol_table *class_body_st = create_st();
-						struct scarl_symbol_table *class_st = create_st_from_ast(st, class_body_st, class_attribute_list); // recursive call
-						struct scarl_class_type *class_type_desc = create_class_type(class_name, parent_class, class_st);
+						struct scarl_class_type *class_type_desc = create_class_type(class_name, parent_class, NULL);
 						struct scarl_symbol_table_entry_identifier *class_ident = create_st_entry_identifier(strdup(class_name), NULL);
+						
+						// error out if there is already an object with the same identifier in this  scope
+						if (lookup_in_scope(st, class_ident) != NULL) {
+							fprintf(stderr, "ERROR: Duplicate identifier \"%s\" in scope\n", class_ident->ident_str);
+							exit(1);
+						}
+						
+						//adding self to symbol table so that a class can have pointers to itself as a field
 						struct scarl_symbol_table_entry *class_entry = create_st_entry(class_ident, (struct scarl_type_descriptor*)class_type_desc);
 						class_entry->defined = 1;
 						add_st_entry(st, class_entry);
+						// create the symbol table for it now 
+						struct scarl_symbol_table *class_st = create_st_from_ast(st, class_body_st, class_attribute_list); // recursive call
+						class_type_desc->class_st = class_st;
 					}
 					break;
 					case NON_TERMINAL_FUNCTION_DEFINITION_STATEMENT:
@@ -210,6 +247,12 @@ struct scarl_symbol_table *create_st_from_ast(
 						// need to test this intensely or just pay attention to code 
 						struct scarl_symbol_table_entry_identifier* func_entry_identifier = create_st_entry_identifier(func_ident_node->str_value, formal_parameter_td_list);
 						
+						// error out if there is already an object with the same identifier in this  scope
+						if (lookup_in_scope(st, func_entry_identifier) != NULL) {
+							fprintf(stderr, "ERROR: Duplicate identifier \"%s\" in scope\n", func_entry_identifier->ident_str);
+							exit(1);
+						}
+						
 						// need to stamp down architecture for this 
 						// function types need a type descriptor list for both
 						// formal parameters and entry identifiers?
@@ -232,6 +275,7 @@ struct scarl_symbol_table *create_st_from_ast(
 						}
 						
 						struct scarl_symbol_table *function_st = create_st_from_ast(st, function_body_st, func_body_node);
+						func_body_node->assoc_st = function_st;
 						struct scarl_function_type *func_type_desc = create_function_type(
 							func_ident_node->str_value,
 							return_type_desc,
@@ -265,6 +309,13 @@ struct scarl_symbol_table *create_st_from_ast(
 						struct scarl_type_descriptor *type_desc_var = create_type_descriptor_for_entry_identifier(st, type_node);
 						struct scarl_ast_node *ident_node = type_node->next_sibling;
 						struct scarl_symbol_table_entry_identifier *var_def_ident = create_st_entry_identifier(strdup(ident_node->str_value), NULL);
+						
+						// error out if there is already an object with the same identifier in this  scope
+						if (lookup_in_scope(st, var_def_ident) != NULL) {
+							fprintf(stderr, "ERROR: Duplicate identifier \"%s\" in scope\n", var_def_ident->ident_str);
+							exit(1);
+						}
+						
 						struct scarl_symbol_table_entry *var_def_entry = create_st_entry(var_def_ident, type_desc_var);
 						//if (statement_block_level->first_child->first_child->node_type == NON_TERMINAL_IDENTIFIER_VALUE && debug_st) {
 						//	printf("Parsing a variable with a user defined type %s\n", type_node->str_value);
@@ -281,6 +332,13 @@ struct scarl_symbol_table *create_st_from_ast(
 						struct scarl_type_descriptor *type_desc_var = create_type_descriptor_for_entry_identifier(st, statement_block_level->first_child->first_child);
 						struct scarl_ast_node *ident_node = statement_block_level->first_child->first_child->next_sibling;
 						struct scarl_symbol_table_entry_identifier *var_decl_ident = create_st_entry_identifier(strdup(ident_node->str_value), NULL);
+						
+						// error out if there is already an object with the same identifier in this  scope
+						if (lookup_in_scope(st, var_decl_ident) != NULL) {
+							fprintf(stderr, "ERROR: Duplicate identifier \"%s\" in scope\n", var_decl_ident->ident_str);
+							exit(1);
+						}
+						
 						struct scarl_symbol_table_entry *var_decl_entry = create_st_entry(var_decl_ident, type_desc_var);
 						var_decl_entry->defined = 0;
 						add_st_entry(st, var_decl_entry);
@@ -289,6 +347,7 @@ struct scarl_symbol_table *create_st_from_ast(
 					case NON_TERMINAL_VARIABLE_SET_STATEMENT:
 					{
 						//if (debug_st) printf("statement_list_block_level variable_set_statement\n");
+						
 						// set the variable (no new symbol table entry)
 						
 					}
@@ -299,6 +358,8 @@ struct scarl_symbol_table *create_st_from_ast(
 						// recursive call to this function (no new symbol table entry)
 						struct scarl_symbol_table *block_internal_st = create_st();
 						struct scarl_symbol_table *block_st = create_st_from_ast(st, block_internal_st, statement_block_level);
+						// associate this st with the block ast to enable usage of anonymous blocks
+						statement_block_level->assoc_st = block_st;
 					}
 					break;
 					case NON_TERMINAL_FUNCTION_INVOCATION:
@@ -324,6 +385,8 @@ struct scarl_symbol_table *create_st_from_ast(
 						if (child_count == 2) {
 							struct scarl_symbol_table *if_internal_block = create_st();
 							struct scarl_symbol_table *if_block = create_st_from_ast(st, if_internal_block, statement_block_level->first_child->next_sibling);
+							// associate this st with the block ast to enable usage of anonymous blocks
+							statement_block_level->first_child->next_sibling->assoc_st = if_block;
 							//add_child_st(st, if_block); // already added - see the start of this function
 						}
 						else if (child_count == 3) {
@@ -331,6 +394,9 @@ struct scarl_symbol_table *create_st_from_ast(
 							struct scarl_symbol_table *if_block = create_st_from_ast(st, if_internal_block, statement_block_level->first_child->next_sibling);
 							struct scarl_symbol_table *else_internal_block = create_st();
 							struct scarl_symbol_table *else_block = create_st_from_ast(st, else_internal_block, statement_block_level->first_child->next_sibling->next_sibling);
+							// associate this st with the block ast to enable usage of anonymous blocks
+							statement_block_level->first_child->next_sibling->assoc_st = if_block;
+							statement_block_level->first_child->next_sibling->next_sibling->assoc_st = else_block;
 							//add_child_st(st, if_block); // already added - see the start of this function
 							//add_child_st(st, else_block); // already added - see the start of this function
 						}
@@ -343,6 +409,7 @@ struct scarl_symbol_table *create_st_from_ast(
 						
 						struct scarl_symbol_table *internal_while_block = create_st();
 						struct scarl_symbol_table *while_block = create_st_from_ast(st, internal_while_block, statement_block_level->first_child->next_sibling);
+						statement_block_level->first_child->next_sibling->assoc_st = while_block;
 						//add_child_st(st, while_block); // already added - see the start of this function
 					}
 					break;
@@ -370,10 +437,17 @@ struct scarl_symbol_table *create_st_from_ast(
 						{
 							// add a class attribute to this class (1 new entry)
 							//if (debug_st) printf("class_attribute variable_declaration\n");
-							
-							struct scarl_type_descriptor *type_desc_var = create_type_descriptor_for_entry_identifier(st, class_attribute->first_child->first_child);
+							struct scarl_ast_node *type_node = class_attribute->first_child->first_child;
 							struct scarl_ast_node *ident_node = class_attribute->first_child->first_child->next_sibling;
+							struct scarl_type_descriptor *type_desc_var = create_type_descriptor_for_entry_identifier(st, type_node);
 							struct scarl_symbol_table_entry_identifier *var_decl_ident = create_st_entry_identifier(strdup(ident_node->str_value), NULL);
+							
+							// error out if there is already an object with the same identifier in this  scope
+							if (lookup_in_scope(st, var_decl_ident) != NULL) {
+								fprintf(stderr, "ERROR: Duplicate identifier \"%s\" in scope\n", var_decl_ident->ident_str);
+								exit(1);
+							}
+							
 							struct scarl_symbol_table_entry *var_decl_entry = create_st_entry(var_decl_ident, type_desc_var);
 							var_decl_entry->defined = 0;
 							add_st_entry(st, var_decl_entry);
@@ -404,28 +478,16 @@ struct scarl_symbol_table *create_st_from_ast(
 							//if (debug_st) {
 							//	printf("counting the number of formal parameters in the function\n");
 							//}
-							int formal_param_count = get_children_count(formal_param_node);
-							struct scarl_type_descriptor *formal_parameter_td_list = NULL; // the list of type descriptors that describe this function (to support overloading)
-							if (formal_param_count > 0) {
-								struct scarl_ast_node *fp_to_process = formal_param_node->first_child;
-								//if (debug_st) {
-								//	printf("creating the type descriptor for the entry identifier from the first formal parameter\n");
-								//	printf("node type of first formal parameter: %s\n", get_ast_node_type_string(fp_to_process->first_child->node_type));
-								//}
-								formal_parameter_td_list = create_type_descriptor_for_entry_identifier(st, fp_to_process->first_child);
-								fp_to_process = fp_to_process->next_sibling;
-								for (int i = 1; i <formal_param_count; i++) {
-									//if (debug_st) {
-									//	printf("creating the type descriptor for the entry identifier from formal parameters %i\n", i);
-									//}
-									struct scarl_type_descriptor *current_fp_td = create_type_descriptor_for_entry_identifier(st, fp_to_process->first_child);
-									append_type_descriptor(formal_parameter_td_list, current_fp_td);
-									fp_to_process = fp_to_process->next_sibling;
-								}
-							}
+							struct scarl_type_descriptor *formal_parameter_td_list = create_type_descriptor_list_from_formal_parameter_node(st, formal_param_node);
 							// reusing the same list and string, which should be ok as long as they are only read from 
 							// need to test this intensely or just pay attention to code 
 							struct scarl_symbol_table_entry_identifier* func_entry_identifier = create_st_entry_identifier(func_ident_node->str_value, formal_parameter_td_list);
+							
+							// error out if there is already an object with the same identifier in this  scope
+							if (lookup_in_scope(st, func_entry_identifier) != NULL) {
+								fprintf(stderr, "ERROR: Duplicate identifier \"%s\" in scope\n", func_entry_identifier->ident_str);
+								exit(1);
+							}
 							
 							// need to stamp down architecture for this 
 							// function types need a type descriptor list for both
@@ -433,6 +495,7 @@ struct scarl_symbol_table *create_st_from_ast(
 							
 							struct scarl_symbol_table *function_body_st = create_st();
 							
+							int formal_param_count = get_children_count(formal_param_node);
 							// add formal parameters to symbol table before processing
 							if (formal_param_count > 0) {
 								struct scarl_ast_node *fp_to_process = formal_param_node->first_child;
@@ -447,8 +510,9 @@ struct scarl_symbol_table *create_st_from_ast(
 									fp_to_process = fp_to_process->next_sibling;
 								}
 							}
-						
+							
 							struct scarl_symbol_table *function_st = create_st_from_ast(st, function_body_st, func_body_node);
+							func_body_node->assoc_st = function_st;
 							struct scarl_function_type *func_type_desc = create_function_type(
 								func_ident_node->str_value,
 								return_type_desc,
@@ -472,7 +536,9 @@ struct scarl_symbol_table *create_st_from_ast(
 			st = NULL;
 	}
 	assert(st != NULL);
-	printf("Finished processing this symbol table with %i entries\n", get_entry_count(st));
+	if (debug_st) {
+		printf("Finished processing this symbol table with %i entries\n", get_entry_count(st));
+	}
 	return st;
 }
 
@@ -487,6 +553,8 @@ struct scarl_symbol_table_entry *create_st_entry(
 	entry->is_constant = 0; //false by default
 	entry->defined = 0; //false by default, remember to change when defined
     entry->containing_st = NULL; // set when added to a symbol table 
+	entry->frameByteSize = 0;
+	entry->frameByteOffset = 0; // set when added
 	return entry;
 }
 
@@ -675,6 +743,8 @@ void print_st_r(struct scarl_symbol_table *st, int level) {
 		while (entry != NULL) {
 			for (int i = 0; i < level; i++) printf("    "); // indent for level
 			printf("%i - ident: %s; ", entry_index, entry->ident->ident_str);
+			printf("byte size: %i; ", entry->frameByteSize);
+			printf("byte offset: %i; ", entry->frameByteOffset);
 			if (entry->is_constant) {
 				printf("constant; ");
 			}
@@ -772,6 +842,7 @@ void add_st_entry(struct scarl_symbol_table *parent, struct scarl_symbol_table_e
 		while(n->next != NULL) {
 			n = n->next;
 		}
+		
 		// add the ast node to the next sibling, which is
 		// in the list of children for this parent
 		n->next = entry;
@@ -796,7 +867,7 @@ struct scarl_symbol_table_entry *lookup_char_str(struct scarl_symbol_table *curr
 	}
 	// if we are here, it means we did not find it
 	// try the outer scope if there is one 
-	if (current_scope_st->parent_st != NULL) {
+	if (current_scope_st->parent_st != NULL && entry == NULL) {
 		return lookup_char_str(current_scope_st->parent_st, ident);
 	}
 	return entry;
@@ -832,6 +903,37 @@ int get_entry_count(struct scarl_symbol_table *st) {
 		count++;
 	}
 	return count;
+}
+
+void calculate_byte_sizes(struct scarl_symbol_table *st) {
+	struct scarl_symbol_table_entry *entry = st->entries;
+	int cur_offset = 0;
+	int cur_size = 0;
+	int total_size = 0;
+	while (entry != NULL) {
+		entry->frameByteOffset = cur_offset;
+		cur_size = size_of_scarl_type(entry->type, st);
+		entry->frameByteSize = cur_size;
+		cur_offset += cur_size;
+		total_size += cur_size;
+		entry = entry->next;
+	}
+	
+	//total_size is now the number of bytes in this symbol table 
+	if (st->first_child == NULL) {
+		st->frameByteTotalSize = total_size;
+	}
+	else {
+		// sum the size of sub-tables to get the total size 
+		struct scarl_symbol_table *child_st = st->first_child;
+		// this is not null we know for sure
+		while (child_st != NULL) {
+			calculate_byte_sizes(child_st);
+			total_size += child_st->frameByteTotalSize;
+			child_st = child_st->next_sibling;
+		}
+		st->frameByteTotalSize = total_size;
+	}
 }
 
 // searches the specified symbol table only

@@ -1,4 +1,6 @@
 
 void main() {
-	int x = 3 + 20 / 5;
+	int x = 3;
+	bool b = false;
+	bool f = true;
 }

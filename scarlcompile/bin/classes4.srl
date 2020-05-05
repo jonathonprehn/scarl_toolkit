@@ -1,6 +1,8 @@
 
 class A {
 	int field;
+	char[10] word;
+	A pointer aPointer;
 	int funcOfClass() {
 		field = field + 2;	
 	}

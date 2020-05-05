@@ -44,11 +44,12 @@ int directional_type_equality(struct scarl_type_descriptor *from_type, struct sc
 	return 0;
 }
 
-/* Returns one of: PRIMITIVE_TYPE, POINTER_TYPE, ARRAY_TYPE, FUNCTION_TYPE, CLASS_TYPE or DEVICE_TYPE */
 /* This function attempts to figure out which type the expression will eventually be converted to,    */
 /* taking the "most straightforward" approach to guessing, given its context (symbol table)    */
-int assume_type_class_of_expression_st(struct scarl_symbol_table *current_scope_st, struct scarl_ast_node *expr_node) {
-	return 0;
+struct scarl_type_descriptor *assume_type_of_expression_st(struct scarl_symbol_table *current_scope_st, struct scarl_ast_node *expr_node) {
+	
+	
+	return NULL;
 }
 
 /* Determines if the expression can be converted to a requested type given its context (symbol table)  */
@@ -296,7 +297,15 @@ struct scarl_type_descriptor *create_type_descriptor_for_entry_identifier(struct
 			// parameter list, so it is not a full class definition
 			// -- this is something that will be acknowledged in implementing
 			// 
-			class_td = create_class_type(strdup(node->str_value), NULL, NULL);
+			char *class_name = strdup(node->str_value);
+			//see if a parent class exists to attach to the type descriptor
+			char *parent_class = NULL;
+			struct scarl_symbol_table_entry *class_entry = lookup_char_str(current_scope_st, class_name);
+			struct scarl_class_type *base_class_td = (struct scarl_class_type *)class_entry->type;
+			if (base_class_td->parent_class_identifier != NULL) {
+				parent_class = strdup(base_class_td->parent_class_identifier);
+			}
+			class_td = create_class_type(class_name, parent_class, NULL);
 			returning_td = (struct scarl_type_descriptor*)class_td;
 		}
 		break;
@@ -334,6 +343,31 @@ struct scarl_type_descriptor *create_type_descriptor_for_entry_identifier(struct
 	assert(returning_td != NULL);
 	return returning_td;
 }
+
+
+struct scarl_type_descriptor *create_type_descriptor_list_from_formal_parameter_node(struct scarl_symbol_table *current_scope, struct scarl_ast_node *formal_param_node) {
+	int formal_param_count = get_children_count(formal_param_node);
+	struct scarl_type_descriptor *formal_parameter_td_list = NULL; // the list of type descriptors that describe this function (to support overloading)
+	if (formal_param_count > 0) {
+		struct scarl_ast_node *fp_to_process = formal_param_node->first_child;
+		//if (debug_st) {
+		//	printf("creating the type descriptor for the entry identifier from the first formal parameter\n");
+		//	printf("node type of first formal parameter: %s\n", get_ast_node_type_string(fp_to_process->first_child->node_type));
+		//}
+		formal_parameter_td_list = create_type_descriptor_for_entry_identifier(current_scope, fp_to_process->first_child);
+		fp_to_process = fp_to_process->next_sibling;
+		for (int i = 1; i <formal_param_count; i++) {
+			//if (debug_st) {
+			//	printf("creating the type descriptor for the entry identifier from formal parameters %i\n", i);
+			//}
+			struct scarl_type_descriptor *current_fp_td = create_type_descriptor_for_entry_identifier(current_scope, fp_to_process->first_child);
+			append_type_descriptor(formal_parameter_td_list, current_fp_td);
+			fp_to_process = fp_to_process->next_sibling;
+		}
+	}
+	return formal_parameter_td_list;
+}
+
 
 /*
 // assuming that the entire definition is there
@@ -452,6 +486,85 @@ int get_type_descriptor_list_count(struct scarl_type_descriptor *lst) {
 		}
 		return count;
 	}
+}
+
+// returns the size of the type in bytes. Used in calculating symbol table frame size
+int size_of_scarl_type(struct scarl_type_descriptor *type, struct scarl_symbol_table *st) {
+	
+	
+	switch(type->type_class) {
+		case PRIMITIVE_TYPE:
+		{
+			struct scarl_primitive_type *prim = (struct scarl_primitive_type *)type;
+			switch(prim->primitive_type) {
+				case BOOL: return 1;
+				case VOID: return 0;
+				case CHAR: return 1;
+				case BYTE: return 1;
+				case INT: return 2; 
+			}
+		}
+		break;
+		case POINTER_TYPE:
+		{
+			return 2; // 2^16 address space
+		}
+		break;
+		case ARRAY_TYPE:
+		{
+			int containedSize;
+			struct scarl_array_type *arrType = (struct scarl_array_type *)type;
+			containedSize = size_of_scarl_type(arrType->containing_type, st);
+			return arrType->length*containedSize;
+		}
+		break;
+		case FUNCTION_TYPE:
+		{
+			return 0; // instances of functions don't use stack space (they indicate stack pushes) 
+		}
+		break;
+		case CLASS_TYPE:
+		{
+			struct scarl_class_type *orig_class_type = (struct scarl_class_type*)type;
+			char *class_name = orig_class_type->class_name_identifier;
+			char *parent_name = orig_class_type->parent_class_identifier;
+			
+			/*
+			printf("Getting size of %s\n", class_name);
+			if (parent_name != NULL) {
+				printf("this class has parent class %s\n", parent_name);
+			}
+			*/
+			
+			struct scarl_symbol_table_entry *class_full_def = lookup_char_str(st, class_name);
+			assert(class_full_def != NULL); // class name must be defined
+			struct scarl_symbol_table *class_table = ((struct scarl_class_type*)class_full_def->type)->class_st;
+			struct scarl_symbol_table_entry *cur_entry = class_table->entries;
+			int sumSize = 0;
+			while (cur_entry != NULL) {
+				sumSize += size_of_scarl_type(cur_entry->type, st);
+				cur_entry = cur_entry->next;
+			}
+			
+			// add the size of the parent class type as well
+			if (parent_name != NULL) {
+				struct scarl_symbol_table_entry *parent_full_def = lookup_char_str(st, parent_name);
+				int parent_size = size_of_scarl_type(parent_full_def->type, st);
+				sumSize += parent_size;
+			}
+			
+			printf("Size of %s is %i\n", class_name, sumSize);
+			return sumSize;
+		}
+		break;
+		case DEVICE_TYPE:
+		{
+			return 0; // instances of devices don't use stack space
+		}
+		break;
+	}
+	// should not reach this point 
+	return 0;
 }
 
 char *get_type_class_str(int type_class) {

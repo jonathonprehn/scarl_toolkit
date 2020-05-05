@@ -139,48 +139,49 @@
   93                   | LPAREN arithmetic_expression RPAREN
 
   94  unit : IDENTIFIER
-  95       | integer_value
-  96       | char_value
-  97       | bool_value
-  98       | function_invocation
-  99       | array_accessor_unit
- 100       | method_invocation
- 101       | dereferenced_pointer
- 102       | array_value
+  95       | class_attribute_identifier
+  96       | integer_value
+  97       | char_value
+  98       | bool_value
+  99       | function_invocation
+ 100       | array_accessor_unit
+ 101       | method_invocation
+ 102       | dereferenced_pointer
+ 103       | array_value
 
- 103  array_accessor_unit : IDENTIFIER LBRACKET arithmetic_expression RBRACKET
+ 104  array_accessor_unit : IDENTIFIER LBRACKET arithmetic_expression RBRACKET
 
- 104  dereferenced_pointer : DEREF IDENTIFIER
+ 105  dereferenced_pointer : DEREF IDENTIFIER
 
- 105  array_value : STRING_LITERAL
- 106              | array_initializer
+ 106  array_value : STRING_LITERAL
+ 107              | array_initializer
 
- 107  array_initializer : LBRACE parameter_list RBRACE
+ 108  array_initializer : LBRACE parameter_list RBRACE
 
- 108  integer_value : DECIMAL
- 109                | OCTAL
- 110                | HEX
- 111                | BINARY
+ 109  integer_value : DECIMAL
+ 110                | OCTAL
+ 111                | HEX
+ 112                | BINARY
 
- 112  char_value : CHAR_LITERAL
+ 113  char_value : CHAR_LITERAL
 
- 113  bool_value : TRUE
- 114             | FALSE
+ 114  bool_value : TRUE
+ 115             | FALSE
 
- 115  primitive_type : BOOL
- 116                 | INT
- 117                 | CHAR
- 118                 | VOID
- 119                 | BYTE
+ 116  primitive_type : BOOL
+ 117                 | INT
+ 118                 | CHAR
+ 119                 | VOID
+ 120                 | BYTE
 
- 120  device_type : LIGHT_ACTUATOR
- 121              | SERVO_ACTUATOR
- 122              | SOUND_SENSOR
- 123              | LIGHT_SENSOR
- 124              | DISTANCE_SENSOR
- 125              | TEMPERATURE_SENSOR
- 126              | SERIAL_SENSOR
- 127              | SERIAL_ACTUATOR
+ 121  device_type : LIGHT_ACTUATOR
+ 122              | SERVO_ACTUATOR
+ 123              | SOUND_SENSOR
+ 124              | LIGHT_SENSOR
+ 125              | DISTANCE_SENSOR
+ 126              | TEMPERATURE_SENSOR
+ 127              | SERIAL_SENSOR
+ 128              | SERIAL_ACTUATOR
 
 state 0
 	$accept : . program $end  (0)
@@ -229,63 +230,63 @@ state 1
 
 
 state 2
-	primitive_type : BOOL .  (115)
-
-	.  reduce 115
-
-
-state 3
-	primitive_type : INT .  (116)
+	primitive_type : BOOL .  (116)
 
 	.  reduce 116
 
 
-state 4
-	primitive_type : CHAR .  (117)
+state 3
+	primitive_type : INT .  (117)
 
 	.  reduce 117
 
 
-state 5
-	primitive_type : VOID .  (118)
+state 4
+	primitive_type : CHAR .  (118)
 
 	.  reduce 118
 
 
+state 5
+	primitive_type : VOID .  (119)
+
+	.  reduce 119
+
+
 state 6
-	device_type : LIGHT_ACTUATOR .  (120)
-
-	.  reduce 120
-
-
-state 7
-	device_type : SERVO_ACTUATOR .  (121)
+	device_type : LIGHT_ACTUATOR .  (121)
 
 	.  reduce 121
 
 
-state 8
-	device_type : SOUND_SENSOR .  (122)
+state 7
+	device_type : SERVO_ACTUATOR .  (122)
 
 	.  reduce 122
 
 
-state 9
-	device_type : LIGHT_SENSOR .  (123)
+state 8
+	device_type : SOUND_SENSOR .  (123)
 
 	.  reduce 123
 
 
-state 10
-	device_type : DISTANCE_SENSOR .  (124)
+state 9
+	device_type : LIGHT_SENSOR .  (124)
 
 	.  reduce 124
 
 
-state 11
-	device_type : TEMPERATURE_SENSOR .  (125)
+state 10
+	device_type : DISTANCE_SENSOR .  (125)
 
 	.  reduce 125
+
+
+state 11
+	device_type : TEMPERATURE_SENSOR .  (126)
+
+	.  reduce 126
 
 
 state 12
@@ -324,21 +325,21 @@ state 13
 
 
 state 14
-	device_type : SERIAL_SENSOR .  (126)
-
-	.  reduce 126
-
-
-state 15
-	device_type : SERIAL_ACTUATOR .  (127)
+	device_type : SERIAL_SENSOR .  (127)
 
 	.  reduce 127
 
 
-state 16
-	primitive_type : BYTE .  (119)
+state 15
+	device_type : SERIAL_ACTUATOR .  (128)
 
-	.  reduce 119
+	.  reduce 128
+
+
+state 16
+	primitive_type : BYTE .  (120)
+
+	.  reduce 120
 
 
 state 17
@@ -726,7 +727,7 @@ state 49
 	class_attribute_identifier : IDENTIFIER . DOT IDENTIFIER  (55)
 	class_attribute_identifier : IDENTIFIER . DOT class_attribute_identifier  (56)
 	unit : IDENTIFIER .  (94)
-	array_accessor_unit : IDENTIFIER . LBRACKET arithmetic_expression RBRACKET  (103)
+	array_accessor_unit : IDENTIFIER . LBRACKET arithmetic_expression RBRACKET  (104)
 
 	LPAREN  shift 94
 	LBRACKET  shift 95
@@ -851,7 +852,7 @@ state 52
 
 
 state 53
-	array_initializer : LBRACE . parameter_list RBRACE  (107)
+	array_initializer : LBRACE . parameter_list RBRACE  (108)
 	parameter_list : .  (65)
 
 	IDENTIFIER  shift 49
@@ -896,39 +897,39 @@ state 53
 
 
 state 54
-	integer_value : DECIMAL .  (108)
-
-	.  reduce 108
-
-
-state 55
-	integer_value : OCTAL .  (109)
+	integer_value : DECIMAL .  (109)
 
 	.  reduce 109
 
 
-state 56
-	integer_value : HEX .  (110)
+state 55
+	integer_value : OCTAL .  (110)
 
 	.  reduce 110
 
 
-state 57
-	integer_value : BINARY .  (111)
+state 56
+	integer_value : HEX .  (111)
 
 	.  reduce 111
 
 
-state 58
-	bool_value : TRUE .  (113)
+state 57
+	integer_value : BINARY .  (112)
 
-	.  reduce 113
+	.  reduce 112
+
+
+state 58
+	bool_value : TRUE .  (114)
+
+	.  reduce 114
 
 
 state 59
-	bool_value : FALSE .  (114)
+	bool_value : FALSE .  (115)
 
-	.  reduce 114
+	.  reduce 115
 
 
 state 60
@@ -948,22 +949,22 @@ state 60
 
 
 state 61
-	dereferenced_pointer : DEREF . IDENTIFIER  (104)
+	dereferenced_pointer : DEREF . IDENTIFIER  (105)
 
 	IDENTIFIER  shift 105
 	.  error
 
 
 state 62
-	array_value : STRING_LITERAL .  (105)
+	array_value : STRING_LITERAL .  (106)
 
-	.  reduce 105
+	.  reduce 106
 
 
 state 63
-	char_value : CHAR_LITERAL .  (112)
+	char_value : CHAR_LITERAL .  (113)
 
-	.  reduce 112
+	.  reduce 113
 
 
 state 64
@@ -996,21 +997,38 @@ state 65
 
 state 66
 	method_invocation : class_attribute_identifier . LPAREN parameter_list RPAREN  (53)
+	unit : class_attribute_identifier .  (95)
 
 	LPAREN  shift 109
-	.  error
+	PLUS  reduce 95
+	MINUS  reduce 95
+	STAR  reduce 95
+	SLASH  reduce 95
+	RPAREN  reduce 95
+	GTR  reduce 95
+	LESS  reduce 95
+	GTR_EQ  reduce 95
+	LESS_EQ  reduce 95
+	DBL_EQ  reduce 95
+	NOT_EQ  reduce 95
+	OR  reduce 95
+	AND  reduce 95
+	COMMA  reduce 95
+	SEMICOLON  reduce 95
+	RBRACE  reduce 95
+	RBRACKET  reduce 95
 
 
 state 67
-	unit : function_invocation .  (98)
+	unit : function_invocation .  (99)
 
-	.  reduce 98
+	.  reduce 99
 
 
 state 68
-	unit : method_invocation .  (100)
+	unit : method_invocation .  (101)
 
-	.  reduce 100
+	.  reduce 101
 
 
 state 69
@@ -1121,45 +1139,45 @@ state 77
 
 
 state 78
-	unit : integer_value .  (95)
-
-	.  reduce 95
-
-
-state 79
-	unit : char_value .  (96)
+	unit : integer_value .  (96)
 
 	.  reduce 96
 
 
-state 80
-	unit : bool_value .  (97)
+state 79
+	unit : char_value .  (97)
 
 	.  reduce 97
 
 
-state 81
-	unit : array_accessor_unit .  (99)
+state 80
+	unit : bool_value .  (98)
 
-	.  reduce 99
+	.  reduce 98
+
+
+state 81
+	unit : array_accessor_unit .  (100)
+
+	.  reduce 100
 
 
 state 82
-	unit : dereferenced_pointer .  (101)
-
-	.  reduce 101
-
-
-state 83
-	unit : array_value .  (102)
+	unit : dereferenced_pointer .  (102)
 
 	.  reduce 102
 
 
-state 84
-	array_value : array_initializer .  (106)
+state 83
+	unit : array_value .  (103)
 
-	.  reduce 106
+	.  reduce 103
+
+
+state 84
+	array_value : array_initializer .  (107)
+
+	.  reduce 107
 
 
 state 85
@@ -1321,7 +1339,7 @@ state 94
 
 
 state 95
-	array_accessor_unit : IDENTIFIER LBRACKET . arithmetic_expression RBRACKET  (103)
+	array_accessor_unit : IDENTIFIER LBRACKET . arithmetic_expression RBRACKET  (104)
 
 	IDENTIFIER  shift 49
 	MINUS  shift 50
@@ -1412,7 +1430,7 @@ state 100
 
 
 state 101
-	array_initializer : LBRACE parameter_list . RBRACE  (107)
+	array_initializer : LBRACE parameter_list . RBRACE  (108)
 
 	RBRACE  shift 132
 	.  error
@@ -1439,9 +1457,9 @@ state 104
 
 
 state 105
-	dereferenced_pointer : DEREF IDENTIFIER .  (104)
+	dereferenced_pointer : DEREF IDENTIFIER .  (105)
 
-	.  reduce 104
+	.  reduce 105
 
 
 state 106
@@ -1969,7 +1987,7 @@ state 126
 state 127
 	arithmetic_expression : arithmetic_expression . PLUS arithmetic_factor  (86)
 	arithmetic_expression : arithmetic_expression . MINUS arithmetic_factor  (87)
-	array_accessor_unit : IDENTIFIER LBRACKET arithmetic_expression . RBRACKET  (103)
+	array_accessor_unit : IDENTIFIER LBRACKET arithmetic_expression . RBRACKET  (104)
 
 	PLUS  shift 106
 	MINUS  shift 107
@@ -1983,8 +2001,25 @@ state 128
 	class_attribute_identifier : IDENTIFIER . DOT class_attribute_identifier  (56)
 
 	DOT  shift 96
+	PLUS  reduce 55
+	MINUS  reduce 55
+	STAR  reduce 55
+	SLASH  reduce 55
 	LPAREN  reduce 55
+	RPAREN  reduce 55
+	GTR  reduce 55
+	LESS  reduce 55
+	GTR_EQ  reduce 55
+	LESS_EQ  reduce 55
+	DBL_EQ  reduce 55
 	EQ  reduce 55
+	NOT_EQ  reduce 55
+	OR  reduce 55
+	AND  reduce 55
+	COMMA  reduce 55
+	SEMICOLON  reduce 55
+	RBRACE  reduce 55
+	RBRACKET  reduce 55
 
 
 state 129
@@ -2046,9 +2081,9 @@ state 131
 
 
 state 132
-	array_initializer : LBRACE parameter_list RBRACE .  (107)
+	array_initializer : LBRACE parameter_list RBRACE .  (108)
 
-	.  reduce 107
+	.  reduce 108
 
 
 state 133
@@ -2347,9 +2382,9 @@ state 150
 
 
 state 151
-	array_accessor_unit : IDENTIFIER LBRACKET arithmetic_expression RBRACKET .  (103)
+	array_accessor_unit : IDENTIFIER LBRACKET arithmetic_expression RBRACKET .  (104)
 
-	.  reduce 103
+	.  reduce 104
 
 
 state 152
@@ -3020,4 +3055,4 @@ state 206
 
 
 59 terminals, 56 nonterminals
-128 grammar rules, 207 states
+129 grammar rules, 207 states

@@ -20,6 +20,7 @@ along with SCARL.  If not, see <https://www.gnu.org/licenses/>.
 #include <assert.h>
 #include <string.h>
 
+#include "scarlregister.h"
 #include "scarltypes.h"
 #include "scarlastnode.h"
 
@@ -32,6 +33,9 @@ struct scarl_ast_node *create_template_ast_node() {
 	ast_node->parent = NULL;
 	ast_node->next_sibling = NULL;
 	ast_node->first_child = NULL;
+	ast_node->assoc_st = NULL;
+	ast_node->reg_low = SCARL_NULL;
+	ast_node->reg_high = SCARL_NULL;
 	return ast_node;
 }
 

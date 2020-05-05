@@ -1,9 +1,19 @@
 
-constant int x = 10;
+//constant int x = 10;
+//int yGlobal = 14;
+class someClass {
+	int val;
+	int value2;
+	int value() { return val; }
+}
+
 void main() {
-	int dec = 53;
-	int bin = 0b0011101;
-	int oct = 034;
-	int hex = 0x11;
-	
+	someClass someObject;
+	int i = 53;
+	i = 70;
+	i = 5;
+	// introducing class object breaks variable lookup in 
+	//set variable statement for whatever reason
+	someObject.val = 10;
+	someObject.value2 = someObject.value();
 }
