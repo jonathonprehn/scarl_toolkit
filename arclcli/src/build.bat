@@ -1,4 +1,4 @@
-gcc -o ./../obj/arclcli.o -c arclcli.c
-gcc -o ./../obj/arclregister.o -c arclregister.c
-gcc -o ./../obj/arclmemory.o -c arclmemory.c
-gcc -o ./../bin/arclcli.exe ./../obj/arclcli.o ./../obj/arclregister.o ./../obj/arclmemory.o
+g++ -o ./../obj/arclcli.o -c arclcli.cpp
+g++ -o ./../obj/arclregister.o -c arclregister.cpp
+g++ -o ./../obj/arclmemory.o -c arclmemory.cpp
+g++ -o ./../bin/arclcli.exe ./../obj/arclcli.o ./../obj/arclregister.o ./../obj/arclmemory.o

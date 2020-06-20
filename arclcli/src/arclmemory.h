@@ -25,6 +25,7 @@ struct arcl_memory_block;
 struct arcl_memory_block {
 	unsigned int index; // identifier
 	unsigned int size;
+	unsigned block_id; //identifier for VM user to interface
 	struct arcl_memory_block *next;
 };
 
@@ -51,6 +52,9 @@ void free_arcl_heap(struct arcl_heap *heap);
 struct arcl_stack *create_arcl_stack(unsigned bytes);
 void destroy_arcl_stack(struct arcl_stack *stack);
 struct arcl_memory_block *allocate_block(struct arcl_heap *heap, unsigned size);
+struct arcl_memory_block *find_block_by_id(struct arcl_heap *heap, unsigned id);
+unsigned get_available_block_id();
+void initialize_memory_block_ids();
 void free_block(struct arcl_heap *heap, struct arcl_memory_block *block);
 void write_char_to_block(struct arcl_heap *heap, struct arcl_memory_block *in_block, unsigned int offset, char char_value);
 void write_arcl_int_to_block(struct arcl_heap *heap, struct arcl_memory_block *in_block, unsigned int offset, int int_value);
@@ -59,7 +63,7 @@ char read_char_from_block(struct arcl_heap *heap, struct arcl_memory_block *from
 int read_arcl_int_from_block(struct arcl_heap *heap, struct arcl_memory_block *from_block, unsigned int offset);
 int read_arcl_byte_from_block(struct arcl_heap *heap, struct arcl_memory_block *from_block, unsigned int offset);
 void push_stack_frame(struct arcl_stack *stack, unsigned int offset);
-void pop_stack_frame(struct arcl_stack *stack);
+void pop_stack_frame(struct arcl_stack *stack, unsigned int offset);
 void write_char_to_stack(struct arcl_stack *stack, unsigned int offset, char char_value);
 void write_arcl_int_to_stack(struct arcl_stack *stack, unsigned int offset, int int_value);
 void write_arcl_byte_to_stack(struct arcl_stack *stack, unsigned int offset, int byte_value);

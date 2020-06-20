@@ -15,6 +15,10 @@ You should have received a copy of the GNU General Public License
 along with SCARL.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+
 #include "arclregister.h"
 
 static int register_values[12] = {
@@ -32,3 +36,23 @@ void set_reg_val(int arcl_register, int value) {
 	register_values[arcl_register - ARCL_R0] = value;
 }
 
+
+int parse_register(char *reg_str) {
+	char temp[10];
+	unsigned len = strlen(reg_str);
+	int i = 0;
+	while (i < 10 && i < len && reg_str[i] != '\0') {
+		temp[i] = reg_str[i+1];
+		i++;
+	}
+	temp[i] = '\0';
+	int parsed = atoi(temp);
+	return ARCL_R0 + parsed;
+}
+
+
+void print_registers() {
+	for (unsigned i = 0; i < 12; i++) {
+		printf("R%i - %i\n", i, get_reg_val(ARCL_R0 + i));
+	}
+}

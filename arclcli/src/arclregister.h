@@ -35,5 +35,8 @@ along with SCARL.  If not, see <https://www.gnu.org/licenses/>.
 
 int get_reg_val(int arcl_register);
 void set_reg_val(int arcl_register, int value);
+int parse_register(char *reg_str);
+
+void print_registers();
 
 #endif // ARCLCLI_REGISTER_H_INCLUDED

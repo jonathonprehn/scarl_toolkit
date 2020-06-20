@@ -70,6 +70,7 @@ struct arcl_memory_block *allocate_block(struct arcl_heap *heap, unsigned size) 
 	struct arcl_memory_block *allocating = (struct arcl_memory_block*)malloc(sizeof(struct arcl_memory_block));
 	allocating->index = 0; // unknown
 	allocating->size = size;
+	allocating->block_id = get_available_block_id();
 	allocating->next = NULL;
 	
 	struct arcl_memory_block *cur = heap->allocated_blocks;
@@ -131,6 +132,43 @@ struct arcl_memory_block *allocate_block(struct arcl_heap *heap, unsigned size) 
 	return NULL;
 }
 
+
+struct arcl_memory_block *find_block_by_id(struct arcl_heap *heap, unsigned id) {
+	struct arcl_memory_block *block = heap->allocated_blocks;
+	while(block != NULL) {
+		if (block->block_id == id) {
+			return block;
+		}
+		block = block->next;
+	}
+	return NULL;
+}
+
+
+static int MAX_MEMORY_BLOCKS = 255;
+static int *memory_id_pool;
+
+void initialize_memory_block_ids() {
+	memory_id_pool = (int*)malloc(sizeof(int)*MAX_MEMORY_BLOCKS);
+	for (unsigned i = 0; i < MAX_MEMORY_BLOCKS; i++) {
+		memory_id_pool[i] = 0;
+	}
+}
+
+unsigned get_available_block_id() {
+	unsigned ptr = 0;
+	unsigned id = 0; //ID of 0 means it failed.
+	while(ptr < MAX_MEMORY_BLOCKS) {
+		ptr++;
+		if (memory_id_pool[ptr] == 0) {
+			memory_id_pool[ptr] = 1; //allocate
+			id = ptr + 1;
+			break;
+		}
+	}
+	return id;
+}
+
 void free_block(struct arcl_heap *heap, struct arcl_memory_block *block) {
 	// find the block in the heap and deallocate it / readjust pointers
 	
@@ -145,9 +183,11 @@ void free_block(struct arcl_heap *heap, struct arcl_memory_block *block) {
 	if (block->index == cur->index && block->size == cur->size) {
 		if (cur->next != NULL) {
 			heap->allocated_blocks = cur->next;
+			memory_id_pool[cur->block_id - 1] = 0;
 			free(cur);
 		}
 		else {
+			memory_id_pool[cur->block_id - 1] = 0;
 			free(cur);
 			heap->allocated_blocks = NULL;
 		}
@@ -162,13 +202,16 @@ void free_block(struct arcl_heap *heap, struct arcl_memory_block *block) {
 		}
 		if (cur != NULL) {
 			prev->next = cur->next;
+			memory_id_pool[cur->block_id - 1] = 0;
 			free(cur);
 		}
 	}
 }
 
 void write_char_to_block(struct arcl_heap *heap, struct arcl_memory_block *in_block, unsigned int offset, char char_value) {
-	heap->raw[in_block->index + offset] = (uint8_t)char_value;
+	unsigned int i = in_block->index + offset;
+	printf("Writing %c to %i\n", char_value, i);
+	heap->raw[i] = (uint8_t)char_value;
 }
 
 void write_arcl_int_to_block(struct arcl_heap *heap, struct arcl_memory_block *in_block, unsigned int offset, int int_value) {
@@ -194,38 +237,38 @@ int read_arcl_byte_from_block(struct arcl_heap *heap, struct arcl_memory_block *
 }
 
 void push_stack_frame(struct arcl_stack *stack, unsigned int offset) {
-	
+	stack->frame_pointer += offset;
 }
 
-void pop_stack_frame(struct arcl_stack *stack) {
-	
+void pop_stack_frame(struct arcl_stack *stack, unsigned int offset) {
+	stack->frame_pointer -= offset;
 }
 
 void write_char_to_stack(struct arcl_stack *stack, unsigned int offset, char char_value) {
-	
+	stack->raw[stack->frame_pointer + offset] = (uint8_t)char_value;
 }
 
 void write_arcl_int_to_stack(struct arcl_stack *stack, unsigned int offset, int int_value) {
-	
+	stack->raw[stack->frame_pointer + offset] = (uint8_t)(int_value & 0xFF);
+	stack->raw[stack->frame_pointer + offset + 1] = (uint8_t)((int_value >> 8) & 0xFF);
 }
 
 void write_arcl_byte_to_stack(struct arcl_stack *stack, unsigned int offset, int byte_value) {
-	
+	stack->raw[stack->frame_pointer + offset] = (uint8_t)(byte_value & 0xFF);
 }
 
 char read_char_from_stack(struct arcl_stack *stack, unsigned int offset) {
-	return '0';
+	return (char)(stack->raw[stack->frame_pointer + offset]);;
 }
 
 int read_arcl_int_from_stack(struct arcl_stack *stack, unsigned int offset) {
-	return 0;
+	return (int)(stack->raw[stack->frame_pointer + offset] & 0xFF)
+			| (int)((stack->raw[stack->frame_pointer + offset + 1] & 0xFF) << 8);
 }
 
 int read_arcl_byte_from_stack(struct arcl_stack *stack, unsigned int offset) {
-	return 0;
+	return (int)(stack->raw[stack->frame_pointer + offset]);
 }
-
-
 
 
 
@@ -235,9 +278,9 @@ void print_heap(struct arcl_heap *heap) {
 	printf("Bytes: %i\n", heap->bytes);
 	printf("Allocated blocks:\n");
 	struct arcl_memory_block* blk = heap->allocated_blocks;
-	int block_counter = 0;
+	//int block_counter = 0;
 	while(blk != NULL) { 
-		printf("Block %i:\n", block_counter++);
+		printf("Block ID %i:\n", blk->block_id);
 		printf("Index %i , size %i\n\n", blk->index, blk->size);
 		blk = blk->next;
 	}
