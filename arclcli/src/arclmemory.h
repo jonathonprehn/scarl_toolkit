@@ -23,10 +23,13 @@ along with SCARL.  If not, see <https://www.gnu.org/licenses/>.
 struct arcl_memory_block;
 
 struct arcl_memory_block {
+public:
 	unsigned int index; // identifier
 	unsigned int size;
 	unsigned block_id; //identifier for VM user to interface
 	struct arcl_memory_block *next;
+	
+	arcl_memory_block();
 };
 
 // runtime memory heap
@@ -47,15 +50,26 @@ struct arcl_stack {
 	unsigned frame_pointer;
 };
 
+class block_id_pool {
+public:
+	block_id_pool() = default;
+	~block_id_pool();
+	void initialize_memory_block_ids();
+	unsigned get_available_block_id();
+	void free_block_id(unsigned id);
+private:
+	int *memory_id_pool;
+};
+
 struct arcl_heap *allocate_arcl_heap(unsigned bytes);
 void free_arcl_heap(struct arcl_heap *heap);
 struct arcl_stack *create_arcl_stack(unsigned bytes);
 void destroy_arcl_stack(struct arcl_stack *stack);
-struct arcl_memory_block *allocate_block(struct arcl_heap *heap, unsigned size);
+struct arcl_memory_block *allocate_block(struct arcl_heap *heap, unsigned size, block_id_pool &block_pool);
 struct arcl_memory_block *find_block_by_id(struct arcl_heap *heap, unsigned id);
 unsigned get_available_block_id();
 void initialize_memory_block_ids();
-void free_block(struct arcl_heap *heap, struct arcl_memory_block *block);
+void free_block(struct arcl_heap *heap, struct arcl_memory_block *block, block_id_pool &bi_pool);
 void write_char_to_block(struct arcl_heap *heap, struct arcl_memory_block *in_block, unsigned int offset, char char_value);
 void write_arcl_int_to_block(struct arcl_heap *heap, struct arcl_memory_block *in_block, unsigned int offset, int int_value);
 void write_arcl_byte_to_block(struct arcl_heap *heap, struct arcl_memory_block *in_block, unsigned int offset, int byte_value);

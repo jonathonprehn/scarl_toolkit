@@ -42,7 +42,7 @@ void free_arcl_heap(struct arcl_heap *heap) {
 	while(blk_ptr != NULL) {
 		struct arcl_memory_block *deleting_block = blk_ptr;
 		blk_ptr = blk_ptr->next;
-		free(deleting_block);
+		delete deleting_block;
 	}
 	free(heap->raw);
 	free(heap);
@@ -61,18 +61,35 @@ void destroy_arcl_stack(struct arcl_stack *stack) {
 	free(stack);
 }
 
-struct arcl_memory_block *allocate_block(struct arcl_heap *heap, unsigned size) {
+arcl_memory_block::arcl_memory_block() {
+	this->index = 0;
+	this->size = 0;
+	this->block_id = 0;
+	this->next = NULL;
+}
+
+struct arcl_memory_block *allocate_block(struct arcl_heap *heap, unsigned size, block_id_pool &block_pool) {
 	//TODO: make it able to be more dynamic
 	//the memory block list should be sorted in ascending offset order
 	//so that this can efficiently find empty space 
 	
-	//make the template object
-	struct arcl_memory_block *allocating = (struct arcl_memory_block*)malloc(sizeof(struct arcl_memory_block));
-	allocating->index = 0; // unknown
-	allocating->size = size;
-	allocating->block_id = get_available_block_id();
-	allocating->next = NULL;
+	/*If this breaks make sure that arclmemory.o comes before arccli.o in the linking order*/
 	
+	//make the template object
+	//printf("gonna allocate the first fake struct here we go \n");
+	//struct arcl_memory_block *allocating = (struct arcl_memory_block*)malloc(sizeof(struct arcl_memory_block));
+	//struct arcl_memory_block *blk = new arcl_memory_block;
+	//delete blk;
+	//printf("gonna allocate the struct here we go \n");
+	struct arcl_memory_block *allocating = new arcl_memory_block(); //C++ constructor
+	//printf("gonna set the index here we go \n");
+	allocating->index = 0; // unknown
+	//printf("gonna set the size??? here we go?? \n");
+	allocating->size = size;
+	//printf("gonna call get_available_block_id here we go\n");
+	allocating->block_id = block_pool.get_available_block_id();
+	allocating->next = NULL;
+		
 	struct arcl_memory_block *cur = heap->allocated_blocks;
 	if (cur == NULL) {
 		//it just starts at the beginning of the heap
@@ -145,23 +162,30 @@ struct arcl_memory_block *find_block_by_id(struct arcl_heap *heap, unsigned id) 
 }
 
 
-static int MAX_MEMORY_BLOCKS = 255;
-static int *memory_id_pool;
+#define MAX_MEMORY_BLOCKS 255
 
-void initialize_memory_block_ids() {
-	memory_id_pool = (int*)malloc(sizeof(int)*MAX_MEMORY_BLOCKS);
+void block_id_pool::initialize_memory_block_ids() {
+	this->memory_id_pool = new int[MAX_MEMORY_BLOCKS];
 	for (unsigned i = 0; i < MAX_MEMORY_BLOCKS; i++) {
-		memory_id_pool[i] = 0;
+		this->memory_id_pool[i] = 0;
 	}
 }
 
-unsigned get_available_block_id() {
+block_id_pool::~block_id_pool() {
+	if (this->memory_id_pool != NULL) {
+		delete[] this->memory_id_pool;
+	}
+}
+
+unsigned block_id_pool::get_available_block_id() {
+	//printf("Getting next available block\n");
+	//printf("Addr of memory_id_pool: %p\n", memory_id_pool);
 	unsigned ptr = 0;
 	unsigned id = 0; //ID of 0 means it failed.
 	while(ptr < MAX_MEMORY_BLOCKS) {
 		ptr++;
-		if (memory_id_pool[ptr] == 0) {
-			memory_id_pool[ptr] = 1; //allocate
+		if (this->memory_id_pool[ptr] == 0) {
+			this->memory_id_pool[ptr] = 1; //allocate
 			id = ptr + 1;
 			break;
 		}
@@ -169,7 +193,11 @@ unsigned get_available_block_id() {
 	return id;
 }
 
-void free_block(struct arcl_heap *heap, struct arcl_memory_block *block) {
+void block_id_pool::free_block_id(unsigned id) {
+	this->memory_id_pool[id-1] = 0;
+}
+
+void free_block(struct arcl_heap *heap, struct arcl_memory_block *block, block_id_pool &bi_pool) {
 	// find the block in the heap and deallocate it / readjust pointers
 	
 	//this block can be identified by its index and size 
@@ -183,12 +211,14 @@ void free_block(struct arcl_heap *heap, struct arcl_memory_block *block) {
 	if (block->index == cur->index && block->size == cur->size) {
 		if (cur->next != NULL) {
 			heap->allocated_blocks = cur->next;
-			memory_id_pool[cur->block_id - 1] = 0;
-			free(cur);
+			//memory_id_pool[cur->block_id - 1] = 0;
+			bi_pool.free_block_id(cur->block_id);
+			delete cur;
 		}
 		else {
-			memory_id_pool[cur->block_id - 1] = 0;
-			free(cur);
+			// memory_id_pool[cur->block_id - 1] = 0;
+			bi_pool.free_block_id(cur->block_id);
+			delete cur;
 			heap->allocated_blocks = NULL;
 		}
 	}
@@ -202,15 +232,16 @@ void free_block(struct arcl_heap *heap, struct arcl_memory_block *block) {
 		}
 		if (cur != NULL) {
 			prev->next = cur->next;
-			memory_id_pool[cur->block_id - 1] = 0;
-			free(cur);
+			//memory_id_pool[cur->block_id - 1] = 0;
+			bi_pool.free_block_id(cur->block_id);
+			delete cur;
 		}
 	}
 }
 
 void write_char_to_block(struct arcl_heap *heap, struct arcl_memory_block *in_block, unsigned int offset, char char_value) {
 	unsigned int i = in_block->index + offset;
-	printf("Writing %c to %i\n", char_value, i);
+	//printf("Writing %c to %i\n", char_value, i);
 	heap->raw[i] = (uint8_t)char_value;
 }
 
